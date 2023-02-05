@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Pelican" />
+    <title>Donut Chart - пончиковая диаграмма</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link rel="stylesheet" href="./theme/css/stork.css">
+    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
+        href="./theme/css/stork-dark.css">
+    <link
+        href="dev.tinito.in/feeds/all.atom.xml"
+        type="application/atom+xml" rel="alternate" title="Papyrus Atom Feed" />
+<meta name="description" content="В этом уроке мы научимся создавать диаграмму пончиков Tableau. Это диаграмма продвинутого типа. Откройте таблицу и загрузите в нее набор данных...." />
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
+    <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
+        <div class="flex pt-4">
+            <h1 class="font-semibold text-2xl"><a href="./">Papyrus</a></h1>
+            <button id="theme-toggle" type="button"
+                class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <ul class="flex flex-wrap lg:mr-24 md:pt-0">
+            <li class="mr-4 pt-6"><a  href="./archives.html">Archive</a></li>
+            <li class="mr-4 pt-6"><a                     href="./categories.html">Categories</a></li>
+            <li class="mr-4 pt-6"><a  href="./tags.html">Tags</a></li>
+            <li class="mr-4 pt-6"><a  href="./search.html">Search</a></li>
+        </ul>
+    </nav>
+    <div class="flex-grow md:max-w-screen-md md:mx-auto md:w-3/4 px-4">
+        <nav class="text-zinc-800 dark:text-zinc-300 mt-12 pb-2 md:mt-16" aria-label="Breadcrumb">
+            <ul class="p-0 inline-flex items-center">
+                <li class="flex items-center">
+                    <a href="./" class="text-zinc-800 dark:text-zinc-300 inline-flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        Home
+                    </a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="./categories.html">Categories</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="./category/tableau.html">Tableau</a>
+                </li>
+                <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                    <path
+                        d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                </svg>
+            </ul>
+        </nav>
+
+<main>
+  <header>
+    <h1 class="font-semibold text-3xl my-2">Donut Chart - пончиковая диаграмма</h1>
+    <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
+      <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+        <time>декабря 03, 2010</time>
+        <div>
+          <span>&nbsp;·&nbsp;3 min read</span>
+        </div>
+        <div>
+          <span>&nbsp;·&nbsp;Mikhail K</span>
+        </div>
+      </div>
+    </footer>
+  </header>
+  <details class="flex flex-col my-6 p-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg">
+    <summary class="text-lg font-bold">Table of contents</summary>
+    <div class="mx-4 px-4 underline">
+      <div id="toc"><ul><li><a class="toc-href" href="#chto-takoe-ponchikovaia-diagramma" title='&CHcy;&tcy;&ocy; &tcy;&acy;&kcy;&ocy;&iecy; "&Pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&acy;&yacy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy;"?'>&CHcy;&tcy;&ocy; &tcy;&acy;&kcy;&ocy;&iecy; "&Pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&acy;&yacy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy;"?</a><ul><li><a class="toc-href" href="#kak-sozdat-diagrammu-v-tableau" title="&Kcy;&acy;&kcy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy; &vcy; Tableau?">&Kcy;&acy;&kcy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy; &vcy; Tableau?</a></li></ul></li></ul></div>
+    </div>
+  </details>
+  <div class="max-w-7xl container mx-auto my-8 text-zinc-800 dark:text-zinc-300  
+              prose lg:max-w-none prose-headings:text-zinc-800 prose-headings:dark:text-zinc-300 
+              prose-h1:text-3xl lg:prose-h1:text-3xl prose-headings:font-semibold 
+              prose-pre:bg-zinc-200 prose-pre:text-zinc-800
+              dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
+              prose-blockquote:text-zinc-800
+              dark:prose-blockquote:text-zinc-200
+              prose-a:text-gray-500
+              dark:prose-a:text-gray-400
+              dark:prose-strong:text-zinc-200 
+              dark:prose-code:text-zinc-200
+              dark:prose-code:bg-zinc-800
+              prose-code:bg-zinc-200
+              prose-code:font-light
+              prose-img:rounded-md
+              ">
+    <p><img alt="homer_donut" src="./images/donut/homer_donut.jpg"/>
+&Vcy; &ecy;&tcy;&ocy;&mcy; &ucy;&rcy;&ocy;&kcy;&iecy; &mcy;&ycy; &ncy;&acy;&ucy;&chcy;&icy;&mcy;&scy;&yacy; &scy;&ocy;&zcy;&dcy;&acy;&vcy;&acy;&tcy;&softcy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy; Tableau. &Ecy;&tcy;&ocy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy; &pcy;&rcy;&ocy;&dcy;&vcy;&icy;&ncy;&ucy;&tcy;&ocy;&gcy;&ocy; &tcy;&icy;&pcy;&acy;. &Ocy;&tcy;&kcy;&rcy;&ocy;&jcy;&tcy;&iecy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&ucy; &icy; &zcy;&acy;&gcy;&rcy;&ucy;&zcy;&icy;&tcy;&iecy; &vcy; &ncy;&iecy;&iecy; &ncy;&acy;&bcy;&ocy;&rcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Zcy;&acy;&tcy;&iecy;&mcy; &scy;&lcy;&iecy;&dcy;&ucy;&jcy;&tcy;&iecy; &icy;&ncy;&scy;&tcy;&rcy;&ucy;&kcy;&tscy;&icy;&yacy;&mcy;, &pcy;&rcy;&icy;&vcy;&iecy;&dcy;&iecy;&ncy;&ncy;&ycy;&mcy; &vcy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&iecy; &ncy;&icy;&zhcy;&iecy;, &icy; &scy;&ocy;&zcy;&dcy;&acy;&jcy;&tcy;&iecy; &scy;&vcy;&ocy;&jcy; &pcy;&iecy;&rcy;&vcy;&ycy;&jcy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;.</p>
+<h1 id="chto-takoe-ponchikovaia-diagramma">&CHcy;&tcy;&ocy; &tcy;&acy;&kcy;&ocy;&iecy; "&Pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&acy;&yacy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy;"?</h1>
+<p>&Kcy;&acy;&kcy; &scy;&lcy;&iecy;&dcy;&ucy;&iecy;&tcy; &icy;&zcy; &ncy;&acy;&zcy;&vcy;&acy;&ncy;&icy;&yacy;, &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&acy;&yacy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy; - &ecy;&tcy;&ocy; &kcy;&rcy;&ucy;&gcy;&ocy;&vcy;&acy;&yacy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy; &scy; &ocy;&tcy;&vcy;&iecy;&rcy;&scy;&tcy;&icy;&iecy;&mcy; &vcy; &tscy;&iecy;&ncy;&tcy;&rcy;&iecy;. &Tcy;&acy;&kcy;&icy;&mcy; &ocy;&bcy;&rcy;&acy;&zcy;&ocy;&mcy;, &vcy;&ycy;&gcy;&lcy;&yacy;&dcy;&yacy; &kcy;&acy;&kcy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;. &Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &vcy;&ycy; &scy;&pcy;&rcy;&ocy;&scy;&icy;&tcy;&iecy;, &zcy;&acy;&chcy;&iecy;&mcy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&ucy;&yucy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy;, &kcy;&ocy;&gcy;&dcy;&acy; &scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ucy;&iecy;&tcy; &kcy;&rcy;&ucy;&gcy;&ocy;&vcy;&acy;&yacy;? &Ncy;&ucy;, &tcy;&acy;&kcy; &kcy;&acy;&kcy; &vcy;&scy;&iecy; &khcy;&ocy;&rcy;&ocy;&shcy;&iecy;&iecy; &vcy;&scy;&iecy;&gcy;&dcy;&acy; &mcy;&ocy;&zhcy;&iecy;&tcy; &bcy;&ycy;&tcy;&softcy; &lcy;&ucy;&chcy;&shcy;&iecy;, &kcy;&ocy;&gcy;&dcy;&acy; &ucy; &ncy;&acy;&scy; &iecy;&scy;&tcy;&softcy; &pcy;&ucy;&scy;&tcy;&ocy;&iecy; &mcy;&iecy;&scy;&tcy;&ocy; &vcy;&vcy; &scy;&iecy;&rcy;&iecy;&dcy;&icy;&ncy;&iecy; &kcy;&rcy;&ucy;&gcy;&ocy;&vcy;&ocy;&jcy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ycy; (&dcy;&iecy;&lcy;&acy;&yacy; &iecy;&iecy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&ocy;&jcy;) &mcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&mcy; &vcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&softcy; &kcy;&ucy;&mcy;&ucy;&lcy;&yacy;&tcy;&icy;&vcy;&ncy;&ycy;&jcy; &tscy;&icy;&fcy;&rcy;&ycy; &ncy;&acy; &ncy;&icy;&khcy; &vcy;&mcy;&iecy;&scy;&tcy;&iecy; &scy;&ocy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;&mcy;&icy;, &ocy;&tcy;&ncy;&ocy;&scy;&yacy;&shchcy;&icy;&mcy;&icy;&scy;&yacy; &kcy; &ocy;&tcy;&dcy;&iecy;&lcy;&softcy;&ncy;&ycy;&mcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&yacy;&mcy;. 
+&Tcy;&acy;&kcy;&icy;&mcy; &ocy;&bcy;&rcy;&acy;&zcy;&ocy;&mcy;, &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&acy;&yacy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy; &pcy;&rcy;&iecy;&dcy;&scy;&tcy;&acy;&vcy;&lcy;&yacy;&iecy;&tcy; &scy;&ocy;&bcy;&ocy;&jcy; &pcy;&ocy;&lcy;&ucy;&yucy; &kcy;&rcy;&ucy;&gcy;&ocy;&vcy;&ucy;&yucy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy;, &kcy;&ocy;&tcy;&ocy;&rcy;&acy;&yacy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&iecy;&ncy;&acy; &ncy;&acy; &kcy;&rcy;&acy;&zcy;&ncy;&ucy;&yucy;&scy;&iecy;&gcy;&mcy;&iecy;&ncy;&tcy;&ycy; &pcy;&rcy;&ocy;&pcy;&ocy;&rcy;&tscy;&icy;&ocy;&ncy;&acy;&lcy;&softcy;&ncy;&ocy; &scy;&ocy;&ocy;&tcy;&vcy;&iecy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&shchcy;&icy;&mcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;&mcy;. &Vcy; &tscy;&iecy;&ncy;&tcy;&rcy;&iecy; &ncy;&acy;&khcy;&ocy;&dcy;&icy;&tcy;&scy;&yacy; &pcy;&ucy;&scy;&tcy;&ocy;&iecy; &mcy;&iecy;&scy;&tcy;&ocy;, &gcy;&dcy;&iecy; &mcy;&ocy;&zhcy;&ncy;&ocy; &rcy;&acy;&zcy;&mcy;&iecy;&scy;&tcy;&icy;&tcy;&softcy; &mcy;&iecy;&tcy;&kcy;&icy;, &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&yucy;&shchcy;&icy;&iecy; &ocy;&bcy;&shchcy;&iecy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy; &icy;&lcy;&icy; &pcy;&acy;&rcy;&acy;&mcy;&iecy;&tcy;&rcy; &kcy;&acy;&kcy;, &chcy;&tcy;&ocy;&bcy;&ycy; &mcy;&ocy;&zhcy;&ncy;&ocy; &bcy;&ycy;&lcy;&ocy; &mcy;&gcy;&ncy;&ocy;&vcy;&iecy;&ncy;&ncy;&ocy; &scy;&rcy;&acy;&vcy;&ncy;&icy;&vcy;&acy;&tcy;&softcy; &iecy;&gcy;&ocy; &scy;&ocy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;&mcy;&icy; &scy;&iecy;&gcy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy;.</p>
+<h2 id="kak-sozdat-diagrammu-v-tableau">&Kcy;&acy;&kcy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy; &vcy; Tableau?</h2>
+<p>&Scy;&lcy;&iecy;&dcy;&ucy;&jcy;&tcy;&iecy; &icy;&ncy;&scy;&tcy;&rcy;&ucy;&kcy;&tscy;&icy;&yacy;&mcy;, &pcy;&rcy;&icy;&vcy;&iecy;&dcy;&iecy;&ncy;&ncy;&ycy;&mcy; &ncy;&icy;&zhcy;&iecy;, &chcy;&tcy;&ocy;&bcy;&ycy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&ucy;&yucy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy; &vcy; &pcy;&rcy;&ocy;&gcy;&rcy;&acy;&mcy;&mcy;&iecy; Tableau.</p>
+<p><strong>&SHcy;&acy;&gcy; 1:</strong> &Scy;&ocy;&zcy;&dcy;&acy;&ncy;&icy;&iecy; &dcy;&vcy;&ucy;&khcy; "&scy;&ucy;&rcy;&rcy;&ocy;&gcy;&acy;&tcy;&ncy;&ycy;&khcy;" &pcy;&ocy;&lcy;&iecy;&jcy;
+&Ncy;&acy;&chcy;&ncy;&iecy;&mcy; &scy; &scy;&ocy;&zcy;&dcy;&acy;&ncy;&icy;&yacy; &dcy;&vcy;&ucy;&khcy; &scy;&ucy;&rcy;&rcy;&ocy;&gcy;&acy;&tcy;&ncy;&ycy;&khcy; &pcy;&ocy;&lcy;&iecy;&jcy; &vcy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&iecy; Rows. &Dcy;&vcy;&acy;&zhcy;&dcy;&ycy; &kcy;&lcy;&icy;&kcy;&acy;&iecy;&mcy; &icy; &zcy;&acy;&pcy;&icy;&scy;&ycy;&vcy;&acy;&iecy;&mcy; avg(0), &zcy;&acy;&tcy;&iecy;&mcy; &ncy;&acy;&zhcy;&icy;&mcy;&acy;&iecy;&mcy; "Enter".
+<img alt="IMAGE_0" src="/images/donut/IMAGE_0.png"/></p>
+<!-- <img style="float: right;" src="/content/images/donut/IMAGE_0.png" alt="Photo" /> -->
+<!-- {% img /images/donut/IMAGE_0.png 300 %} -->
+<p>&Acy;&ncy;&acy;&lcy;&ocy;&gcy;&icy;&chcy;&ncy;&ocy; &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&iecy;&mcy; &iecy;&shchcy;&iecy; &ocy;&dcy;&ncy;&ucy; &acy;&gcy;&rcy;&iecy;&gcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&ncy;&ucy;&yucy; &mcy;&iecy;&rcy;&ucy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 2:</strong> &Vcy;&ycy;&bcy;&iecy;&rcy;&acy;&iecy;&mcy; &tcy;&icy;&pcy; &mcy;&iecy;&tcy;&kcy;&icy; &dcy;&lcy;&yacy; &mcy;&iecy;&rcy;</p>
+<p>&Dcy;&acy;&lcy;&iecy;&iecy;, &vcy;&ycy;&bcy;&icy;&rcy;&acy;&iecy;&mcy; &tcy;&icy;&pcy; &mcy;&iecy;&tcy;&kcy;&icy; &dcy;&lcy;&yacy; &pcy;&iecy;&rcy;&vcy;&ocy;&jcy; &mcy;&iecy;&rcy;&ycy; - Pie. &Kcy;&rcy;&ocy;&mcy;&iecy; &tcy;&ocy;&gcy;&ocy;, &ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy; &ncy;&acy; &tcy;&ocy;, &chcy;&tcy;&ocy;, &scy;&ocy;&zcy;&dcy;&acy;&vcy; &dcy;&vcy;&acy; &scy;&ocy;&vcy;&ocy;&kcy;&ucy;&pcy;&ncy;&ycy;&khcy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&tcy;&iecy;&lcy;&yacy;, &ncy;&acy; &kcy;&acy;&rcy;&tcy;&ocy;&chcy;&kcy;&iecy; Marks &pcy;&ocy;&lcy;&ucy;&chcy;&icy;&lcy;&icy; &dcy;&vcy;&iecy; &scy;&iecy;&kcy;&tscy;&icy;&icy; &dcy;&lcy;&yacy; &kcy;&acy;&zhcy;&dcy;&ocy;&jcy; &mcy;&iecy;&rcy;&ycy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 3:</strong> &Dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&iecy;&mcy; &ncy;&acy;&bcy;&ocy;&rcy; &pcy;&ocy;&lcy;&iecy;&jcy; &dcy;&lcy;&yacy; &pcy;&ocy;&lcy;&ucy;&chcy;&iecy;&ncy;&icy;&yacy; &kcy;&rcy;&ucy;&gcy;&ocy;&vcy;&ocy;&jcy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ycy;
+&Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &dcy;&ocy;&bcy;&acy;&vcy;&icy;&mcy; &ncy;&acy;&bcy;&ocy;&rcy; &pcy;&ocy;&lcy;&iecy;&jcy; &vcy; &kcy;&acy;&rcy;&tcy;&ocy;&chcy;&kcy;&acy;&khcy; Color, Angle &icy; Label &kcy;&acy;&rcy;&tcy;&ocy;&chcy;&iecy;&kcy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&acy; Marks. &Pcy;&ocy;&zhcy;&acy;&lcy;&ucy;&jcy;&scy;&tcy;&acy;, &ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy;, &chcy;&tcy;&ocy; &mcy;&ycy; &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&iecy;&mcy; &ecy;&tcy;&icy; &pcy;&ocy;&lcy;&yacy; &vcy; &pcy;&iecy;&rcy;&vcy;&ycy;&jcy; &scy;&tcy;&ocy;&lcy;&bcy;&iecy;&tscy; &pcy;&ocy;&lcy;&yacy; AGG(avg(0)). &Dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&yacy; &ecy;&tcy;&icy; &pcy;&ocy;&lcy;&yacy; &vcy; &scy;&ocy;&ocy;&tcy;&vcy;&iecy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&shchcy;&icy;&jcy; &scy;&tcy;&ocy;&lcy;&bcy;&tscy;&ycy;, &mcy;&ycy; &pcy;&ocy;&lcy;&ucy;&chcy;&acy;&iecy;&mcy; &kcy;&rcy;&ucy;&gcy;&ocy;&vcy;&ucy;&yucy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ucy;, &kcy;&acy;&kcy; &vcy;&icy;&dcy;&ncy;&ocy; &ncy;&acy; &scy;&kcy;&rcy;&icy;&ncy;&shcy;&ocy;&tcy;&iecy; &ncy;&icy;&zhcy;&iecy;, &scy; &tcy;&rcy;&iecy;&mcy;&yacy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&acy;&mcy;&icy;, &ncy;&acy;&kcy;&lcy;&iecy;&jcy;&kcy;&icy; &scy; &icy;&mcy;&iecy;&ncy;&acy;&mcy;&icy;, &icy; &ncy;&acy;&kcy;&lcy;&iecy;&jcy;&kcy;&icy; &scy; &tscy;&iecy;&ncy;&ncy;&ocy;&scy;&tcy;&yacy;&mcy;&icy;.</p>
+<p>&Pcy;&rcy;&icy;&mcy;&iecy;&ncy;&icy;&mcy; &bcy;&ycy;&scy;&tcy;&rcy;&ocy;&iecy; &tcy;&acy;&bcy;&lcy;&icy;&chcy;&ncy;&ocy;&iecy; &vcy;&ycy;&chcy;&icy;&scy;&lcy;&iecy;&ncy;&icy;&iecy; &kcy; &pcy;&ocy;&lcy;&yucy; SUM(Sales), &ncy;&acy;&zhcy;&icy;&mcy;&acy;&yacy; &ncy;&acy; &ncy;&iecy;&gcy;&ocy;, &vcy;&ycy;&bcy;&icy;&rcy;&acy;&iecy;&mcy; &ocy;&pcy;&tscy;&icy;&yucy; Quick Table Calculation, &acy; &zcy;&acy;&tcy;&iecy;&mcy; &vcy;&ycy;&bcy;&iecy;&rcy;&iecy;&mcy; Per&scy;ent of Total &Ocy;&tcy;&ocy;&bcy;&rcy;&acy;&zcy;&icy;&tcy;&scy;&yacy; &pcy;&rcy;&ocy;&tscy;&iecy;&ncy;&tcy; &ocy;&tcy; &ocy;&bcy;&shchcy;&iecy;&gcy;&ocy; &ocy;&bcy;&hardcy;&iecy;&mcy;&acy; &pcy;&rcy;&ocy;&dcy;&acy;&zhcy; &dcy;&lcy;&yacy; &kcy;&acy;&zhcy;&dcy;&ocy;&jcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&icy; &vcy; &mcy;&iecy;&tcy;&kcy;&acy;&khcy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ycy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 4:</strong> &Vcy;&ycy;&bcy;&iecy;&rcy;&acy;&iecy;&mcy; &Kcy;&rcy;&ucy;&gcy; &icy;&zcy; &vcy;&ycy;&pcy;&acy;&dcy;&acy;&yucy;&shchcy;&iecy;&gcy;&ocy; &scy;&pcy;&icy;&scy;&kcy;&acy;
+&Dcy;&acy;&lcy;&iecy;&iecy; &shchcy;&iecy;&lcy;&kcy;&acy;&iecy;&mcy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; &ncy;&acy;&shcy;&iecy;&mcy; &vcy;&tcy;&ocy;&rcy;&ocy;&mcy; &pcy;&ocy;&lcy;&iecy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy; (&tcy;.&iecy;. AGG(avg(0))) &vcy; &pcy;&ocy;&lcy;&iecy; Marks &rcy;&acy;&zcy;&dcy;&iecy;&lcy; &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; Circle &vcy; &kcy;&acy;&chcy;&iecy;&scy;&tcy;&vcy;&iecy; &tcy;&icy;&pcy;&acy; &mcy;&iecy;&tcy;&kcy;&icy; &icy;&zcy; &vcy;&ycy;&pcy;&acy;&dcy;&acy;&yucy;&shchcy;&iecy;&gcy;&ocy; &scy;&pcy;&icy;&scy;&kcy;&acy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 5:</strong> &Mcy;&iecy;&ncy;&yacy;&iecy;&mcy; &tscy;&vcy;&iecy;&tcy; &ocy;&kcy;&rcy;&ucy;&zhcy;&ncy;&ocy;&scy;&tcy;&icy;
+&Mcy;&iecy;&ncy;&yacy;&iecy;&mcy; &tscy;&vcy;&iecy;&tcy; &kcy;&rcy;&ucy;&gcy;&acy; &scy; &scy;&iecy;&rcy;&ocy;&gcy;&ocy; &ncy;&acy; &bcy;&iecy;&lcy;&ycy;&jcy;. &Dcy;&lcy;&yacy; &ecy;&tcy;&ocy;&gcy;&ocy; &ncy;&acy;&zhcy;&icy;&mcy;&acy;&iecy;&mcy; &ncy;&acy; Color &icy; &vcy;&ycy;&bcy;&rcy;&acy;&tcy;&softcy; &bcy;&iecy;&lcy;&ycy;&jcy; &icy;&zcy; &dcy;&acy;&ncy;&ncy;&ocy;&jcy; &tscy;&vcy;&iecy;&tcy;&ocy;&vcy;&ocy;&jcy; &pcy;&acy;&lcy;&icy;&tcy;&rcy;&ycy;. &Ocy;&pcy;&yacy;&tcy;&softcy; &zhcy;&iecy;, &ucy;&bcy;&iecy;&dcy;&icy;&tcy;&iecy;&scy;&softcy; &chcy;&tcy;&ocy; &vcy;&ycy;&pcy;&ocy;&lcy;&ncy;&yacy;&iecy;&tcy;&iecy; &ecy;&tcy;&ocy;&tcy; &shcy;&acy;&gcy; &dcy;&lcy;&yacy; &vcy;&tcy;&ocy;&rcy;&ocy;&gcy;&ocy; &icy;&zcy;&mcy;&iecy;&rcy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;&gcy;&ocy; &pcy;&ocy;&lcy;&yacy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 6:</strong> &Dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&iecy;&mcy; &Ocy;&bcy;&shchcy;&iecy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy; &pcy;&ocy; &vcy;&scy;&iecy;&mcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&yacy;&mcy;
+&Pcy;&ocy;&scy;&mcy;&ocy;&tcy;&rcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;, &ncy;&acy;&shcy; &pcy;&ocy;&scy;&lcy;&iecy;&dcy;&ncy;&icy;&jcy; &shcy;&acy;&gcy; &scy;&ocy;&zcy;&dcy;&acy;&iecy;&tcy; &bcy;&iecy;&lcy;&ycy;&jcy; &kcy;&rcy;&ucy;&gcy; &ncy;&acy; &ncy;&icy;&zhcy;&ncy;&iecy;&jcy; &pcy;&ocy;&lcy;&ocy;&vcy;&icy;&ncy;&iecy; &pcy;&lcy;&ocy;&shchcy;&acy;&dcy;&softcy; &ucy;&chcy;&acy;&scy;&tcy;&kcy;&acy;. &Pcy;&iecy;&rcy;&iecy;&dcy; &tcy;&iecy;&mcy;, &kcy;&acy;&kcy; &pcy;&rcy;&ocy;&dcy;&ocy;&lcy;&zhcy;&icy;&tcy;&softcy;, &dcy;&ocy;&bcy;&acy;&vcy;&icy;&mcy; &icy;&zcy;&mcy;&iecy;&rcy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;&iecy; &pcy;&ocy;&lcy;&iecy;, &Pcy;&rcy;&ocy;&dcy;&acy;&zhcy;&icy; &vcy; &Kcy;&acy;&rcy;&tcy;&ocy;&chcy;&kcy;&acy; &vcy;&tcy;&ocy;&rcy;&ocy;&gcy;&ocy; &acy;&gcy;&rcy;&iecy;&gcy;&acy;&tcy;&ncy;&ocy;&gcy;&ocy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy;. &Ecy;&tcy;&ocy; &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&iecy;&tcy; &tscy;&iecy;&ncy;&ncy;&ocy;&scy;&tcy;&softcy; &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&yacy; &ocy;&bcy;&shchcy;&icy;&jcy; &ocy;&bcy;&hardcy;&iecy;&mcy; &pcy;&rcy;&ocy;&dcy;&acy;&zhcy; &pcy;&ocy; &vcy;&scy;&iecy;&mcy; &tcy;&rcy;&iecy;&mcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&yacy;&mcy;, &ncy;&acy;&khcy;&ocy;&dcy;&yacy;&shchcy;&icy;&mcy;&scy;&yacy; &ncy;&icy;&zhcy;&iecy; &bcy;&iecy;&lcy;&ocy;&gcy;&ocy; &kcy;&rcy;&ucy;&gcy;&acy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 7:</strong> &Vcy;&ycy;&bcy;&iecy;&rcy;&acy;&iecy;&mcy; &dcy;&vcy;&ocy;&jcy;&ncy;&ucy;&yucy; &ocy;&scy;&softcy; &dcy;&lcy;&yacy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy; &gcy;&rcy;&acy;&fcy;&icy;&kcy;&ocy;&vcy;
+&Pcy;&rcy;&icy;&shcy;&lcy;&ocy; &vcy;&rcy;&iecy;&mcy;&yacy; &scy;&ocy;&vcy;&mcy;&iecy;&scy;&tcy;&icy;&tcy;&softcy; &ecy;&tcy;&icy; &dcy;&vcy;&acy; &gcy;&rcy;&acy;&fcy;&icy;&kcy;&acy; &icy; &pcy;&rcy;&icy;&bcy;&lcy;&icy;&zcy;&icy;&tcy;&softcy;&scy;&yacy; &kcy; &ncy;&acy;&shcy;&iecy;&mcy;&ucy; &fcy;&icy;&ncy;&acy;&lcy;&softcy;&ncy;&ocy;&mcy;&ucy; &rcy;&iecy;&zcy;&ucy;&lcy;&softcy;&tcy;&acy;&tcy;&ucy;. &Dcy;&lcy;&yacy; &ecy;&tcy;&ocy;&gcy;&ocy; &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; &pcy;&rcy;&icy;&scy;&ucy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&shchcy;&iecy;&mcy; &ncy;&acy;&zcy;&vcy;&acy;&ncy;&icy;&icy; &pcy;&ocy;&lcy;&yacy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy; &vcy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&iecy; Rows &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; Dual Axis &icy;&zcy; &vcy;&ycy;&pcy;&acy;&dcy;&acy;&yucy;&shchcy;&iecy;&gcy;&ocy; &mcy;&iecy;&ncy;&yucy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 8:</strong> &Icy;&zcy;&mcy;&iecy;&ncy;&yacy;&iecy;&mcy; &rcy;&acy;&zcy;&mcy;&iecy;&rcy;
+&Scy;&iecy;&jcy;&chcy;&acy;&scy; &mcy;&ycy; &vcy;&icy;&dcy;&icy;&mcy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &bcy;&iecy;&lcy;&ycy;&jcy; &kcy;&rcy;&ucy;&gcy;, &scy; &mcy;&iecy;&tcy;&kcy;&acy;&mcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &vcy;&ocy;&kcy;&rcy;&ucy;&gcy;. &Ecy;&tcy;&ocy; &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &dcy;&vcy;&iecy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ycy; &tscy;&iecy;&lcy;&icy;&kcy;&ocy;&mcy; &pcy;&iecy;&rcy;&iecy;&kcy;&rcy;&ycy;&vcy;&acy;&yucy;&tcy; &dcy;&rcy;&ucy;&gcy; &dcy;&rcy;&ucy;&gcy;&acy;. &CHcy;&tcy;&ocy;&bcy;&ycy; &pcy;&rcy;&icy;&vcy;&iecy;&scy;&tcy;&icy; &vcy;&tcy;&ocy;&rcy;&ocy;&jcy;
+&gcy;&rcy;&acy;&fcy;&icy;&kcy; &scy;&pcy;&iecy;&rcy;&iecy;&dcy;&icy;, &ncy;&acy;&zhcy;&mcy;&icy;&tcy;&iecy; &ncy;&acy; &kcy;&acy;&rcy;&tcy;&ucy; Size &icy; &ucy;&mcy;&iecy;&ncy;&softcy;&shcy;&icy;&tcy;&softcy; &rcy;&acy;&zcy;&mcy;&iecy;&rcy; &bcy;&iecy;&lcy;&ocy;&gcy;&ocy; &kcy;&rcy;&ucy;&gcy;&acy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 9:</strong> &Zcy;&acy;&vcy;&iecy;&rcy;&shcy;&iecy;&ncy;&icy;&iecy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ycy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;
+&Kcy;&acy;&kcy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &ocy;&tcy;&rcy;&iecy;&gcy;&ucy;&lcy;&icy;&rcy;&ucy;&iecy;&mcy; &rcy;&acy;&zcy;&mcy;&iecy;&rcy; &vcy;&ncy;&ucy;&tcy;&rcy;&iecy;&ncy;&ncy;&iecy;&gcy;&ocy; &bcy;&iecy;&lcy;&ocy;&gcy;&ocy; &kcy;&rcy;&ucy;&gcy;&acy;, &pcy;&ocy;&yacy;&vcy;&icy;&tcy;&scy;&yacy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy; &vcy; &fcy;&ocy;&rcy;&mcy;&iecy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&ycy; &scy; &tcy;&rcy;&iecy;&mcy;&yacy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&acy;&mcy;&icy; &icy; &mcy;&iecy;&tcy;&kcy;&acy;&mcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Vcy; &tscy;&iecy;&ncy;&tcy;&rcy;&iecy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;&ocy;&gcy;&ocy; &gcy;&rcy;&acy;&fcy;&icy;&kcy;&acy; &ocy;&tcy;&ocy;&bcy;&rcy;&acy;&zcy;&icy;&tcy;&scy;&yacy; &ocy;&bcy;&shchcy;&acy;&yacy; &scy;&tcy;&ocy;&icy;&mcy;&ocy;&scy;&tcy;&softcy; &pcy;&rcy;&ocy;&dcy;&acy;&zhcy; &pcy;&ocy; &vcy;&scy;&iecy;&mcy; &tcy;&rcy;&iecy;&mcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&yacy;&mcy;.</p>
+<p><strong>&SHcy;&acy;&gcy; 10:</strong> &Pcy;&rcy;&icy;&mcy;&iecy;&ncy;&iecy;&ncy;&icy;&iecy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy;
+&Mcy;&ycy; &tcy;&acy;&kcy;&zhcy;&iecy; &mcy;&ocy;&zhcy;&iecy;&mcy; &icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy;:
+&TScy;&vcy;&iecy;&tcy;&ocy;&vcy;&ucy;&yucy; &scy;&khcy;&iecy;&mcy;&ucy; &gcy;&rcy;&acy;&fcy;&icy;&kcy;&acy;, &ncy;&acy;&zhcy;&acy;&vcy; &ncy;&acy; &kcy;&ncy;&ocy;&pcy;&kcy;&ucy; Color &vcy; &pcy;&iecy;&rcy;&vcy;&ocy;&jcy; &scy;&iecy;&kcy;&tscy;&icy;&icy; &pcy;&ocy;&lcy;&yacy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&jcy;
+&Ncy;&acy;&scy;&tcy;&rcy;&ocy;&icy;&tcy;&softcy; &rcy;&acy;&zcy;&mcy;&iecy;&rcy; &vcy;&ncy;&iecy;&shcy;&ncy;&iecy;&jcy; &icy; &vcy;&ncy;&ucy;&tcy;&rcy;&iecy;&ncy;&ncy;&iecy;&jcy; &ocy;&kcy;&rcy;&ucy;&zhcy;&ncy;&ocy;&scy;&tcy;&icy;
+&Ucy;&bcy;&rcy;&acy;&tcy;&softcy; &lcy;&icy;&ncy;&icy;&icy; &scy;&iecy;&tcy;&kcy;&icy;
+&Icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy; &iecy;&dcy;&icy;&ncy;&icy;&tscy;&ycy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy;
+&Icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy; &rcy;&acy;&scy;&pcy;&ocy;&lcy;&ocy;&zhcy;&iecy;&ncy;&icy;&iecy; &mcy;&iecy;&tcy;&ocy;&kcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;
+&Ocy;&tcy;&ocy;&bcy;&rcy;&acy;&zcy;&icy;&tcy;&softcy; &gcy;&rcy;&acy;&fcy;&icy;&kcy; &pcy;&ocy; &vcy;&scy;&iecy;&khcy; &shcy;&icy;&rcy;&icy;&ncy;&iecy; &rcy;&acy;&bcy;&ocy;&chcy;&iecy;&jcy; &ocy;&bcy;&lcy;&acy;&scy;&tcy;&icy;</p>
+<p>&Tcy;&ocy;&chcy;&ncy;&ocy; &tcy;&acy;&kcy; &zhcy;&iecy; &mcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&mcy; &ocy;&tcy;&fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&tcy;&softcy; &vcy;&scy;&pcy;&lcy;&ycy;&vcy;&acy;&yucy;&shchcy;&ucy;&yucy; &pcy;&ocy;&dcy;&scy;&kcy;&acy;&zcy;&kcy;&ucy; (Tooltip). &Ncy;&acy; &ecy;&tcy;&ocy;&mcy; &ncy;&acy;&shcy;&acy; &dcy;&icy;&acy;&gcy;&rcy;&acy;&mcy;&mcy;&acy; &pcy;&ocy;&ncy;&chcy;&icy;&kcy;&ocy;&vcy;, &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&yucy;&shchcy;&acy;&yacy; &ocy;&bcy;&shchcy;&ucy;&yucy; &scy;&tcy;&ocy;&icy;&mcy;&ocy;&scy;&tcy;&softcy; &pcy;&rcy;&ocy;&dcy;&acy;&zhcy; &pcy;&ocy; &vcy;&scy;&iecy;&mcy; &tcy;&rcy;&iecy;&mcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&yacy;&mcy;, &gcy;&ocy;&tcy;&ocy;&vcy;&acy;. &Tcy;&rcy;&icy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&icy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&ncy;&ycy; &rcy;&acy;&zcy;&ncy;&ycy;&mcy;&icy; &tscy;&vcy;&iecy;&tcy;&acy;&mcy;&icy;, &chcy;&tcy;&ocy; &ocy;&bcy;&lcy;&iecy;&gcy;&chcy;&acy;&iecy;&tcy; &ncy;&acy;&mcy; &zcy;&acy;&dcy;&acy;&chcy;&ucy; &ocy;&pcy;&ocy;&zcy;&ncy;&acy;&tcy;&softcy; &icy;&khcy;.
+&Icy;&tcy;&ocy;&gcy;&ocy;&vcy;&ycy;&jcy; &rcy;&iecy;&zcy;&ucy;&lcy;&softcy;&tcy;&acy;&tcy; &vcy;&ocy; &vcy;&lcy;&ocy;&zhcy;&iecy;&ncy;&icy;&icy;:
+Donut Chart.twbx</p>
+<p><strong>&Rcy;&iecy;&zcy;&yucy;&mcy;&iecy;</strong>
+&Icy;&tcy;&acy;&kcy;, &ncy;&acy; &ecy;&tcy;&ocy;&mcy; &zcy;&acy;&vcy;&iecy;&rcy;&shcy;&acy;&iecy;&tcy;&scy;&yacy; &ucy;&rcy;&ocy;&kcy; &pcy;&ocy; &scy;&ocy;&zcy;&dcy;&acy;&ncy;&icy;&yucy; Donut Chart. &Ncy;&acy;&dcy;&iecy;&iecy;&mcy;&scy;&yacy;, &chcy;&tcy;&ocy; &vcy;&ycy; &tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &scy;&pcy;&ocy;&scy;&ocy;&bcy;&ncy;&ycy; &lcy;&iecy;&gcy;&kcy;&ocy; &icy; &bcy;&ycy;&scy;&tcy;&rcy;&ocy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &iecy;&iecy; &scy;&acy;&mcy;&ocy;&scy;&tcy;&ocy;&yacy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;.
+&Pcy;&rcy;&icy;&yacy;&tcy;&ncy;&ocy;&gcy;&ocy; &ocy;&bcy;&ucy;&chcy;&iecy;&ncy;&icy;&yacy; 😃</p>
+    <!-- <div class="aspect-w-16 aspect-h-9 mx-auto"></div> CSS placeholder -->
+  </div>
+  <footer class="flex flex-col mt-10 ">
+    <ul class="flex flex-wrap">
+    </ul>
+    <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-l-lg">
+        <a class="flex flex-col pr-2" href="./data-densification-what-is-it.html">
+          <div class="mx-4 py-2 text-left">
+            <p class="text-zinc-500 dark:text-neutral-400 text-sm">« PREV PAGE</p>
+            <p class="text-left py-1 hover:underline">Data Densification - what is it?</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="twitter" aria-label="share Features on twitter"
+          href="https://twitter.com/intent/tweet/?text=Features&amp;url=./donut-chart-ponchikovaia-diagramma.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+          href="https://www.linkedin.com/sharing/share-offsite/?url=./donut-chart-ponchikovaia-diagramma.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="reddit" aria-label="share Features on reddit"
+          href="https://reddit.com/submit?url=./donut-chart-ponchikovaia-diagramma.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-reddit fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="facebook" aria-label="share Features on facebook"
+          href="https://facebook.com/sharer/sharer.php?u=./donut-chart-ponchikovaia-diagramma.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-facebook fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+          href="https://api.whatsapp.com/send?text=Features - ./donut-chart-ponchikovaia-diagramma.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+          href="https://telegram.me/share/url?text=Features&amp;url=./donut-chart-ponchikovaia-diagramma.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </footer>
+  <div>
+  </div>
+</main>
+
+    </div>
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-500 dark:text-zinc-400">
+        <div class="px-4">
+            <span>©2022&nbsp;&#8226;&nbsp;</span>Powered by
+            <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
+            <a class="underline" href="https://github.com/aleylara/Papyrus">&nbsp;Papyrus</a>
+        </div>
+    </footer>
+
+
+    <script>
+        let themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        let themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+        let themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', function () {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+    <script src="https://files.stork-search.net/releases/v1.4.0/stork.js"></script>
+    <script>
+        stork.register("sitesearch", "./search-index.st")
+    </script>
+</body>
+
+</html>

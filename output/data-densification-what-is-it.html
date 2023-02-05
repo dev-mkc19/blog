@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Pelican" />
+    <title>Data Densification - what is it?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link rel="stylesheet" href="./theme/css/stork.css">
+    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
+        href="./theme/css/stork-dark.css">
+    <link
+        href="dev.tinito.in/feeds/all.atom.xml"
+        type="application/atom+xml" rel="alternate" title="Papyrus Atom Feed" />
+<meta name="description" content="В этом уроке мы научимся создавать диаграмму пончиков Tableau. Это диаграмма продвинутого типа. Откройте таблицу и загрузите в нее набор данных...." />
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
+    <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
+        <div class="flex pt-4">
+            <h1 class="font-semibold text-2xl"><a href="./">Papyrus</a></h1>
+            <button id="theme-toggle" type="button"
+                class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <ul class="flex flex-wrap lg:mr-24 md:pt-0">
+            <li class="mr-4 pt-6"><a  href="./archives.html">Archive</a></li>
+            <li class="mr-4 pt-6"><a                     href="./categories.html">Categories</a></li>
+            <li class="mr-4 pt-6"><a  href="./tags.html">Tags</a></li>
+            <li class="mr-4 pt-6"><a  href="./search.html">Search</a></li>
+        </ul>
+    </nav>
+    <div class="flex-grow md:max-w-screen-md md:mx-auto md:w-3/4 px-4">
+        <nav class="text-zinc-800 dark:text-zinc-300 mt-12 pb-2 md:mt-16" aria-label="Breadcrumb">
+            <ul class="p-0 inline-flex items-center">
+                <li class="flex items-center">
+                    <a href="./" class="text-zinc-800 dark:text-zinc-300 inline-flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        Home
+                    </a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="./categories.html">Categories</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="./category/tableau.html">Tableau</a>
+                </li>
+                <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                    <path
+                        d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                </svg>
+            </ul>
+        </nav>
+
+<main>
+  <header>
+    <h1 class="font-semibold text-3xl my-2">Data Densification - what is it?</h1>
+    <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
+      <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+        <time>декабря 03, 2010</time>
+        <div>
+          <span>&nbsp;·&nbsp;4 min read</span>
+        </div>
+        <div>
+          <span>&nbsp;·&nbsp;Mikhail K</span>
+        </div>
+      </div>
+    </footer>
+  </header>
+  <details class="flex flex-col my-6 p-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg">
+    <summary class="text-lg font-bold">Table of contents</summary>
+    <div class="mx-4 px-4 underline">
+      <div id="toc"><ul><li><a class="toc-href" href="#povyshenie-plotnosti-dannykh" title="&Pcy;&ocy;&vcy;&ycy;&shcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;">&Pcy;&ocy;&vcy;&ycy;&shcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;</a></li></ul></div>
+    </div>
+  </details>
+  <div class="max-w-7xl container mx-auto my-8 text-zinc-800 dark:text-zinc-300  
+              prose lg:max-w-none prose-headings:text-zinc-800 prose-headings:dark:text-zinc-300 
+              prose-h1:text-3xl lg:prose-h1:text-3xl prose-headings:font-semibold 
+              prose-pre:bg-zinc-200 prose-pre:text-zinc-800
+              dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
+              prose-blockquote:text-zinc-800
+              dark:prose-blockquote:text-zinc-200
+              prose-a:text-gray-500
+              dark:prose-a:text-gray-400
+              dark:prose-strong:text-zinc-200 
+              dark:prose-code:text-zinc-200
+              dark:prose-code:bg-zinc-800
+              prose-code:bg-zinc-200
+              prose-code:font-light
+              prose-img:rounded-md
+              ">
+    <h1 id="povyshenie-plotnosti-dannykh">&Pcy;&ocy;&vcy;&ycy;&shcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;</h1>
+<p>&Ocy;&dcy;&ncy;&ocy;&jcy; &icy;&zcy; &bcy;&ocy;&lcy;&iecy;&iecy; &scy;&lcy;&ocy;&zhcy;&ncy;&ycy;&khcy; &tcy;&iecy;&mcy; &vcy; Tableau &yacy;&vcy;&lcy;&yacy;&iecy;&tcy;&scy;&yacy; "&Ucy;&vcy;&iecy;&lcy;&icy;&chcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;". &Kcy;&acy;&kcy; &icy; &mcy;&ncy;&ocy;&gcy;&ocy;&iecy; &dcy;&rcy;&ucy;&gcy;&ocy;&iecy; &vcy; Tableau, &mcy;&ycy; &ocy;&scy;&ncy;&ocy;&vcy;&ycy;&vcy;&acy;&iecy;&mcy;&scy;&yacy; &ncy;&acy; &rcy;&acy;&bcy;&ocy;&tcy;&acy;&khcy; &dcy;&rcy;&ucy;&gcy;&icy;&khcy; &lcy;&yucy;&dcy;&iecy;&jcy;, &pcy;&ocy;&ecy;&tcy;&ocy;&mcy;&ucy;, &pcy;&rcy;&iecy;&zhcy;&dcy;&iecy; &chcy;&iecy;&mcy; &ncy;&acy;&chcy;&acy;&tcy;&softcy;, &scy;&tcy;&ocy;&icy;&tcy; &ocy;&tcy;&mcy;&iecy;&tcy;&icy;&tcy;&softcy; &dcy;&vcy;&ucy;&khcy; &lcy;&yucy;&dcy;&iecy;&jcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &pcy;&iecy;&rcy;&vcy;&ycy;&mcy;&icy; &pcy;&rcy;&icy;&mcy;&iecy;&ncy;&icy;&lcy;&icy; &ecy;&tcy;&icy; &pcy;&rcy;&icy;&iecy;&mcy;&ycy;. &Acy;&vcy;&tcy;&ocy;&rcy;&ycy;: &Dcy;&zhcy;&ocy; &Mcy;&acy;&kcy;&ocy; &icy; &Dcy;&zhcy;&ocy;&ncy;&acy;&tcy;&acy;&ncy; &Dcy;&rcy;&acy;&mcy;&mcy;&icy;. &Pcy;&rcy;&ocy;&bcy;&lcy;&iecy;&mcy;&acy;&Dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &ncy;&acy;&chcy;&ncy;&iecy;&mcy; &scy; &rcy;&acy;&zcy;&bcy;&ocy;&rcy;&acy; &scy;&lcy;&ucy;&chcy;&acy;&iecy;&vcy;, &vcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &pcy;&rcy;&icy;&mcy;&iecy;&ncy;&icy;&mcy;&acy; &tcy;&iecy;&khcy;&ncy;&icy;&kcy;&acy; "&Ucy;&pcy;&lcy;&ocy;&tcy;&ncy;&iecy;&ncy;&icy;&yacy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;". &Ncy;&icy;&zhcy;&iecy; &pcy;&rcy;&icy;&vcy;&iecy;&dcy;&iecy;&ncy;&ycy; &dcy;&vcy;&acy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&acy; &rcy;&acy;&zcy;&rcy;&iecy;&zhcy;&iecy;&ncy;&ncy;&ycy;&khcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Pcy;&iecy;&rcy;&vcy;&ycy;&jcy; &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&iecy;&tcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&icy;, &ncy;&ocy; &dcy;&lcy;&yacy; &ncy;&iecy;&kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &icy;&zcy; &ncy;&icy;&khcy; &ocy;&tcy;&scy;&ucy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy; &mcy;&iecy;&rcy;&ycy;. &Vcy;&ocy; &vcy;&tcy;&ocy;&rcy;&ocy;&mcy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&iecy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&ncy;&acy; &dcy;&acy;&tcy;&acy; &pcy;&ocy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yucy;, &ncy;&ocy; &ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy;, &chcy;&tcy;&ocy; &dcy;&acy;&tcy;&ycy; &ocy;&tcy;&scy;&ucy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy;, &pcy;&rcy;&iecy;&dcy;&scy;&tcy;&acy;&vcy;&lcy;&iecy;&ncy;&ycy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &zcy;&acy; &chcy;&iecy;&tcy;&ycy;&rcy;&iecy; &ncy;&iecy;&pcy;&ocy;&scy;&lcy;&iecy;&dcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&softcy;&ncy;&ycy;&khcy; &dcy;&ncy;&yacy; &vcy; &mcy;&acy;&rcy;&tcy;&iecy; 2019 &gcy;&ocy;&dcy;&acy;. &Ecy;&tcy;&ocy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&ycy; &rcy;&acy;&zcy;&rcy;&ocy;&zcy;&ncy;&iecy;&ncy;&ncy;&ycy;&khcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;.&CHcy;&tcy;&ocy;&bcy;&ycy; &pcy;&rcy;&ocy;&dcy;&ocy;&lcy;&zhcy;&icy;&tcy;&softcy; &dcy;&acy;&lcy;&softcy;&shcy;&iecy;, &tcy;&ocy; &pcy;&rcy;&iecy;&zhcy;&dcy;&iecy; &vcy;&scy;&iecy;&gcy;&ocy; &dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &ncy;&acy;&chcy;&ncy;&iecy;&mcy; &scy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&icy;&khcy; &ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&jcy;.&Ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&yacy;&bull;Data Densification (&acy;&ncy;&gcy;&lcy;. &Pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&softcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;) - &ocy;&bcy;&shchcy;&icy;&jcy; &tcy;&iecy;&rcy;&mcy;&icy;&ncy;, &ocy;&khcy;&vcy;&acy;&tcy;&ycy;&vcy;&acy;&yucy;&shchcy;&icy;&jcy; &vcy;&scy;&iecy; &scy;&icy;&tcy;&ucy;&acy;&tscy;&icy;&icy;, &pcy;&rcy;&icy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &vcy; Tableau &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &mcy;&acy;&rcy;&kcy;&iecy;&rcy;&ycy; (Marks) &dcy;&lcy;&yacy; &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ycy;&khcy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&acy;&tscy;&icy;&jcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&jcy; (Dimension).&bull;Domain Completion (&acy;&ncy;&gcy;&lcy;. &Zcy;&acy;&vcy;&iecy;&rcy;&shcy;&iecy;&ncy;&icy;&iecy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy;) - &mcy;&acy;&rcy;&kcy;&iecy;&rcy;&ycy; (Marks) &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &dcy;&lcy;&yacy; &pcy;&ocy;&tcy;&iecy;&ncy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ycy;&khcy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&acy;&tscy;&icy;&jcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy;.&bull;Domain Padding  - &dcy;&lcy;&yacy; &pcy;&ocy;&tcy;&iecy;&ncy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ycy;&khcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; &vcy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy;&iecy; &pcy;&icy;&lcy;&yucy;&lcy;&icy; Range Aware &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &mcy;&acy;&rcy;&kcy;&iecy;&rcy;&ycy;.&bull;Sparse Data (&acy;&ncy;&gcy;&lcy;. &Dcy;&acy;&ncy;&ncy;&ycy;&iecy; &scy; &rcy;&acy;&zcy;&rcy;&ycy;&vcy;&ocy;&mcy;) - &dcy;&acy;&ncy;&ncy;&ycy;&iecy;, &vcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &ncy;&iecy; &vcy;&scy;&iecy; &pcy;&ocy;&tcy;&iecy;&ncy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ycy;&iecy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&acy;&tscy;&icy;&icy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; Dimension &scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy; &vcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &vcy;&ocy;&zcy;&vcy;&rcy;&acy;&shchcy;&acy;&iecy;&mcy;&ycy;&khcy; &icy;&zcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;.&bull;Range Aware Pill (&acy;&ncy;&gcy;&lcy;. &Pcy;&icy;&lcy;&yucy;&lcy;&yacy; &scy; &ocy;&zhcy;&icy;&dcy;&acy;&iecy;&mcy;&ycy;&mcy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy;&ocy;&mcy;)- &pcy;&icy;&lcy;&yucy;&lcy;&yacy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy; &scy; &tcy;&icy;&pcy;&ocy;&mcy; &pcy;&ocy;&lcy;&yacy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;: &Dcy;&acy;&tcy;&acy;, &Vcy;&rcy;&iecy;&mcy;&yacy; &icy;&lcy;&icy; Bin. &Icy;&scy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&icy;&iecy; &scy;&ocy;&scy;&tcy;&acy;&vcy;&lcy;&yacy;&iecy;&tcy; &Tcy;&ocy;&chcy;&ncy;&ocy;&iecy; &vcy;&rcy;&iecy;&mcy;&yacy;, 
+&ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&lcy;&iecy;&ncy;&ncy;&ocy;&iecy; &ncy;&acy; &Tcy;&ocy;&chcy;&ncy;&ucy;&yucy; &dcy;&acy;&tcy;&ucy;. &Pcy;&rcy;&ocy;&tcy;&icy;&vcy;&ocy;&pcy;&ocy;&lcy;&ocy;&zhcy;&ncy;&ycy;&iecy; &pcy;&ocy;&lcy;&kcy;&icy; - &Pcy;&ocy;&lcy;&kcy;&icy; &dcy;&lcy;&yacy; &scy;&tcy;&rcy;&ocy;&kcy; &icy; &scy;&tcy;&ocy;&lcy;&bcy;&ocy;&vcy; &yacy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &pcy;&rcy;&ocy;&tcy;&icy;&vcy;&ocy;&pcy;&ocy;&scy;&tcy;&acy;&vcy;&lcy;&yacy;&iecy;&mcy;&ycy;&mcy;&icy; &pcy;&ocy;&lcy;&kcy;&acy;&mcy;&icy;.&Scy;&pcy;&ocy;&scy;&ocy;&bcy;&ycy; &pcy;&ocy;&vcy;&ycy;&shcy;&iecy;&ncy;&icy;&yacy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;:&bull;Domain Padding - &icy;&ncy;&icy;&tscy;&icy;&icy;&rcy;&ucy;&iecy;&tcy;&scy;&yacy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; &ocy;&pcy;&tscy;&icy;&icy; Show missing values &ocy;&tcy; &pcy;&icy;&lcy;&yucy;&lcy;&icy; Range Aware.&bull;Domain Completion - &icy;&ncy;&icy;&tscy;&icy;&icy;&rcy;&ucy;&iecy;&tcy;&scy;&yacy; 2&mcy;&yacy; &icy;&lcy;&icy; &bcy;&ocy;&lcy;&iecy;&iecy; &pcy;&icy;&lcy;&yucy;&lcy;&yacy;&mcy;&icy; &dcy;&lcy;&yacy; &ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&yacy; &rcy;&acy;&zcy;&mcy;&iecy;&rcy;&ocy;&vcy;.Domain Padding&Ncy;&acy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&iecy; &ncy;&icy;&zhcy;&iecy; &pcy;&rcy;&icy;&vcy;&iecy;&dcy;&iecy;&ncy;&ycy; &dcy;&ncy;&icy; &mcy;&iecy;&scy;&yacy;&tscy;&acy;, DAY (Order Date), &vcy; &scy;&tcy;&ocy;&lcy;&bcy;&tscy;&acy;&khcy;. &Ecy;&tcy;&ocy; Range Aware Pill (&Icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&iecy; &tcy;&acy;&bcy;&lcy;&iecy;&tcy;&kcy;&icy; &scy; &pcy;&ocy;&lcy;&iecy;&mcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &tcy;&icy;&pcy;&acy; &lcy;&icy;&bcy;&ocy; &Dcy;&acy;&tcy;&acy;, &lcy;&icy;&bcy;&ocy; &Vcy;&rcy;&iecy;&mcy;&yacy; &icy;&lcy;&icy; &Bcy;&icy;&ncy;). &Mcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&mcy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; Domain Padding &dcy;&lcy;&yacy; &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&iecy;&ncy;&icy;&yacy; &ecy;&tcy;&icy;&khcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy;. &Dcy;&lcy;&yacy; &ecy;&tcy;&ocy;&gcy;&ocy; &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; &rcy;&acy;&zcy;&mcy;&iecy;&rcy;&ncy;&ocy;&jcy; &tcy;&acy;&bcy;&lcy;&iecy;&tcy;&kcy;&iecy; &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; "Show Missing Values".&Ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy;, &chcy;&tcy;&ocy; Tableau &bcy;&ucy;&dcy;&iecy;&tcy; &ucy;&pcy;&lcy;&ocy;&tcy;&ncy;&yacy;&tcy;&softcy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &vcy;&ncy;&ucy;&tcy;&rcy;&icy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy;&acy;. &Tcy;&acy;&kcy;&icy;&mcy; &ocy;&bcy;&rcy;&acy;&zcy;&ocy;&mcy;, &iecy;&scy;&lcy;&icy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy; DAY (Order Date) &scy;&ocy;&dcy;&iecy;&rcy;&zhcy;&icy;&tcy; &rcy;&iecy;&acy;&lcy;&softcy;&ncy;&ycy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &scy; 2&gcy;&ocy; &pcy;&ocy; 20&iecy; &chcy;&icy;&scy;&lcy;&ocy;, &tcy;&ocy; &pcy;&ocy;&scy;&lcy;&iecy; &vcy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&icy;&yacy; &ocy;&pcy;&tscy;&icy;&icy; "Show Missing Values" &ncy;&iecy; &scy;&tcy;&ocy;&icy;&tcy; &ocy;&zhcy;&icy;&dcy;&acy;&tcy;&softcy; &pcy;&ocy;&yacy;&vcy;&lcy;&iecy;&ncy;&icy;&yacy; 1&gcy;&ocy; &chcy;&icy;&scy;&lcy;&acy; &icy; &dcy;&acy;&tcy; &vcy;&ycy;&shcy;&iecy; 20&gcy;&ocy; &chcy;&icy;&scy;&lcy;&acy;.&Ecy;&tcy;&ocy; &bcy;&ycy;&lcy;&ocy; &lcy;&iecy;&gcy;&kcy;&ocy;, &dcy;&acy;? &Pcy;&ocy;&lcy;&acy;&gcy;&acy;&yucy;, &chcy;&tcy;&ocy; &scy;&lcy;&ocy;&zhcy;&ncy;&iecy;&iecy; &pcy;&ocy;&ncy;&yacy;&tcy;&softcy;, &chcy;&iecy;&mcy; &rcy;&iecy;&acy;&lcy;&softcy;&ncy;&ocy; &pcy;&rcy;&icy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy; &ecy;&tcy;&icy; &shcy;&acy;&gcy;&icy;. &Pcy;&rcy;&ocy;&scy;&tcy;&ocy;&iecy; &vcy;&ycy;&chcy;&icy;&scy;&lcy;&iecy;&ncy;&icy;&iecy; &icy;&lcy;&icy; &ocy;&dcy;&icy;&ncy; &shchcy;&iecy;&lcy;&chcy;&ocy;&kcy; &ocy;&pcy;&tscy;&icy;&icy; &mcy;&ocy;&zhcy;&iecy;&tcy; &vcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&softcy; &ucy;&pcy;&lcy;&ocy;&tcy;&ncy;&iecy;&ncy;&icy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;.Domain Completion
+&Vcy; &pcy;&iecy;&rcy;&vcy;&ocy;&mcy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&iecy; &ncy;&icy;&zhcy;&iecy;, &ucy; &chcy;&acy;&scy;&tcy;&icy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&icy; &ocy;&tcy;&scy;&ucy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;, &vcy; &ecy;&tcy;&ocy;&mcy; &scy;&lcy;&ucy;&chcy;&acy;&iecy; &ncy;&iecy;&ocy;&bcy;&khcy;&ocy;&dcy;&icy;&mcy;&ocy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; Domain Completion, &chcy;&tcy;&ocy;&bcy;&ycy; &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&softcy; &ecy;&tcy;&icy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;. &Icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&jcy;&tcy;&iecy; &tcy;&acy;&kcy;&ocy;&iecy; &vcy;&ycy;&chcy;&icy;&scy;&lcy;&iecy;&ncy;&icy;&iecy;, &kcy;&acy;&kcy; INDEX(), &chcy;&tcy;&ocy;&bcy;&ycy; &vcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&softcy; &fcy;&ucy;&ncy;&kcy;&tscy;&icy;&yucy; Densification (&Rcy;&acy;&scy;&shcy;&icy;&rcy;&iecy;&ncy;&icy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;). &Ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy;, &chcy;&tcy;&ocy; "abc" &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&iecy;&tcy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &tcy;&ocy;, &gcy;&dcy;&iecy; &iecy;&scy;&tcy;&softcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;, &ncy;&ocy; &pcy;&ocy;&scy;&lcy;&iecy; &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&iecy;&ncy;&icy;&yacy; INDEX &mcy;&ycy; &vcy;&icy;&dcy;&icy;&mcy; "abc" &vcy; &kcy;&acy;&zhcy;&dcy;&ocy;&jcy; &yacy;&chcy;&iecy;&jcy;&kcy;&iecy;.&Ucy;&vcy;&iecy;&rcy;&iecy;&ncy;, &ucy;&zhcy;&iecy; &ncy;&acy; &dcy;&acy;&ncy;&ncy;&ocy;&mcy; &ecy;&tcy;&acy;&pcy;&iecy; &pcy;&ocy;&ncy;&yacy;&tcy;&ncy;&acy; &scy;&ucy;&tcy;&softcy; &tcy;&iecy;&khcy;&ncy;&icy;&kcy; &icy; &gcy;&rcy;&acy;&ncy;&icy;&tscy;&acy; &pcy;&rcy;&acy;&kcy;&tcy;&icy;&chcy;&iecy;&scy;&kcy;&ocy;&gcy;&ocy; &pcy;&rcy;&icy;&mcy;&iecy;&ncy;&iecy;&ncy;&icy;&yacy;. &Ocy;&dcy;&ncy;&acy;&kcy;&ocy;, &chcy;&tcy;&ocy;&bcy;&ycy; &zcy;&acy;&kcy;&rcy;&iecy;&pcy;&icy;&tcy;&softcy; &pcy;&ocy;&lcy;&ucy;&chcy;&iecy;&ncy;&ncy;&ycy;&iecy; &tcy;&iecy;&ocy;&rcy;&iecy;&tcy;&icy;&chcy;&iecy;&scy;&kcy;&icy;&iecy; &ncy;&acy;&vcy;&ycy;&kcy;&icy; &rcy;&acy;&scy;&scy;&mcy;&ocy;&tcy;&rcy;&icy;&mcy; &rcy;&iecy;&acy;&lcy;&softcy;&ncy;&ycy;&jcy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &vcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ocy;&mcy; &ncy;&acy; &vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&icy; Highlight Table &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&icy;&mcy; 0% &tcy;&acy;&mcy;, &gcy;&dcy;&iecy; &ncy;&iecy;&tcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &vcy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&iecy;. &Dcy;&lcy;&yacy; &ecy;&tcy;&ocy;&gcy;&ocy; &vcy; &kcy;&acy;&chcy;&iecy;&scy;&tcy;&vcy;&iecy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &bcy;&ucy;&dcy;&iecy;&mcy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; &vcy;&scy;&tcy;&rcy;&ocy;&iecy;&ncy;&ncy;&ycy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; Superstore.&SHcy;&acy;&gcy;&icy; &dcy;&lcy;&yacy; &pcy;&ocy;&dcy;&gcy;&ocy;&tcy;&ocy;&vcy;&kcy;&icy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&acy;:1.&Dcy;&vcy;&acy;&zhcy;&dcy;&ycy; &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; Order Date (&Dcy;&acy;&tcy;&acy; &zcy;&acy;&kcy;&acy;&zcy;&acy;), &chcy;&tcy;&ocy;&bcy;&ycy; &dcy;&ocy;&bcy;&acy;&vcy;&icy;&tcy;&softcy; &pcy;&ocy;&lcy;&iecy; &vcy; &scy;&tcy;&ocy;&lcy;&bcy;&tscy;&ycy;.2.&SHCHcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; Order Date (&Dcy;&acy;&tcy;&acy; &zcy;&acy;&kcy;&acy;&zcy;&acy;) &icy; &icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&iecy; &gcy;&rcy;&acy;&ncy;&ucy;&lcy;&yacy;&rcy;&ncy;&ocy;&scy;&tcy;&softcy; &ncy;&acy; Month (&Dcy;&acy;&tcy;&acy; &zcy;&acy;&kcy;&acy;&zcy;&acy;), &vcy;&ycy;&bcy;&rcy;&acy;&vcy; &pcy;&iecy;&rcy;&vcy;&ycy;&jcy; &mcy;&iecy;&scy;&yacy;&tscy; &vcy; &scy;&pcy;&icy;&scy;&kcy;&iecy;.3.&Dcy;&vcy;&acy;&zhcy;&dcy;&ycy; &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; Customer Name (&Icy;&mcy;&yacy; &kcy;&lcy;&icy;&iecy;&ncy;&tcy;&acy;), &chcy;&tcy;&ocy;&bcy;&ycy; &dcy;&ocy;&bcy;&acy;&vcy;&icy;&tcy;&softcy; &pcy;&ocy;&lcy;&iecy; &vcy; &scy;&tcy;&rcy;&ocy;&kcy;&icy;.4.&Dcy;&vcy;&acy;&zhcy;&dcy;&ycy; &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; Profit Ratio (&Kcy;&ocy;&ecy;&fcy;&fcy;&icy;&tscy;&icy;&iecy;&ncy;&tcy; &pcy;&rcy;&icy;&bcy;&ycy;&lcy;&icy;), &chcy;&tcy;&ocy;&bcy;&ycy; &dcy;&ocy;&bcy;&acy;&vcy;&icy;&tcy;&softcy; &pcy;&ocy;&lcy;&iecy; &vcy; Label (&Tcy;&iecy;&kcy;&scy;&tcy;) &ncy;&acy; &kcy;&acy;&rcy;&tcy;&ocy;&chcy;&kcy;&iecy; Marks.5.&Dcy;&ocy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy; &pcy;&iecy;&rcy;&iecy;&tcy;&acy;&shchcy;&icy;&tcy;&iecy; Profit Ratio (&Kcy;&ocy;&ecy;&fcy;&fcy;&icy;&tscy;&icy;&iecy;&ncy;&tcy; &pcy;&rcy;&icy;&bcy;&ycy;&lcy;&icy;) &vcy; Color (&TScy;&vcy;&iecy;&tcy;) &ncy;&acy; &kcy;&acy;&rcy;&tcy;&ocy;&chcy;&kcy;&iecy; Marks.6.&Icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&iecy; &tcy;&icy;&pcy; &vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&icy; &scy; Automatic &ncy;&acy; Square, &shchcy;&iecy;&lcy;&kcy;&ncy;&ucy;&vcy; &ncy;&acy; &vcy;&ycy;&pcy;&acy;&dcy;&acy;&yucy;&shchcy;&iecy;&mcy; &scy;&pcy;&icy;&scy;&kcy;&iecy; &kcy;&acy;&rcy;&tcy;&ocy;&chcy;&kcy;&icy; Marks.7.&Pcy;&iecy;&rcy;&iecy;&tcy;&acy;&shchcy;&icy;&tcy;&iecy;  Order Date (&Dcy;&acy;&tcy;&acy; &zcy;&acy;&kcy;&acy;&zcy;&acy;) &vcy; "&Fcy;&icy;&lcy;&softcy;&tcy;&rcy;&ycy;" &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; "2017", &chcy;&tcy;&ocy;&bcy;&ycy; &ocy;&tcy;&fcy;&icy;&lcy;&softcy;&tcy;&rcy;&ocy;&vcy;&acy;&tcy;&softcy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; 2017 &gcy;&ocy;&dcy;.8.&Pcy;&iecy;&rcy;&iecy;&tcy;&acy;&shchcy;&icy;&tcy;&iecy; Profit Ratio (&Kcy;&ocy;&ecy;&fcy;&fcy;&icy;&tscy;&icy;&iecy;&ncy;&tcy; &pcy;&rcy;&icy;&bcy;&ycy;&lcy;&icy;) &vcy; "&Fcy;&icy;&lcy;&softcy;&tcy;&rcy;&ycy;" &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy; &ocy;&tcy; -0.5 &dcy;&ocy; 0.59.&Dcy;&vcy;&acy;&zhcy;&dcy;&ycy; &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &tscy;&vcy;&iecy;&tcy;&ocy;&vcy;&ucy;&yucy; &lcy;&iecy;&gcy;&iecy;&ncy;&dcy;&ucy; &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; &pcy;&acy;&lcy;&icy;&tcy;&rcy;&ucy; "SIBUR Red-Gray-Green Sequential" &vcy; &vcy;&ycy;&pcy;&acy;&dcy;&acy;&yucy;&shchcy;&iecy;&mcy; &mcy;&iecy;&ncy;&yucy; &icy; &ncy;&acy;&zhcy;&mcy;&icy;&tcy;&iecy; OK.
+&Vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&yacy; Highlight Table &gcy;&ocy;&tcy;&ocy;&vcy;&acy;. &Ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy; &ncy;&acy; &ncy;&iecy;&dcy;&ocy;&scy;&tcy;&acy;&yucy;&shchcy;&icy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &vcy; &ecy;&tcy;&ocy;&jcy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&iecy;.&Ecy;&tcy;&ocy; &ocy;&tcy;&lcy;&icy;&chcy;&ncy;&ycy;&jcy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &ocy;&ncy; &icy;&mcy;&iecy;&iecy;&tcy; &dcy;&vcy;&acy; &pcy;&rcy;&ocy;&tcy;&icy;&vcy;&ocy;&pcy;&ocy;&lcy;&ocy;&zhcy;&ncy;&ycy;&khcy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy; &vcy; &scy;&tcy;&ocy;&lcy;&bcy;&tscy;&acy;&khcy; &icy; &scy;&tcy;&rcy;&ocy;&kcy;&acy;&khcy;, &icy; &ocy;&dcy;&ncy;&ocy; &icy;&zcy; &ncy;&icy;&khcy; - &pcy;&icy;&lcy;&yucy;&lcy;&yacy; &scy; &ocy;&zhcy;&icy;&dcy;&acy;&iecy;&mcy;&ycy;&mcy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy;&ocy;&mcy;. &Ecy;&tcy;&ocy; &ocy;&zcy;&ncy;&acy;&chcy;&acy;&iecy;&tcy;, &chcy;&tcy;&ocy; &mcy;&ocy;&zhcy;&ncy;&ocy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; &lcy;&icy;&bcy;&ocy; Domain Completion, &lcy;&icy;&bcy;&ocy; Domain Padding, &chcy;&tcy;&ocy;&bcy;&ycy; &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&softcy; &ncy;&iecy;&dcy;&ocy;&scy;&tcy;&acy;&yucy;&shchcy;&icy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy; &vcy; &ecy;&tcy;&ocy;&jcy; &vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&icy;, &bcy;&iecy;&zcy; &ncy;&iecy;&ocy;&bcy;&khcy;&ocy;&dcy;&icy;&mcy;&ocy;&scy;&tcy;&icy; &ocy;&bcy;&hardcy;&iecy;&dcy;&icy;&ncy;&iecy;&ncy;&icy;&yacy; &scy; &scy;&ucy;&rcy;&rcy;&ocy;&gcy;&acy;&tcy;&ncy;&ycy;&mcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&mcy;&icy; &icy; &scy;&pcy;&rcy;&acy;&vcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy;&mcy;&icy;. &Pcy;&ocy;&mcy;&ncy;&icy;&tcy;&iecy;, &chcy;&tcy;&ocy; &tscy;&iecy;&lcy;&softcy; &scy;&ocy;&scy;&tcy;&ocy;&icy;&tcy; &vcy; &tcy;&ocy;&mcy;, &chcy;&tcy;&ocy;&bcy;&ycy; &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&softcy; "0%" &dcy;&lcy;&yacy; &pcy;&ucy;&scy;&tcy;&ycy;&khcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy;, &gcy;&dcy;&iecy; &ncy;&iecy;&tcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;.&Dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &ncy;&acy;&chcy;&ncy;&iecy;&mcy; &scy; &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&iecy;&ncy;&icy;&yacy; &dcy;&ocy;&mcy;&iecy;&ncy;&acy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ocy;&iecy; &rcy;&iecy;&acy;&lcy;&icy;&zcy;&ucy;&iecy;&tcy;&scy;&yacy; &vcy; &dcy;&vcy;&acy; &shcy;&acy;&gcy;&acy;.&Vcy;&ocy;-&pcy;&iecy;&rcy;&vcy;&ycy;&khcy;, &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; Range Aware Pill, &vcy; &dcy;&acy;&ncy;&ncy;&ocy;&mcy; &scy;&lcy;&ucy;&chcy;&acy;&iecy; &ecy;&tcy;&ocy; MONTH(Order Date), &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; "Show Missing Values" (&Pcy;&ocy;&kcy;&acy;&zcy;&acy;&tcy;&softcy; &ocy;&tcy;&scy;&ucy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&shchcy;&icy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;). &Ecy;&tcy;&ocy; &vcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy; &ucy;&pcy;&lcy;&ocy;&tcy;&ncy;&iecy;&ncy;&icy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;.&CHcy;&tcy;&ocy;&bcy;&ycy; &pcy;&rcy;&icy;&scy;&vcy;&ocy;&icy;&tcy;&softcy; &kcy;&ocy;&ncy;&kcy;&rcy;&iecy;&tcy;&ncy;&ocy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy;, &ncy;&acy;&pcy;&rcy;&icy;&mcy;&iecy;&rcy;, "0%", &kcy;&ocy;&tcy;&ocy;&rcy;&ocy;&iecy; &ncy;&iecy;&ocy;&bcy;&khcy;&ocy;&dcy;&icy;&mcy;&ocy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&tcy;&softcy; &vcy; &vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&icy;, &shchcy;&iecy;&lcy;&kcy;&acy;&iecy;&mcy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; &mcy;&iecy;&rcy;&iecy;, &kcy;&ocy;&tcy;&ocy;&rcy;&acy;&yacy; &ncy;&acy;&khcy;&ocy;&dcy;&icy;&tcy;&scy;&yacy; &vcy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&iecy; (&vcy; &dcy;&acy;&ncy;&ncy;&ocy;&mcy; &scy;&lcy;&ucy;&chcy;&acy;&iecy; Profit Ratio &vcy; &kcy;&acy;&rcy;&tcy;&ocy;&chcy;&kcy;&iecy; Marks) &icy; &vcy;&ycy;&bcy;&icy;&rcy;&acy;&iecy;&mcy; Format. &Vcy; &mcy;&iecy;&ncy;&yucy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy; &ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&icy;&tcy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy; "Special Values (eg, NULL)" &rcy;&acy;&vcy;&ncy;&ycy;&mcy; 0% (&icy;&lcy;&icy; &icy;&ncy;&ocy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy; &icy;&lcy;&icy; &tcy;&iecy;&kcy;&scy;&tcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&jcy; &khcy;&ocy;&tcy;&icy;&tcy;&iecy; &ocy;&tcy;&ocy;&bcy;&rcy;&acy;&zcy;&icy;&tcy;&softcy; &vcy; &pcy;&ucy;&scy;&tcy;&ycy;&khcy; &yacy;&chcy;&iecy;&jcy;&kcy;&acy;&khcy;, &bcy;&ucy;&dcy;&iecy;&tcy; &rcy;&acy;&bcy;&ocy;&tcy;&acy;&tcy;&softcy; &icy; &tcy;&iecy;&kcy;&scy;&tcy; &tcy;&icy;&pcy;&acy; "NONE" &icy;&lcy;&icy; "NULL"). &Pcy;&rcy;&icy; &ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&kcy;&iecy; &tscy;&vcy;&iecy;&tcy;&acy; &vcy; "SIBUR Red-Gray-Green Sequential" 0% &bcy;&ucy;&dcy;&iecy;&tcy; &scy;&iecy;&rcy;&ocy;&gcy;&ocy; &tscy;&vcy;&iecy;&tcy;&acy;, &acy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &ncy;&iecy; &pcy;&ucy;&scy;&tcy;&ycy;&iecy;, &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&tcy;&softcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy; &tscy;&vcy;&iecy;&tcy;&ocy;&mcy;. &Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &ucy; &vcy;&acy;&scy; &dcy;&ocy;&lcy;&zhcy;&ncy;&acy; &bcy;&ycy;&tcy;&softcy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&acy; &pcy;&ocy;&dcy;&scy;&vcy;&iecy;&tcy;&kcy;&icy;, &kcy;&acy;&kcy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&ncy;&ocy; &ncy;&icy;&zhcy;&iecy;.
+&Zcy;&acy; &dcy;&vcy;&acy; &shcy;&acy;&gcy;&acy; &dcy;&ocy;&bcy;&icy;&lcy;&icy;&scy;&softcy; &icy;&scy;&kcy;&ocy;&mcy;&ocy;&gcy;&ocy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&acy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&ycy;. &Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &scy;&dcy;&iecy;&lcy;&acy;&iecy;&mcy; &acy;&ncy;&acy;&lcy;&ocy;&gcy;&icy;&chcy;&ncy;&ocy;, &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&yacy; Domain Completion. &Pcy;&rcy;&icy;&dcy;&iecy;&tcy;&scy;&yacy; &ocy;&tcy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy; &shcy;&acy;&gcy;&icy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &chcy;&tcy;&ocy; &bcy;&ycy;&lcy;&icy; &scy;&dcy;&iecy;&lcy;&acy;&ncy;&ycy;, &chcy;&tcy;&ocy;&bcy;&ycy; &vcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&softcy; Domain Padding. &Vcy;&ocy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&jcy;&tcy;&iecy;&scy;&softcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &ncy;&acy;&zcy;&acy;&dcy;, &chcy;&tcy;&ocy;&bcy;&ycy; &vcy;&iecy;&rcy;&ncy;&ucy;&tcy;&softcy;&scy;&yacy; &kcy; &icy;&scy;&khcy;&ocy;&dcy;&ncy;&ocy;&jcy; &vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&icy;.&Rcy;&iecy;&shcy;&iecy;&ncy;&icy;&iecy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; Domain Completion - &ecy;&tcy;&ocy; &tcy;&ocy;&zhcy;&iecy; &pcy;&rcy;&ocy;&tscy;&iecy;&scy;&scy; &icy;&zcy; &dcy;&vcy;&ucy;&khcy; &shcy;&acy;&gcy;&ocy;&vcy;, &pcy;&rcy;&icy; &ecy;&tcy;&ocy;&mcy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&iecy; &icy;&dcy;&iecy;&ncy;&tcy;&icy;&chcy;&ncy;&ocy;. &Tcy;&acy;&kcy; &chcy;&tcy;&ocy; &rcy;&acy;&zcy;&ncy;&icy;&tscy;&acy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &vcy; &tcy;&ocy;&mcy;, &kcy;&acy;&kcy; &vcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&softcy; "&Pcy;&ocy;&vcy;&ycy;&shcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; ". &Dcy;&lcy;&yacy; &ecy;&tcy;&ocy;&gcy;&ocy; &dcy;&vcy;&acy;&zhcy;&dcy;&ycy; &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &bcy;&iecy;&lcy;&ucy;&yucy; &ocy;&bcy;&lcy;&acy;&scy;&tcy;&softcy; &vcy; &ncy;&icy;&zhcy;&ncy;&iecy;&jcy; &chcy;&acy;&scy;&tcy;&icy; &kcy;&acy;&rcy;&tcy;&ycy; &mcy;&iecy;&tcy;&ocy;&kcy; &dcy;&lcy;&yacy; &vcy;&vcy;&ocy;&dcy;&acy; &fcy;&ocy;&rcy;&mcy;&ucy;&lcy;&ycy; &vcy; &scy;&tcy;&rcy;&ocy;&kcy;&iecy;. &Vcy;&vcy;&iecy;&dcy;&icy;&tcy;&iecy; INDEX() &icy; &ncy;&acy;&zhcy;&mcy;&icy;&tcy;&iecy; Enter.&Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &pcy;&ocy;&vcy;&tcy;&ocy;&rcy;&icy;&tcy;&iecy; &shcy;&acy;&gcy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy;, &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; &mcy;&iecy;&rcy;&ucy;, &kcy;&ocy;&tcy;&ocy;&rcy;&acy;&yacy; &ncy;&acy;&khcy;&ocy;&dcy;&icy;&tcy;&scy;&yacy; &vcy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&iecy; (Profit Ratio on the Marks Card Text) &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; &Fcy;&ocy;&rcy;&mcy;&acy;&tcy;. &Vcy; &mcy;&iecy;&ncy;&yucy; "&Fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&iecy;" &ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&icy;&tcy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy; "Special Values (eg, NULL)" &rcy;&acy;&vcy;&ncy;&ycy;&mcy; 0% (&icy;&lcy;&icy; &icy;&ncy;&ocy;&iecy; &dcy;&rcy;&ucy;&gcy;&ocy;&iecy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&iecy; &icy;&lcy;&icy; &tcy;&iecy;&kcy;&scy;&tcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&jcy; &tcy;&rcy;&iecy;&bcy;&ucy;&iecy;&tcy;&scy;&yacy; &ocy;&tcy;&ocy;&bcy;&rcy;&acy;&zcy;&icy;&tcy;&softcy; &vcy; &pcy;&ucy;&scy;&tcy;&ycy;&khcy; &yacy;&chcy;&iecy;&jcy;&kcy;&acy;&khcy;). &Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &ucy; &vcy;&acy;&scy; &dcy;&ocy;&lcy;&zhcy;&ncy;&acy; &bcy;&ycy;&tcy;&softcy; &vcy;&ycy;&dcy;&iecy;&lcy;&iecy;&ncy;&ncy;&acy;&yacy; &tcy;&acy;&bcy;&lcy;&icy;&tscy;&acy;, &kcy;&acy;&kcy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&ncy;&ocy; &ncy;&icy;&zhcy;&iecy;, &icy; &tcy;&ocy;&tcy; &zhcy;&iecy; &rcy;&iecy;&zcy;&ucy;&lcy;&softcy;&tcy;&acy;&tcy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy;, &chcy;&tcy;&ocy; &icy; &rcy;&acy;&ncy;&softcy;&shcy;&iecy;.
+&Kcy;&ncy;&icy;&gcy;&acy; &dcy;&lcy;&yacy; &pcy;&ocy;&vcy;&tcy;&ocy;&rcy;&iecy;&ncy;&icy;&yacy; Data Densification starter.twbx&Rcy;&iecy;&zcy;&yucy;&mcy;&iecy;&Kcy;&acy;&kcy; &yacy; &ucy;&zhcy;&iecy; &ucy;&pcy;&ocy;&mcy;&icy;&ncy;&acy;&lcy;, &ecy;&tcy;&ocy; &ocy;&tcy;&lcy;&icy;&chcy;&ncy;&ycy;&jcy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &mcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&mcy; &vcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&softcy; &fcy;&ucy;&ncy;&kcy;&tscy;&icy;&yucy; "&Pcy;&ocy;&vcy;&ycy;&shcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;" &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; Domain Padding (&scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; Range Aware Pill) &icy;&lcy;&icy; Domain Completion (&scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; &fcy;&ucy;&ncy;&kcy;&tscy;&icy;&icy; INDEX() &scy; &pcy;&rcy;&ocy;&tcy;&icy;&vcy;&ocy;&pcy;&ocy;&lcy;&ocy;&zhcy;&ncy;&ycy;&mcy;&icy; &pcy;&ocy;&lcy;&kcy;&acy;&mcy;&icy;). &Ocy;&bcy;&acy; &vcy;&acy;&rcy;&icy;&acy;&ncy;&tcy;&acy; &rcy;&iecy;&shcy;&acy;&yucy;&tcy; &pcy;&rcy;&ocy;&bcy;&lcy;&iecy;&mcy;&ucy; &icy; &scy;&ocy;&zcy;&dcy;&acy;&yucy;&tcy; &zhcy;&iecy;&lcy;&acy;&iecy;&mcy;&ycy;&jcy; &rcy;&iecy;&zcy;&ucy;&lcy;&softcy;&tcy;&acy;&tcy;.&Pcy;&rcy;&icy;&yacy;&tcy;&ncy;&ocy;&gcy;&ocy; &ocy;&bcy;&ucy;&chcy;&iecy;&ncy;&icy;&yacy;</p>
+    <!-- <div class="aspect-w-16 aspect-h-9 mx-auto"></div> CSS placeholder -->
+  </div>
+  <footer class="flex flex-col mt-10 ">
+    <ul class="flex flex-wrap">
+      <a href="./tag/intro.html">
+        <li
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-500 dark:text-neutral-400 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          intro
+        </li>
+      </a>
+    </ul>
+    <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-l-lg">
+        <a class="flex flex-col pr-2" href="./funnel-vizualisation-kak-postroit.html">
+          <div class="mx-4 py-2 text-left">
+            <p class="text-zinc-500 dark:text-neutral-400 text-sm">« PREV PAGE</p>
+            <p class="text-left py-1 hover:underline">Funnel vizualisation - как построить?</p>
+          </div>
+        </a>
+      </div>
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-r-lg ">
+        <a class="flex flex-col" href="./donut-chart-ponchikovaia-diagramma.html">
+          <div class="text-right mx-4 py-2">
+            <p class="text-zinc-500 dark:text-neutral-400 text-sm">NEXT PAGE »</p>
+            <p class="text-right py-1 hover:underline">Donut Chart - пончиковая диаграмма</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="twitter" aria-label="share Features on twitter"
+          href="https://twitter.com/intent/tweet/?text=Features&amp;url=./data-densification-what-is-it.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+          href="https://www.linkedin.com/sharing/share-offsite/?url=./data-densification-what-is-it.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="reddit" aria-label="share Features on reddit"
+          href="https://reddit.com/submit?url=./data-densification-what-is-it.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-reddit fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="facebook" aria-label="share Features on facebook"
+          href="https://facebook.com/sharer/sharer.php?u=./data-densification-what-is-it.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-facebook fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+          href="https://api.whatsapp.com/send?text=Features - ./data-densification-what-is-it.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+      <ul>
+        <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+          href="https://telegram.me/share/url?text=Features&amp;url=./data-densification-what-is-it.html">
+          <li class="bg-gray-900 p-1 text-white rounded-md">
+            <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </footer>
+  <div>
+  </div>
+</main>
+
+    </div>
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-500 dark:text-zinc-400">
+        <div class="px-4">
+            <span>©2022&nbsp;&#8226;&nbsp;</span>Powered by
+            <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
+            <a class="underline" href="https://github.com/aleylara/Papyrus">&nbsp;Papyrus</a>
+        </div>
+    </footer>
+
+
+    <script>
+        let themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        let themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+        let themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', function () {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+    <script src="https://files.stork-search.net/releases/v1.4.0/stork.js"></script>
+    <script>
+        stork.register("sitesearch", "./search-index.st")
+    </script>
+</body>
+
+</html>

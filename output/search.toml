@@ -1,0 +1,8 @@
+[input]
+base_directory = "output"
+html_selector = "main"
+
+[[input.files]]
+path = "donut-chart-ponchikovaia-diagramma.html"
+url = "/donut-chart-ponchikovaia-diagramma.html"
+title = "Donut Chart - пончиковая диаграмма"
