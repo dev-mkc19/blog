@@ -17,4 +17,4 @@ jobs:
       env:
         PELICAN_CONTENT_FOLDER: 'output'
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        GH_PAGES_CNAME: ${{secrets.DOMAIN_CNAME}}
+        # GH_PAGES_CNAME: ${{secrets.DOMAIN_CNAME}}
