@@ -1,6 +1,6 @@
 AUTHOR = 'Author'
 SITENAME = 'Papyrus'
-SITEURL = 'dev.tinito.in'
+SITEURL = 'https://dev-mkc19.github.io/blog/'
 TIMEZONE = 'Australia/Sydney'
 DEFAULT_LANG = 'en'
 
@@ -65,7 +65,7 @@ SHARE = (
 DEFAULT_PAGINATION = 8
 
 # Uncomment following line if you want document-relative URLs when developing
-RELATIVE_URLS = True
+RELATIVE_URLS = False
 
 # DISQUS_SITENAME = ''
 # GOOGLE_ANALYTICS = ''
