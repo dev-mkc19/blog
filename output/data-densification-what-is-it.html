@@ -5,10 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content="Pelican" />
+    <meta name="description" content="Papyrus Blog Posts">
     <title>Data Densification - what is it?</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
     <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="./theme/css/pygment.css" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./theme/css/stork.css">
     <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
         href="./theme/css/stork-dark.css">
@@ -16,6 +19,10 @@
         href="dev.tinito.in/feeds/all.atom.xml"
         type="application/atom+xml" rel="alternate" title="Papyrus Atom Feed" />
 <meta name="description" content="В этом уроке мы научимся создавать диаграмму пончиков Tableau. Это диаграмма продвинутого типа. Откройте таблицу и загрузите в нее набор данных...." />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
@@ -24,14 +31,10 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
-</head>
-
-<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
-    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
         <div class="flex pt-4">
             <h1 class="font-semibold text-2xl"><a href="./">Papyrus</a></h1>
-            <button id="theme-toggle" type="button"
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
                 class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
                 <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -81,11 +84,11 @@
                 </li>
                 <li class="flex items-center">
                     <a href="./category/tableau.html">Tableau</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
                 </li>
-                <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                    <path
-                        d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-                </svg>
             </ul>
         </nav>
 
@@ -94,7 +97,7 @@
     <h1 class="font-semibold text-3xl my-2">Data Densification - what is it?</h1>
     <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
       <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-        <time>декабря 03, 2010</time>
+        <time>December 03, 2010</time>
         <div>
           <span>&nbsp;·&nbsp;4 min read</span>
         </div>
@@ -117,14 +120,15 @@
               dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
               prose-blockquote:text-zinc-800
               dark:prose-blockquote:text-zinc-200
-              prose-a:text-gray-500
-              dark:prose-a:text-gray-400
+              prose-a:text-slate-600 prose-a:font-normal
+              dark:prose-a:text-slate-400
               dark:prose-strong:text-zinc-200 
               dark:prose-code:text-zinc-200
               dark:prose-code:bg-zinc-800
               prose-code:bg-zinc-200
               prose-code:font-light
               prose-img:rounded-md
+              sm:text-left md:text-justify
               ">
     <h1 id="povyshenie-plotnosti-dannykh">&Pcy;&ocy;&vcy;&ycy;&shcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;</h1>
 <p>&Ocy;&dcy;&ncy;&ocy;&jcy; &icy;&zcy; &bcy;&ocy;&lcy;&iecy;&iecy; &scy;&lcy;&ocy;&zhcy;&ncy;&ycy;&khcy; &tcy;&iecy;&mcy; &vcy; Tableau &yacy;&vcy;&lcy;&yacy;&iecy;&tcy;&scy;&yacy; "&Ucy;&vcy;&iecy;&lcy;&icy;&chcy;&iecy;&ncy;&icy;&iecy; &pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;". &Kcy;&acy;&kcy; &icy; &mcy;&ncy;&ocy;&gcy;&ocy;&iecy; &dcy;&rcy;&ucy;&gcy;&ocy;&iecy; &vcy; Tableau, &mcy;&ycy; &ocy;&scy;&ncy;&ocy;&vcy;&ycy;&vcy;&acy;&iecy;&mcy;&scy;&yacy; &ncy;&acy; &rcy;&acy;&bcy;&ocy;&tcy;&acy;&khcy; &dcy;&rcy;&ucy;&gcy;&icy;&khcy; &lcy;&yucy;&dcy;&iecy;&jcy;, &pcy;&ocy;&ecy;&tcy;&ocy;&mcy;&ucy;, &pcy;&rcy;&iecy;&zhcy;&dcy;&iecy; &chcy;&iecy;&mcy; &ncy;&acy;&chcy;&acy;&tcy;&softcy;, &scy;&tcy;&ocy;&icy;&tcy; &ocy;&tcy;&mcy;&iecy;&tcy;&icy;&tcy;&softcy; &dcy;&vcy;&ucy;&khcy; &lcy;&yucy;&dcy;&iecy;&jcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &pcy;&iecy;&rcy;&vcy;&ycy;&mcy;&icy; &pcy;&rcy;&icy;&mcy;&iecy;&ncy;&icy;&lcy;&icy; &ecy;&tcy;&icy; &pcy;&rcy;&icy;&iecy;&mcy;&ycy;. &Acy;&vcy;&tcy;&ocy;&rcy;&ycy;: &Dcy;&zhcy;&ocy; &Mcy;&acy;&kcy;&ocy; &icy; &Dcy;&zhcy;&ocy;&ncy;&acy;&tcy;&acy;&ncy; &Dcy;&rcy;&acy;&mcy;&mcy;&icy;. &Pcy;&rcy;&ocy;&bcy;&lcy;&iecy;&mcy;&acy;&Dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &ncy;&acy;&chcy;&ncy;&iecy;&mcy; &scy; &rcy;&acy;&zcy;&bcy;&ocy;&rcy;&acy; &scy;&lcy;&ucy;&chcy;&acy;&iecy;&vcy;, &vcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &pcy;&rcy;&icy;&mcy;&iecy;&ncy;&icy;&mcy;&acy; &tcy;&iecy;&khcy;&ncy;&icy;&kcy;&acy; "&Ucy;&pcy;&lcy;&ocy;&tcy;&ncy;&iecy;&ncy;&icy;&yacy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;". &Ncy;&icy;&zhcy;&iecy; &pcy;&rcy;&icy;&vcy;&iecy;&dcy;&iecy;&ncy;&ycy; &dcy;&vcy;&acy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&acy; &rcy;&acy;&zcy;&rcy;&iecy;&zhcy;&iecy;&ncy;&ncy;&ycy;&khcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Pcy;&iecy;&rcy;&vcy;&ycy;&jcy; &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&iecy;&tcy; &kcy;&acy;&tcy;&iecy;&gcy;&ocy;&rcy;&icy;&icy;, &ncy;&ocy; &dcy;&lcy;&yacy; &ncy;&iecy;&kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &icy;&zcy; &ncy;&icy;&khcy; &ocy;&tcy;&scy;&ucy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy; &mcy;&iecy;&rcy;&ycy;. &Vcy;&ocy; &vcy;&tcy;&ocy;&rcy;&ocy;&mcy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&iecy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&ncy;&acy; &dcy;&acy;&tcy;&acy; &pcy;&ocy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yucy;, &ncy;&ocy; &ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy;, &chcy;&tcy;&ocy; &dcy;&acy;&tcy;&ycy; &ocy;&tcy;&scy;&ucy;&tcy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy;, &pcy;&rcy;&iecy;&dcy;&scy;&tcy;&acy;&vcy;&lcy;&iecy;&ncy;&ycy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &zcy;&acy; &chcy;&iecy;&tcy;&ycy;&rcy;&iecy; &ncy;&iecy;&pcy;&ocy;&scy;&lcy;&iecy;&dcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&softcy;&ncy;&ycy;&khcy; &dcy;&ncy;&yacy; &vcy; &mcy;&acy;&rcy;&tcy;&iecy; 2019 &gcy;&ocy;&dcy;&acy;. &Ecy;&tcy;&ocy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&ycy; &rcy;&acy;&zcy;&rcy;&ocy;&zcy;&ncy;&iecy;&ncy;&ncy;&ycy;&khcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;.&CHcy;&tcy;&ocy;&bcy;&ycy; &pcy;&rcy;&ocy;&dcy;&ocy;&lcy;&zhcy;&icy;&tcy;&softcy; &dcy;&acy;&lcy;&softcy;&shcy;&iecy;, &tcy;&ocy; &pcy;&rcy;&iecy;&zhcy;&dcy;&iecy; &vcy;&scy;&iecy;&gcy;&ocy; &dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &ncy;&acy;&chcy;&ncy;&iecy;&mcy; &scy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&icy;&khcy; &ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&jcy;.&Ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&yacy;&bull;Data Densification (&acy;&ncy;&gcy;&lcy;. &Pcy;&lcy;&ocy;&tcy;&ncy;&ocy;&scy;&tcy;&softcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;) - &ocy;&bcy;&shchcy;&icy;&jcy; &tcy;&iecy;&rcy;&mcy;&icy;&ncy;, &ocy;&khcy;&vcy;&acy;&tcy;&ycy;&vcy;&acy;&yucy;&shchcy;&icy;&jcy; &vcy;&scy;&iecy; &scy;&icy;&tcy;&ucy;&acy;&tscy;&icy;&icy;, &pcy;&rcy;&icy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &vcy; Tableau &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &mcy;&acy;&rcy;&kcy;&iecy;&rcy;&ycy; (Marks) &dcy;&lcy;&yacy; &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ycy;&khcy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&acy;&tscy;&icy;&jcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&jcy; (Dimension).&bull;Domain Completion (&acy;&ncy;&gcy;&lcy;. &Zcy;&acy;&vcy;&iecy;&rcy;&shcy;&iecy;&ncy;&icy;&iecy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy;) - &mcy;&acy;&rcy;&kcy;&iecy;&rcy;&ycy; (Marks) &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &dcy;&lcy;&yacy; &pcy;&ocy;&tcy;&iecy;&ncy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ycy;&khcy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&acy;&tscy;&icy;&jcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy;.&bull;Domain Padding  - &dcy;&lcy;&yacy; &pcy;&ocy;&tcy;&iecy;&ncy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ycy;&khcy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; &vcy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy;&iecy; &pcy;&icy;&lcy;&yucy;&lcy;&icy; Range Aware &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &mcy;&acy;&rcy;&kcy;&iecy;&rcy;&ycy;.&bull;Sparse Data (&acy;&ncy;&gcy;&lcy;. &Dcy;&acy;&ncy;&ncy;&ycy;&iecy; &scy; &rcy;&acy;&zcy;&rcy;&ycy;&vcy;&ocy;&mcy;) - &dcy;&acy;&ncy;&ncy;&ycy;&iecy;, &vcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &ncy;&iecy; &vcy;&scy;&iecy; &pcy;&ocy;&tcy;&iecy;&ncy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ycy;&iecy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&acy;&tscy;&icy;&icy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&jcy; Dimension &scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy; &vcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &vcy;&ocy;&zcy;&vcy;&rcy;&acy;&shchcy;&acy;&iecy;&mcy;&ycy;&khcy; &icy;&zcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;.&bull;Range Aware Pill (&acy;&ncy;&gcy;&lcy;. &Pcy;&icy;&lcy;&yucy;&lcy;&yacy; &scy; &ocy;&zhcy;&icy;&dcy;&acy;&iecy;&mcy;&ycy;&mcy; &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy;&ocy;&mcy;)- &pcy;&icy;&lcy;&yucy;&lcy;&yacy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&yacy; &scy; &tcy;&icy;&pcy;&ocy;&mcy; &pcy;&ocy;&lcy;&yacy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;: &Dcy;&acy;&tcy;&acy;, &Vcy;&rcy;&iecy;&mcy;&yacy; &icy;&lcy;&icy; Bin. &Icy;&scy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&icy;&iecy; &scy;&ocy;&scy;&tcy;&acy;&vcy;&lcy;&yacy;&iecy;&tcy; &Tcy;&ocy;&chcy;&ncy;&ocy;&iecy; &vcy;&rcy;&iecy;&mcy;&yacy;, 
@@ -137,18 +141,16 @@
   </div>
   <footer class="flex flex-col mt-10 ">
     <ul class="flex flex-wrap">
-      <a href="./tag/intro.html">
         <li
-          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-500 dark:text-neutral-400 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
-          intro
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          <a href="./tag/intro.html">intro</a>
         </li>
-      </a>
     </ul>
     <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
       <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-l-lg">
         <a class="flex flex-col pr-2" href="./funnel-vizualisation-kak-postroit.html">
           <div class="mx-4 py-2 text-left">
-            <p class="text-zinc-500 dark:text-neutral-400 text-sm">« PREV PAGE</p>
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">« PREV PAGE</p>
             <p class="text-left py-1 hover:underline">Funnel vizualisation - как построить?</p>
           </div>
         </a>
@@ -156,7 +158,7 @@
       <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-r-lg ">
         <a class="flex flex-col" href="./donut-chart-ponchikovaia-diagramma.html">
           <div class="text-right mx-4 py-2">
-            <p class="text-zinc-500 dark:text-neutral-400 text-sm">NEXT PAGE »</p>
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">NEXT PAGE »</p>
             <p class="text-right py-1 hover:underline">Donut Chart - пончиковая диаграмма</p>
           </div>
         </a>
@@ -164,52 +166,52 @@
     </div>
     <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="twitter" aria-label="share Features on twitter"
-          href="https://twitter.com/intent/tweet/?text=Features&amp;url=./data-densification-what-is-it.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="twitter" aria-label="share Features on twitter"
+            href="https://twitter.com/intent/tweet/?text=Features&amp;url=./data-densification-what-is-it.html">
             <i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
-          href="https://www.linkedin.com/sharing/share-offsite/?url=./data-densification-what-is-it.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+            href="https://www.linkedin.com/sharing/share-offsite/?url=./data-densification-what-is-it.html">
             <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="reddit" aria-label="share Features on reddit"
-          href="https://reddit.com/submit?url=./data-densification-what-is-it.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="reddit" aria-label="share Features on reddit"
+            href="https://reddit.com/submit?url=./data-densification-what-is-it.html">
             <i class="fab fa-reddit fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="facebook" aria-label="share Features on facebook"
-          href="https://facebook.com/sharer/sharer.php?u=./data-densification-what-is-it.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="facebook" aria-label="share Features on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=./data-densification-what-is-it.html">
             <i class="fab fa-facebook fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
-          href="https://api.whatsapp.com/send?text=Features - ./data-densification-what-is-it.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+            href="https://api.whatsapp.com/send?text=Features - ./data-densification-what-is-it.html">
             <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
-          href="https://telegram.me/share/url?text=Features&amp;url=./data-densification-what-is-it.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+            href="https://telegram.me/share/url?text=Features&amp;url=./data-densification-what-is-it.html">
             <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
     </div>
   </footer>
@@ -218,11 +220,11 @@
 </main>
 
     </div>
-    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-500 dark:text-zinc-400">
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
         <div class="px-4">
             <span>©2022&nbsp;&#8226;&nbsp;</span>Powered by
             <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
-            <a class="underline" href="https://github.com/aleylara/Papyrus">&nbsp;Papyrus</a>
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
         </div>
     </footer>
 
@@ -258,10 +260,6 @@
                 }
             }
         });
-    </script>
-    <script src="https://files.stork-search.net/releases/v1.4.0/stork.js"></script>
-    <script>
-        stork.register("sitesearch", "./search-index.st")
     </script>
 </body>
 

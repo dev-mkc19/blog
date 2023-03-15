@@ -5,10 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content="Pelican" />
+    <meta name="description" content="Papyrus Blog Posts">
     <title>Funnel vizualisation - как построить?</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
     <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="./theme/css/pygment.css" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./theme/css/stork.css">
     <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
         href="./theme/css/stork-dark.css">
@@ -16,6 +19,10 @@
         href="dev.tinito.in/feeds/all.atom.xml"
         type="application/atom+xml" rel="alternate" title="Papyrus Atom Feed" />
 <meta name="description" content="Сегодня рассмотрим способ построение визуализации Funnel Chart ("Воронка"). С помощью нее можно великолепным образом раскрыть суть данных...." />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
@@ -24,14 +31,10 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
-</head>
-
-<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
-    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
         <div class="flex pt-4">
             <h1 class="font-semibold text-2xl"><a href="./">Papyrus</a></h1>
-            <button id="theme-toggle" type="button"
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
                 class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
                 <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -81,11 +84,11 @@
                 </li>
                 <li class="flex items-center">
                     <a href="./category/tableau.html">Tableau</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
                 </li>
-                <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                    <path
-                        d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-                </svg>
             </ul>
         </nav>
 
@@ -94,7 +97,7 @@
     <h1 class="font-semibold text-3xl my-2">Funnel vizualisation - как построить?</h1>
     <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
       <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-        <time>декабря 13, 2010</time>
+        <time>December 13, 2010</time>
         <div>
           <span>&nbsp;·&nbsp;4 min read</span>
         </div>
@@ -117,14 +120,15 @@
               dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
               prose-blockquote:text-zinc-800
               dark:prose-blockquote:text-zinc-200
-              prose-a:text-gray-500
-              dark:prose-a:text-gray-400
+              prose-a:text-slate-600 prose-a:font-normal
+              dark:prose-a:text-slate-400
               dark:prose-strong:text-zinc-200 
               dark:prose-code:text-zinc-200
               dark:prose-code:bg-zinc-800
               prose-code:bg-zinc-200
               prose-code:font-light
               prose-img:rounded-md
+              sm:text-left md:text-justify
               ">
     <h1 id="postroenie-voronki-prodazh">&Pcy;&ocy;&scy;&tcy;&rcy;&ocy;&iecy;&ncy;&icy;&iecy; "&Vcy;&ocy;&rcy;&ocy;&ncy;&kcy;&icy;" &pcy;&rcy;&ocy;&dcy;&acy;&zhcy;</h1>
 <p>&Vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&yacy; Funnel Chart ("&Vcy;&ocy;&rcy;&ocy;&ncy;&kcy;&acy;") &scy;&icy;&mcy;&vcy;&ocy;&lcy;&icy;&zcy;&icy;&rcy;&ucy;&iecy;&tcy; &scy;&ocy;&bcy;&ocy;&jcy; &pcy;&rcy;&ocy;&tscy;&iecy;&scy;&scy;. &Scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; &ncy;&iecy;&iecy; &mcy;&ocy;&zhcy;&ncy;&ocy; &vcy;&iecy;&lcy;&icy;&kcy;&ocy;&lcy;&iecy;&pcy;&ncy;&ycy;&mcy; &ocy;&bcy;&rcy;&acy;&zcy;&ocy;&mcy; &rcy;&acy;&scy;&kcy;&rcy;&ycy;&tcy;&softcy; &scy;&ucy;&tcy;&softcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Pcy;&ocy;&kcy;&acy;&zcy;&acy;&tcy;&softcy; &vcy; &kcy;&ocy;&lcy;&icy;&chcy;&iecy;&scy;&tcy;&vcy;&iecy;&ncy;&ncy;&ocy;&mcy; &vcy;&ycy;&rcy;&acy;&zhcy;&iecy;&ncy;&icy;&icy; &zcy;&ncy;&acy;&chcy;&iecy;&ncy;&icy;&yacy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &icy;&zcy;&mcy;&iecy;&ncy;&yacy;&yucy;&tcy;&scy;&yacy; &ocy;&tcy; &ecy;&tcy;&acy;&pcy;&acy; &kcy; &ecy;&tcy;&acy;&pcy;&ucy;. &Ncy;&acy;&dcy;&iecy;&yucy;&scy;&softcy;, &ecy;&tcy;&acy; &scy;&tcy;&acy;&tcy;&softcy;&yacy; &pcy;&ocy;&mcy;&ocy;&zhcy;&iecy;&tcy; &scy;&ecy;&kcy;&ocy;&ncy;&ocy;&mcy;&icy;&tcy;&softcy; &vcy;&rcy;&iecy;&mcy;&yacy; &ncy;&acy; &pcy;&ocy;&icy;&scy;&kcy;&icy; &ncy;&iecy;&ocy;&chcy;&iecy;&vcy;&icy;&dcy;&ncy;&ycy;&khcy; &mcy;&ocy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy; &pcy;&rcy;&icy; &pcy;&ocy;&scy;&tcy;&rcy;&ocy;&iecy;&ncy;&icy;&icy; &vcy;&icy;&zcy;&acy;, &ocy;&bcy;&softcy;&iecy;&dcy;&iecy;&ncy;&iecy;&ncy;&icy;&icy; &rcy;&acy;&zcy;&rcy;&ocy;&zcy;&ncy;&iecy;&ncy;&ncy;&ycy;&khcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&ocy;&vcy; &icy;&zcy; &icy;&ncy;&tcy;&iecy;&rcy;&ncy;&iecy;&tcy;&acy; &icy; &rcy;&acy;&zcy;&bcy;&ocy;&rcy;&iecy; &tcy;&ocy;&gcy;&ocy; &kcy;&acy;&kcy; &vcy;&scy;&iecy; &ucy;&scy;&tcy;&rcy;&ocy;&iecy;&ncy;&ocy; &chcy;&tcy;&ocy; &ncy;&acy;&zcy;&ycy;&vcy;&acy;&iecy;&tcy;&scy;&yacy; "&pcy;&ocy;&dcy; &kcy;&acy;&pcy;&ocy;&tcy;&ocy;&mcy;"</p>
@@ -164,32 +168,32 @@
 <p>&Tcy;&acy;&kcy;&icy;&mcy; &ocy;&bcy;&rcy;&acy;&zcy;&ocy;&ocy;&mcy; &ncy;&acy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&iecy; &kcy;&lcy;&icy;&iecy;&ncy;&tcy;&acy; &scy; id 704835 (&pcy;&ocy;&lcy;&iecy; sk) &vcy;&icy;&dcy;&ncy;&ocy;, &chcy;&tcy;&ocy; &ocy;&ncy; &pcy;&rcy;&ocy;&shcy;&iecy;&lcy; &vcy;&scy;&iecy; &ecy;&tcy;&acy;&pcy;&ycy; &ocy;&tcy; &mcy;&ocy;&mcy;&iecy;&ncy;&tcy;&acy; &pcy;&rcy;&icy;&gcy;&lcy;&acy;&shcy;&iecy;&ncy;&icy;&yacy; &dcy;&ocy; &scy;&ocy;&vcy;&iecy;&rcy;&shcy;&iecy;&ncy;&icy;&yacy; &pcy;&ocy;&kcy;&ucy;&pcy;&kcy;&icy;. &Zcy;&ncy;&acy;&chcy;&icy;&tcy; &ucy; &ncy;&acy;&scy; &icy;&mcy;&iecy;&iecy;&tcy;&scy;&yacy; 1 &kcy;&lcy;&icy;&iecy;&ncy;&tcy; &icy; 5 &scy;&tcy;&acy;&tcy;&ucy;&scy;&ocy;&vcy; &kcy; &ncy;&iecy;&mcy;&ucy;. &Ecy;&tcy;&ocy; &scy;&vcy;&yacy;&zcy;&softcy; &ocy;&dcy;&icy;&ncy; &kcy;&ocy; &mcy;&ncy;&ocy;&gcy;&icy;&mcy;.&Vcy; Tableau (&vcy;&iecy;&rcy;&scy;&icy;&yacy; 2019.2) &ncy;&iecy;&tcy; &rcy;&iecy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&icy; &scy;&vcy;&yacy;&zcy;&iecy;&jcy;, &pcy;&ocy;&ecy;&tcy;&ocy;&mcy;&ucy; &vcy;&scy;&iecy; &ocy;&ncy;&ocy;&shcy;&iecy;&ncy;&icy;&yacy; &rcy;&iecy;&acy;&lcy;&icy;&zcy;&ucy;&yucy;&tcy;&scy;&yacy; &pcy;&rcy;&ocy;&scy;&tcy;&ycy;&mcy; &dcy;&ucy;&bcy;&lcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&iecy;&mcy; &zcy;&acy;&pcy;&icy;&scy;&iecy;&jcy;.&Dcy;&ocy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy; &ncy;&acy;&dcy;&ocy; &pcy;&ocy;&mcy;&ncy;&icy;&tcy;&softcy;, &chcy;&tcy;&ocy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&iecy; &ncy;&iecy; &vcy;&ocy;&zcy;&softcy;&mcy;&ucy;&tcy;&scy;&yacy; &icy;&zcy; &ncy;&icy;&ocy;&tcy;&kcy;&ucy;&dcy;&acy;, &icy;&khcy; &tcy;&ocy;&zhcy;&iecy; &ncy;&acy;&dcy;&ocy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy;. &Tcy;&acy;&kcy; &kcy;&acy;&kcy; &vcy;&ncy;&iecy;&shcy;&ncy;&iecy;&gcy;&ocy; &scy;&pcy;&rcy;&acy;&vcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &scy;&tcy;&acy;&tcy;&ucy;&scy;&ocy;&vcy; (&ecy;&tcy;&acy;&pcy;&ocy;&vcy;) &ncy;&iecy; &scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ucy;&iecy;&tcy; &icy; &zcy;&acy;&vcy;&ocy;&dcy;&icy;&tcy;&softcy; &mcy;&ycy; &iecy;&gcy;&ocy; &ncy;&iecy; &scy;&ocy;&bcy;&icy;&rcy;&acy;&iecy;&mcy;&scy;&yacy;, &tcy;&ocy; &pcy;&ocy;&dcy;&gcy;&ocy;&tcy;&ocy;&vcy;&icy;&tcy;&softcy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &mcy;&ocy;&zhcy;&ncy;&ocy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; SQL. &Pcy;&ocy;&ncy;&icy;&mcy;&acy;&yucy;, &chcy;&tcy;&ocy; &scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy; &icy; &dcy;&rcy;&ucy;&gcy;&icy;&iecy; &scy;&pcy;&ocy;&scy;&ocy;&bcy;&ycy;, &ncy;&ocy; &mcy;&ncy;&ocy;&jcy; &vcy;&ycy;&bcy;&rcy;&acy;&ncy; &ncy;&acy;&icy;&bcy;&ocy;&lcy;&iecy;&iecy; &pcy;&rcy;&icy;&vcy;&ycy;&chcy;&ncy;&ycy;&jcy;.</p>
 <p><strong>&Pcy;&rcy;&icy;&mcy;&iecy;&rcy; &zcy;&acy;&pcy;&rcy;&ocy;&scy;&acy;</strong></p>
 <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span>
-<span class="w">    </span><span class="s1">'&Pcy;&rcy;&icy;&gcy;&lcy;&acy;&shcy;&iecy;&ncy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span><span class="w"></span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"></span>
-<span class="k">SELECT</span><span class="s1">'&Zcy;&acy;&rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span><span class="w"></span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">registration_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'registered'</span><span class="w"></span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"></span>
-<span class="k">SELECT</span><span class="w"></span>
-<span class="s1">'&Pcy;&ocy;&scy;&iecy;&tcy;&icy;&lcy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span><span class="w"></span>
+<span class="w">    </span><span class="s1">'&Pcy;&rcy;&icy;&gcy;&lcy;&acy;&shcy;&iecy;&ncy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="k">SELECT</span><span class="s1">'&Zcy;&acy;&rcy;&iecy;&gcy;&icy;&scy;&tcy;&rcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">registration_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'registered'</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="k">SELECT</span>
+<span class="s1">'&Pcy;&ocy;&scy;&iecy;&tcy;&icy;&lcy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">registration_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'registered'</span><span class="w"> </span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">activity_time</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'not visited'</span><span class="w"></span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"></span>
-<span class="k">SELECT</span><span class="w"></span>
-<span class="s1">'&Scy;&ocy;&bcy;&rcy;&acy;&lcy; &zcy;&acy;&kcy;&acy;&zcy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span><span class="w"></span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">activity_time</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'not visited'</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="k">SELECT</span>
+<span class="s1">'&Scy;&ocy;&bcy;&rcy;&acy;&lcy; &zcy;&acy;&kcy;&acy;&zcy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">registration_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'registered'</span><span class="w"> </span>
 <span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">activity_time</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'not visited'</span><span class="w"> </span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">cart_products_number</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"></span>
-<span class="k">SELECT</span><span class="s1">'&Kcy;&ucy;&pcy;&icy;&lcy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span><span class="w"></span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">cart_products_number</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="k">SELECT</span><span class="s1">'&Kcy;&ucy;&pcy;&icy;&lcy;'</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">stage_name</span><span class="p">,</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">SB_SCHOOL</span><span class="p">.</span><span class="n">LRN_SUPERSTORE_PROMO</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">registration_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'registered'</span><span class="w"> </span>
 <span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">activity_time</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'not visited'</span><span class="w"> </span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">cart_products_number</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">billing_ts</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">NULL</span><span class="w"></span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">cart_products_number</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">billing_ts</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">NULL</span>
 </code></pre></div>
 <p>&Kcy;&acy;&kcy; &ecy;&tcy;&ocy; &vcy;&ycy;&gcy;&lcy;&yacy;&dcy;&icy;&tcy; &ncy;&acy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy;&iecy; &rcy;&acy;&scy;&scy;&mcy;&acy;&scy;&tcy;&rcy;&icy;&vcy;&acy;&iecy;&mcy;&ocy;&gcy;&ocy; &kcy;&lcy;&icy;&iecy;&ncy;&tcy;&acy;:
 <img alt="IMAGE_5" src="/images/funnel/IMAGE_5.png"/></p>
@@ -220,18 +224,16 @@
   </div>
   <footer class="flex flex-col mt-10 ">
     <ul class="flex flex-wrap">
-      <a href="./tag/how-to.html">
         <li
-          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-500 dark:text-neutral-400 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
-          how-to
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          <a href="./tag/how-to.html">how-to</a>
         </li>
-      </a>
     </ul>
     <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
       <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-l-lg">
         <a class="flex flex-col pr-2" href="./datasource-replacement.html">
           <div class="mx-4 py-2 text-left">
-            <p class="text-zinc-500 dark:text-neutral-400 text-sm">« PREV PAGE</p>
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">« PREV PAGE</p>
             <p class="text-left py-1 hover:underline">DataSource replacement</p>
           </div>
         </a>
@@ -239,7 +241,7 @@
       <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-r-lg ">
         <a class="flex flex-col" href="./data-densification-what-is-it.html">
           <div class="text-right mx-4 py-2">
-            <p class="text-zinc-500 dark:text-neutral-400 text-sm">NEXT PAGE »</p>
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">NEXT PAGE »</p>
             <p class="text-right py-1 hover:underline">Data Densification - what is it?</p>
           </div>
         </a>
@@ -247,52 +249,52 @@
     </div>
     <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="twitter" aria-label="share Features on twitter"
-          href="https://twitter.com/intent/tweet/?text=Features&amp;url=./funnel-vizualisation-kak-postroit.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="twitter" aria-label="share Features on twitter"
+            href="https://twitter.com/intent/tweet/?text=Features&amp;url=./funnel-vizualisation-kak-postroit.html">
             <i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
-          href="https://www.linkedin.com/sharing/share-offsite/?url=./funnel-vizualisation-kak-postroit.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+            href="https://www.linkedin.com/sharing/share-offsite/?url=./funnel-vizualisation-kak-postroit.html">
             <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="reddit" aria-label="share Features on reddit"
-          href="https://reddit.com/submit?url=./funnel-vizualisation-kak-postroit.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="reddit" aria-label="share Features on reddit"
+            href="https://reddit.com/submit?url=./funnel-vizualisation-kak-postroit.html">
             <i class="fab fa-reddit fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="facebook" aria-label="share Features on facebook"
-          href="https://facebook.com/sharer/sharer.php?u=./funnel-vizualisation-kak-postroit.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="facebook" aria-label="share Features on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=./funnel-vizualisation-kak-postroit.html">
             <i class="fab fa-facebook fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
-          href="https://api.whatsapp.com/send?text=Features - ./funnel-vizualisation-kak-postroit.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+            href="https://api.whatsapp.com/send?text=Features - ./funnel-vizualisation-kak-postroit.html">
             <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
       <ul>
-        <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
-          href="https://telegram.me/share/url?text=Features&amp;url=./funnel-vizualisation-kak-postroit.html">
-          <li class="bg-gray-900 p-1 text-white rounded-md">
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+            href="https://telegram.me/share/url?text=Features&amp;url=./funnel-vizualisation-kak-postroit.html">
             <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
     </div>
   </footer>
@@ -301,11 +303,11 @@
 </main>
 
     </div>
-    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-500 dark:text-zinc-400">
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
         <div class="px-4">
             <span>©2022&nbsp;&#8226;&nbsp;</span>Powered by
             <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
-            <a class="underline" href="https://github.com/aleylara/Papyrus">&nbsp;Papyrus</a>
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
         </div>
     </footer>
 
@@ -341,10 +343,6 @@
                 }
             }
         });
-    </script>
-    <script src="https://files.stork-search.net/releases/v1.4.0/stork.js"></script>
-    <script>
-        stork.register("sitesearch", "./search-index.st")
     </script>
 </body>
 

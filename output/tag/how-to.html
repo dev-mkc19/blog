@@ -5,16 +5,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content="Pelican" />
+    <meta name="description" content="Papyrus Blog Posts">
     <title> how-to | Papyrus</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
     <link rel="stylesheet" type="text/css" href="../theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="../theme/css/pygment.css" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../theme/css/stork.css">
     <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
         href="../theme/css/stork-dark.css">
     <link
         href="dev.tinito.in/feeds/all.atom.xml"
         type="application/atom+xml" rel="alternate" title="Papyrus Atom Feed" />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
@@ -23,14 +30,10 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
-</head>
-
-<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
-    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
         <div class="flex pt-4">
             <h1 class="font-semibold text-2xl"><a href="../">Papyrus</a></h1>
-            <button id="theme-toggle" type="button"
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
                 class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
                 <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -88,8 +91,8 @@
 
 <div class="py-1">
   <ul>
-    <a href="../datasource-replacement.html" rel="bookmark" title="Permalink to DataSource replacement">
-      <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+    <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+      <a href="../datasource-replacement.html" rel="bookmark" title="Permalink to DataSource replacement">
         <div class="bg-white dark:bg-zinc-800 p-4 md:p-6 mb-4 rounded-lg">
           <header class="font-semibold text-2xl mb-2">
             <h1>DataSource replacement</h1>
@@ -113,17 +116,18 @@
             <p>Каким образом можно заменить источник данных в Tableau встроенными средствами рассмотрим в жанной статье.</p>
           </div>
           <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-            <time>декабря 13, 2010</time>
+            <time>December 13, 2010</time>
             <div>
             </div>
             <div>
-                <span>&nbsp;·&nbsp;Mikhail K</span>
+              <span>&nbsp;·&nbsp;Mikhail K</span>
             </div>
           </div>
-      </li>
-    </a>
-    <a href="../funnel-vizualisation-kak-postroit.html" rel="bookmark" title="Permalink to Funnel vizualisation - как построить?">
-      <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+        </div>
+      </a>
+    </li>
+    <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+      <a href="../funnel-vizualisation-kak-postroit.html" rel="bookmark" title="Permalink to Funnel vizualisation - как построить?">
         <div class="bg-white dark:bg-zinc-800 p-4 md:p-6 mb-4 rounded-lg">
           <header class="font-semibold text-2xl mb-2">
             <h1>Funnel vizualisation - как построить?</h1>
@@ -147,25 +151,26 @@
             <p>Сегодня рассмотрим способ построение визуализации Funnel Chart ("Воронка"). С помощью нее можно великолепным образом раскрыть суть данных. Показать в количественном выражении значения которые изменяются от этапа к этапу. Надеюсь, эта статья поможет сэкономить время на поиски неочевидных моментов при построении виза, обьеденении разрозненных источников из интернета и разборе того как все устроено что называется "под капотом".</p>
           </div>
           <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-            <time>декабря 13, 2010</time>
+            <time>December 13, 2010</time>
             <div>
-                <span>&nbsp;·&nbsp;4 min read</span>
+              <span>&nbsp;·&nbsp;4 min read</span>
             </div>
             <div>
-                <span>&nbsp;·&nbsp;Mikhail K</span>
+              <span>&nbsp;·&nbsp;Mikhail K</span>
             </div>
           </div>
-      </li>
-    </a>
+        </div>
+      </a>
+    </li>
   </ul>
 </div>
 
     </div>
-    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-500 dark:text-zinc-400">
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
         <div class="px-4">
             <span>©2022&nbsp;&#8226;&nbsp;</span>Powered by
             <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
-            <a class="underline" href="https://github.com/aleylara/Papyrus">&nbsp;Papyrus</a>
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
         </div>
     </footer>
 
@@ -201,10 +206,6 @@
                 }
             }
         });
-    </script>
-    <script src="https://files.stork-search.net/releases/v1.4.0/stork.js"></script>
-    <script>
-        stork.register("sitesearch", "../search-index.st")
     </script>
 </body>
 

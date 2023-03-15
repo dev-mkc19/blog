@@ -5,16 +5,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content="Pelican" />
+    <meta name="description" content="Papyrus Blog Posts">
     <title>Papyrus - Mikhail K</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
     <link rel="stylesheet" type="text/css" href="../theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="../theme/css/pygment.css" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../theme/css/stork.css">
     <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
         href="../theme/css/stork-dark.css">
     <link
         href="dev.tinito.in/feeds/all.atom.xml"
         type="application/atom+xml" rel="alternate" title="Papyrus Atom Feed" />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
@@ -23,14 +30,10 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
-</head>
-
-<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
-    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
     <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
         <div class="flex pt-4">
             <h1 class="font-semibold text-2xl"><a href="../">Papyrus</a></h1>
-            <button id="theme-toggle" type="button"
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
                 class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
                 <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +58,7 @@
 
 <div class="my-12 md:my-24 text-zinc-800 dark:text-zinc-300">
   <h1 class="mb-6 text-3xl font-bold">Papyrus</h1>
-    <p class="mb-8 text-zinc-500 dark:text-zinc-400"> A fast and responsive theme built for the <a class="underline" 
+  <p class="mb-8 text-zinc-600 dark:text-zinc-400"> A fast and responsive theme built for the <a class="underline" 
 href="https://blog.getpelican.com/">Pelican</a> site generator.<br>
 The theme is inspired from <a class="underline" 
 href="https://github.com/adityatelange/hugo-PaperMod">Hugo-PaperMod</a>. 
@@ -64,10 +67,10 @@ href="https://tailwindcss.com/">Tailwind CSS</a>.
 It supports dark mode and built in search function.
 </p>
   <ul class="flex px-2 space-x-4 text-lg">
-    <li><a href="https://github.com/aleylara/Papyrus"><i class="fab fa-github fa-lg" aria-hidden="true" target="_blank"
-          rel="noopener noreferrer" title="github"></i></a></li>
-    <li><a href="https://twitter.com/"><i class="fab fa-twitter fa-lg" aria-hidden="true" target="_blank"
-          rel="noopener noreferrer" title="twitter"></i></a></li>
+    <li><a href="https://github.com/aleylara/Papyrus" target="_blank" rel="noopener noreferrer" title="Github"
+        aria-label="Github"><i class="fab fa-github fa-lg"></i></a></li>
+    <li><a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" title="Twitter"
+        aria-label="Twitter"><i class="fab fa-twitter fa-lg"></i></a></li>
     <li><a href="dev.tinito.in/
 feeds/all.atom.xml"
         type="application/atom+xml" title="feeds/all.atom.xml" rel="alternate"><i class="fa fa-rss fa-lg"
@@ -78,8 +81,8 @@ feeds/all.atom.xml"
 
 <div class="py-1">
   <ul>
-    <a href="../datasource-replacement.html" rel="bookmark" title="Permalink to DataSource replacement">
-      <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+    <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+      <a href="../datasource-replacement.html" rel="bookmark" title="Permalink to DataSource replacement">
         <div class="bg-white dark:bg-zinc-800 p-4 md:p-6 mb-4 rounded-lg">
           <header class="font-semibold text-2xl mb-2">
             <h1>DataSource replacement</h1>
@@ -103,17 +106,18 @@ feeds/all.atom.xml"
             <p>Каким образом можно заменить источник данных в Tableau встроенными средствами рассмотрим в жанной статье.</p>
           </div>
           <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-            <time>декабря 13, 2010</time>
+            <time>December 13, 2010</time>
             <div>
             </div>
             <div>
-                <span>&nbsp;·&nbsp;Mikhail K</span>
+              <span>&nbsp;·&nbsp;Mikhail K</span>
             </div>
           </div>
-      </li>
-    </a>
-    <a href="../funnel-vizualisation-kak-postroit.html" rel="bookmark" title="Permalink to Funnel vizualisation - как построить?">
-      <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+        </div>
+      </a>
+    </li>
+    <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+      <a href="../funnel-vizualisation-kak-postroit.html" rel="bookmark" title="Permalink to Funnel vizualisation - как построить?">
         <div class="bg-white dark:bg-zinc-800 p-4 md:p-6 mb-4 rounded-lg">
           <header class="font-semibold text-2xl mb-2">
             <h1>Funnel vizualisation - как построить?</h1>
@@ -137,18 +141,19 @@ feeds/all.atom.xml"
             <p>Сегодня рассмотрим способ построение визуализации Funnel Chart ("Воронка"). С помощью нее можно великолепным образом раскрыть суть данных. Показать в количественном выражении значения которые изменяются от этапа к этапу. Надеюсь, эта статья поможет сэкономить время на поиски неочевидных моментов при построении виза, обьеденении разрозненных источников из интернета и разборе того как все устроено что называется "под капотом".</p>
           </div>
           <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-            <time>декабря 13, 2010</time>
+            <time>December 13, 2010</time>
             <div>
-                <span>&nbsp;·&nbsp;4 min read</span>
+              <span>&nbsp;·&nbsp;4 min read</span>
             </div>
             <div>
-                <span>&nbsp;·&nbsp;Mikhail K</span>
+              <span>&nbsp;·&nbsp;Mikhail K</span>
             </div>
           </div>
-      </li>
-    </a>
-    <a href="../data-densification-what-is-it.html" rel="bookmark" title="Permalink to Data Densification - what is it?">
-      <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+        </div>
+      </a>
+    </li>
+    <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+      <a href="../data-densification-what-is-it.html" rel="bookmark" title="Permalink to Data Densification - what is it?">
         <div class="bg-white dark:bg-zinc-800 p-4 md:p-6 mb-4 rounded-lg">
           <header class="font-semibold text-2xl mb-2">
             <h1>Data Densification - what is it?</h1>
@@ -172,18 +177,19 @@ feeds/all.atom.xml"
             <p>В этом уроке мы научимся создавать диаграмму пончиков Tableau. Это диаграмма продвинутого типа. Откройте таблицу и загрузите в нее набор данных. Затем следуйте инструкциям, приведенным в разделе ниже, и создайте свой первый пончик.</p>
           </div>
           <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-            <time>декабря 03, 2010</time>
+            <time>December 03, 2010</time>
             <div>
-                <span>&nbsp;·&nbsp;4 min read</span>
+              <span>&nbsp;·&nbsp;4 min read</span>
             </div>
             <div>
-                <span>&nbsp;·&nbsp;Mikhail K</span>
+              <span>&nbsp;·&nbsp;Mikhail K</span>
             </div>
           </div>
-      </li>
-    </a>
-    <a href="../donut-chart-ponchikovaia-diagramma.html" rel="bookmark" title="Permalink to Donut Chart - пончиковая диаграмма">
-      <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+        </div>
+      </a>
+    </li>
+    <li class="transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+      <a href="../donut-chart-ponchikovaia-diagramma.html" rel="bookmark" title="Permalink to Donut Chart - пончиковая диаграмма">
         <div class="bg-white dark:bg-zinc-800 p-4 md:p-6 mb-4 rounded-lg">
           <header class="font-semibold text-2xl mb-2">
             <h1>Donut Chart - пончиковая диаграмма</h1>
@@ -207,25 +213,26 @@ feeds/all.atom.xml"
             <p>В этом уроке мы научимся создавать диаграмму пончиков Tableau. Это диаграмма продвинутого типа. Откройте таблицу и загрузите в нее набор данных. Затем следуйте инструкциям, приведенным в разделе ниже, и создайте свой первый пончик.</p>
           </div>
           <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
-            <time>декабря 03, 2010</time>
+            <time>December 03, 2010</time>
             <div>
-                <span>&nbsp;·&nbsp;3 min read</span>
+              <span>&nbsp;·&nbsp;3 min read</span>
             </div>
             <div>
-                <span>&nbsp;·&nbsp;Mikhail K</span>
+              <span>&nbsp;·&nbsp;Mikhail K</span>
             </div>
           </div>
-      </li>
-    </a>
+        </div>
+      </a>
+    </li>
   </ul>
 </div>
 
     </div>
-    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-500 dark:text-zinc-400">
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
         <div class="px-4">
             <span>©2022&nbsp;&#8226;&nbsp;</span>Powered by
             <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
-            <a class="underline" href="https://github.com/aleylara/Papyrus">&nbsp;Papyrus</a>
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
         </div>
     </footer>
 
@@ -261,10 +268,6 @@ feeds/all.atom.xml"
                 }
             }
         });
-    </script>
-    <script src="https://files.stork-search.net/releases/v1.4.0/stork.js"></script>
-    <script>
-        stork.register("sitesearch", "../search-index.st")
     </script>
 </body>
 
