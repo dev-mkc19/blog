@@ -1,5 +1,5 @@
 Title: Funnel vizualisation - как построить?
-Date: 2010-12-13 10:20
+Date: 2023-03-28
 Author: Mikhail K
 Category: Tableau
 Tags: how-to
