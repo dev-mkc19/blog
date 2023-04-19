@@ -1,19 +1,14 @@
 AUTHOR = 'Author'
-SITENAME = 'Papyrus'
+SITENAME = 'dev.tinito'
 SITEURL = 'https://dev-mkc19.github.io/blog/'
 TIMEZONE = 'Australia/Sydney'
 DEFAULT_LANG = 'en'
 
-SUBTITLE = 'Papyrus'
-SUBTEXT = '''A fast and responsive theme built for the <a class="underline" 
-href="https://blog.getpelican.com/">Pelican</a> site generator.<br>
-The theme is inspired from <a class="underline" 
-href="https://github.com/adityatelange/hugo-PaperMod">Hugo-PaperMod</a>. 
-It is styled using <a class="underline" 
-href="https://tailwindcss.com/">Tailwind CSS</a>. 
-It supports dark mode and built in search function.
+SUBTITLE = 'dev.tinito'
+SUBTEXT = '''Personal blog about instruments what I use, technology what I learned, 
+courses and all related professional things which I want to share with others.
 '''
-COPYRIGHT = '©2022'
+COPYRIGHT = '©2023'
 PATH = 'content'
 THEME = 'themes/Papyrus'
 THEME_STATIC_PATHS = ['static']
@@ -48,16 +43,13 @@ TOC = {
 
 # Social widgets
 SOCIAL = (
-    ('github', 'https://github.com/aleylara/Papyrus'),
-    ('twitter', 'https://twitter.com/'),
+    ('github', 'https://github.com/dev-mkc19'),
+    ('linkedin', 'https://linkedin.com/in/mikhail-k-4250631b5/'),
 )
 
 # Article share widgets
 SHARE = (
-    ("twitter", "https://twitter.com/intent/tweet/?text=Features&amp;url="),
     ("linkedin", "https://www.linkedin.com/sharing/share-offsite/?url="),
-    ("reddit", "https://reddit.com/submit?url="),
-    ("facebook", "https://facebook.com/sharer/sharer.php?u="),
     ("whatsapp", "https://api.whatsapp.com/send?text=Features - "),
     ("telegram", "https://telegram.me/share/url?text=Features&amp;url="),
 )
