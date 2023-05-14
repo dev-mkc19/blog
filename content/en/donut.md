@@ -1,8 +1,10 @@
-Title: Donut Chart - пончиковая диаграмма
+Title: Donut Chart
 Date: 2023-02-03
 Author: Mikhail K
 Category: Tableau
 Tags: how-to
+Slug: donut-chart
+Lang: ru
 Summary: В этом уроке мы научимся создавать диаграмму пончиков Tableau. Это диаграмма продвинутого типа. Откройте таблицу и загрузите в нее набор данных. Затем следуйте инструкциям, приведенным в разделе ниже, и создайте свой первый пончик.
 
 ![homer_donut]({static}/images/donut/homer_donut.jpg)
