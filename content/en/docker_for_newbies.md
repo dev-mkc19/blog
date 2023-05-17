@@ -6,6 +6,7 @@ Tags: docker
 Lang: en
 Summary: Found great course about working with containerization via docker. Perhaps my feedback will motivate you to learn it too.
 
+![karpov_logo]({static}/images/karpov_logo.png)
 Few years ago when I first time met with the NAS I discovered cool technology which I didn't use before. I was interested in new services, smart home, extend functionality of NAS up to 200% and it was possible only with the docker, because there aren't many native apps in a build-in app center. Also docker allowed to install all what I want without impact to host system. That fact makes possible any experiments without fear broke something. But what was the problem? .. I totally didn't know docker :)
 
 ## Knowledge for free
