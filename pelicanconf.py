@@ -13,7 +13,7 @@ PATH = 'content'
 THEME = 'themes/Papyrus'
 THEME_STATIC_PATHS = ['static']
 PLUGIN_PATHS = ['pelican-plugins']
-PLUGINS = ['readtime', 'neighbors', 'pelican-toc']
+PLUGINS = ['readtime', 'neighbors', 'pelican-toc', 'search']
 
 DISPLAY_PAGES_ON_MENU = True
 DIRECT_TEMPLATES = (('index', 'search', 'tags', 'categories', 'archives',))
