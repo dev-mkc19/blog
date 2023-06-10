@@ -1,6 +1,6 @@
 AUTHOR = 'Author'
 SITENAME = 'dev.tinito'
-SITEURL = 'https://dev-mkc19.github.io/blog/'
+SITEURL = 'https://dev-mkc19.github.io/blog'
 TIMEZONE = 'Australia/Sydney'
 DEFAULT_LANG = 'en'
 
@@ -20,6 +20,9 @@ DIRECT_TEMPLATES = (('index', 'search', 'tags', 'categories', 'archives',))
 PAGINATED_TEMPLATES = {'index':None,'tag':None,'category':None,'author':None,'archives':24,}
 
 # Site search plugin
+STORK_INPUT_OPTIONS = {
+    'url_prefix': SITEURL
+}
 SEARCH_MODE = "output"
 SEARCH_HTML_SELECTOR = "main"
 # Table of Content Plugin

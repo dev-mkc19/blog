@@ -62,7 +62,7 @@ docs/snippets/error_code_table.rst
 .vscode/
 
 # MacOS files
-.DS_Store
+*.DS_Store
 
 # Jupyter Notebook
 *.ipynb
