@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Pelican" />
+    <meta name="description" content="dev.tinito Blog Posts">
+    <title>Docker for newbies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/pygment.css" />
+    <link rel="shortcut icon" href="https://dev-mkc19.github.io/blog/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://dev-mkc19.github.io/blog/theme/css/stork.css">
+    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
+        href="https://dev-mkc19.github.io/blog/theme/css/stork-dark.css">
+    <link
+        href="https://dev-mkc19.github.io/blog/feeds/all.atom.xml"
+        type="application/atom+xml" rel="alternate" title="dev.tinito Atom Feed" />
+<meta name="description" content="Found great course about working with containerization via docker. Perhaps my feedback will motivate you to learn it too." />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
+        <div class="flex pt-4">
+            <h1 class="font-semibold text-2xl"><a href="https://dev-mkc19.github.io/blog/">dev.tinito</a></h1>
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
+                class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <ul class="flex flex-wrap lg:mr-24 md:pt-0">
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/archives.html">Archive</a></li>
+            <li class="mr-4 pt-6"><a                     href="https://dev-mkc19.github.io/blog/categories.html">Categories</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/tags.html">Tags</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/search.html">Search</a></li>
+        </ul>
+    </nav>
+    <div class="flex-grow md:max-w-screen-md md:mx-auto md:w-3/4 px-4">
+        <nav class="text-zinc-800 dark:text-zinc-300 mt-12 pb-2 md:mt-16" aria-label="Breadcrumb">
+            <ul class="p-0 inline-flex items-center">
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/" class="text-zinc-800 dark:text-zinc-300 inline-flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        Home
+                    </a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/categories.html">Categories</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/category/docker.html">Docker</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+            </ul>
+        </nav>
+
+<main>
+  <header>
+    <h1 class="font-semibold text-3xl my-2">Docker for newbies</h1>
+    <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
+      <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+        <time>May 15, 2023</time>
+        <div>
+          <span>&nbsp;·&nbsp;6 min read</span>
+        </div>
+        <div>
+          <span>&nbsp;·&nbsp;Mikhail K</span>
+        </div>
+      </div>
+    </footer>
+  </header>
+  <details class="flex flex-col my-6 p-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg">
+    <summary class="text-lg font-bold">Table of contents</summary>
+    <div class="mx-4 px-4 underline">
+      <div id="toc"><ul><li><a class="toc-href" href="#knowledge-for-free" title="Knowledge for free">Knowledge for free</a></li><li><a class="toc-href" href="#course-highlights" s'="" title="Course highlight">Course highlight's</a><ul><li><a class="toc-href" href="#basic" title="Basic">Basic</a></li><li><a class="toc-href" href="#networks" title="Networks">Networks</a></li><li><a class="toc-href" href="#yaml-notation" title="YAML notation">YAML notation</a></li></ul></li><li><a class="toc-href" href="#summary_1" title="Summary">Summary</a></li></ul></div>
+    </div>
+  </details>
+  <div class="max-w-7xl container mx-auto my-8 text-zinc-800 dark:text-zinc-300  
+              prose lg:max-w-none prose-headings:text-zinc-800 prose-headings:dark:text-zinc-300 
+              prose-h1:text-3xl lg:prose-h1:text-3xl prose-headings:font-semibold 
+              prose-pre:bg-zinc-200 prose-pre:text-zinc-800
+              dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
+              prose-blockquote:text-zinc-800
+              dark:prose-blockquote:text-zinc-200
+              prose-a:text-slate-600 prose-a:font-normal
+              dark:prose-a:text-slate-400
+              dark:prose-strong:text-zinc-200 
+              dark:prose-code:text-zinc-200
+              dark:prose-code:bg-zinc-800
+              prose-code:bg-zinc-200
+              prose-code:font-light
+              prose-img:rounded-md
+              sm:text-left md:text-justify
+              ">
+
+        <p class="hover:underline decoration-4 decoration-solid"><a href="docker-for-newbies-ru.html">
+            Read in Russian 🇷🇺
+ 
+        </a></p>
+    <hr>
+
+    <p><img alt="karpov_logo" src="https://dev-mkc19.github.io/blog/images/karpov_logo.png"/>
+Few years ago when I first time met with the NAS I discovered cool technology which I didn't use before. I was interested in new services, smart home, extend functionality of NAS up to 200% and it was possible only with the docker, because there aren't many native apps in a build-in app center. Also docker allowed to install all what I want without impact to host system. That fact makes possible any experiments without fear broke something. But what was the problem? .. I totally didn't know docker :)</p>
+<h2 id="knowledge-for-free">Knowledge for free</h2>
+<p>Guys from karpov.courses made a great <a href="https://karpov.courses/docker">course</a> for everyone. You no need programming skills, knowing bash or something else, it suits for absolutely everyone. Nevertheless it comprehensively describes docker from different sides. Despite of I learnt docker by this years I discovered some insights for instance how to set up container with separate IP address. I would be happy to find this valuable course at the beginning of my learning path because it tells topic by topic in a simple form. Special thanks to Anton Sidorin as an author.</p>
+<h2 id="course-highlights">Course highlight's</h2>
+<p>Before starting observe what new things I dig from course I have to announce: That things attracted me, not you, so perhaps you will find useful something else.</p>
+<h3 id="basic">Basic</h3>
+<h4>1. Bash tips</h4>
+<p>It doesn't directly refer docker functionality, but it shows how quickly you can stop all running containers for 1 step.</p>
+<div class="highlight"><pre><span></span><code>docker stop <span class="k">$(</span>docker ps -q<span class="k">)</span>
+</code></pre></div>
+<p>Similar you can delete all containers</p>
+<div class="highlight"><pre><span></span><code>docker rm <span class="k">$(</span>docker ps -qa<span class="k">)</span>
+</code></pre></div>
+<p>Redirecting logs to file it's also typical for bash through the <code>&gt; / &gt;&gt;</code> operator, but I didn't think about it in that context.</p>
+<h4>2. ENTRYPOINT command vs. CMD</h4>
+<p>I don't know why I was stuck with this command and didn't see to the documentation where is pretty clear description. So I refer to it.</p>
+<p>Both CMD and ENTRYPOINT instructions define what command gets executed when running a container. There are few rules that describe their co-operation.</p>
+<ul>
+<li>Dockerfile should specify at least one of CMD or ENTRYPOINT commands.</li>
+<li>ENTRYPOINT should be defined when using the container as an executable.</li>
+<li>CMD should be used as a way of defining default arguments for an ENTRYPOINT command or for executing an ad-hoc command in a container.</li>
+<li>CMD will be overridden when running the container with alternative arguments.</li>
+</ul>
+<h4>3. Multi build</h4>
+<p>Good feature to split your build into several steps for reducing size of your final image or for reusing this step in a next stages.</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">&lt;image&gt;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span>
+. . .
+
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">&lt;image&gt;</span><span class="w"> </span>
+. . .
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder &lt;path_from_builder&gt; &lt;path_to_current_build&gt;
+</code></pre></div>
+<h4>5. Volumes difference</h4>
+<p>There are 2 types of volumes:</p>
+<ul>
+<li>Bind mount</li>
+<li>Volumes</li>
+</ul>
+<p>Before this course it was strange for me for what volumes might be use. But let's look to the docs again. Volumes have several advantages over bind mounts:</p>
+<ul>
+<li>Volumes are easier to back up or migrate than bind mounts.</li>
+<li>You can manage volumes using Docker CLI commands or the Docker API.</li>
+<li>Volumes work on both Linux and Windows containers.</li>
+<li>Volumes can be more safely shared among multiple containers.</li>
+<li>Volume drivers let you store volumes on remote hosts or cloud providers, to encrypt the contents of volumes, or to add other functionality.</li>
+<li>New volumes can have their content pre-populated by a container.</li>
+<li>Volumes on Docker Desktop have much higher performance than bind mounts from Mac and Windows hosts.</li>
+</ul>
+<p>So now I'll easily make a decision what to use. If it some persistent data generated by container which you don't plan to manage by yourself - select volumes, otherwise bind mount best chose for external files which should be in container.</p>
+<p>Read only flag is another cool feature of volumes.</p>
+<div class="highlight"><pre><span></span><code>docker run -d <span class="se">\</span>
+  --name<span class="o">=</span>nginxtest <span class="se">\</span>
+  -v nginx-vol:/usr/share/nginx/html:ro <span class="se">\</span>
+  nginx:latest
+</code></pre></div>
+<h4>4. Making images from running state of other container</h4>
+<p>I have never met real case where to use it. But perhaps as an alternative to rebuilding each time images you can run it and install some additional packages, modify files, fix bugs and then create once "snapshot" of this container as an new image.</p>
+<div class="highlight"><pre><span></span><code>docker commit <span class="o">[</span>OPTIONS<span class="o">]</span> CONTAINER <span class="o">[</span>REPOSITORY<span class="o">[</span>:TAG<span class="o">]]</span>
+</code></pre></div>
+<h3 id="networks">Networks</h3>
+<p>The most interesting part for me was a network section. Compare with other parts I knew less and exactly this fact motivated me to pass entire course.</p>
+<h4>1. Addressing to container by name if using custom network</h4>
+<p>Do you want to discover IP address of each container for setting it to another? Not me and docker provides build-in DNS resolver. Just set container name via attribute <code>--name &lt;container_name&gt;</code> and access to it by name. Really cool, is't it?</p>
+<h4>2. Using multiple networks by one container</h4>
+<p>Not obvious thing, but it is. Nothing to tell more.</p>
+<h4>3. Giving container external IP address</h4>
+<p>That what I need for several times. Hope I will explain it in details in separate article, but wor now just mention cases:</p>
+<ul>
+<li>Using Ad Blocking instruments (AdGuard, PiHole etc.) and external DNS Server can't co-exists on the same host because of ports conflicts. But what should I use then? Virtual Machine helped to resolve the problem before, but now I can assign external IP for container.</li>
+<li>What if  you want to use VPN or IPS provider for special container, but not to entire host? Yeah, external IP for container helps me again.</li>
+</ul>
+<p>I was confused a little bit about what attributes according official <a href="https://docs.docker.com/network/macvlan/">tutorial</a> should I fill to achieve my goal.</p>
+<div class="highlight"><pre><span></span><code>docker network create -d macvlan <span class="se">\</span>
+  --subnet<span class="o">=</span><span class="m">192</span>.168.1.0/24 <span class="se">\</span>
+  --gateway<span class="o">=</span><span class="m">192</span>.168.1.1 <span class="se">\</span>
+  -o <span class="nv">parent</span><span class="o">=</span>ovs_eth0 <span class="se">\</span>
+  my-macvlan-net
+</code></pre></div>
+<p>Pay attention that you will use IP ranges of your current network, so it might be conflicts there. You also need to specify the parent, which is the interface the traffic will physically go through on the Docker host (unfortunately there is a <a href="https://github.com/docker/for-mac/issues/3926">bug with MacOS</a>). You can find appropriate via <code>ifconfig</code> command (see those where assign real IP.)</p>
+<h3 id="yaml-notation">YAML notation</h3>
+<p>Previously I didn't think about YAML as a format. I mean that I didn't understand it as a format with the rules. It seems like habitual text file, where you are able to write whatever you want, almost. For instance others formats will be broken if you will make a mistake somewhere but YAML doesn't seem to other as I thought, but I was mistaken. And course shown the basics, rules, structure etc. It was surprisingly to see how data structures like list was implemented in a native form.</p>
+<p>One more feature with anchors of YAML was explained on Airflow docker compose file, it is a perfect bullseye. Real and practical example for me, because of when I opened this first time, I was confused what was that and I tried to find out in ... docker documentation. For sure there is nothing there.</p>
+<p>DRY principle in action:
+Anchor - <code>&amp;</code>
+Alias - <code>&lt;&lt;: *</code></p>
+<div class="highlight"><pre><span></span><code><span class="nt">definitions</span><span class="p">:</span><span class="w"> </span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">step</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;build-and-test</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and test</span><span class="w"></span>
+<span class="w">        </span><span class="nt">script</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mvn package</span><span class="w"></span>
+<span class="w">        </span><span class="nt">artifacts</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">target/**</span><span class="w"></span>
+
+<span class="nt">pipelines</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">branches</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">develop</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">step</span><span class="p">:</span><span class="w"> </span><span class="nv">*build-and-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">master</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">step</span><span class="p">:</span><span class="w"> </span><span class="nv">*build-and-test</span><span class="w"></span>
+</code></pre></div>
+<h2 id="summary_1">Summary</h2>
+<p>After all maybe I didn't know docker as well as I thought, because of it's too much useful insights was appears for me. And there are tons of other feature which I don't know yet. But I suppose it's all because course was really great. Check it out yourself!</p>
+    
+    <!-- <div class="aspect-w-16 aspect-h-9 mx-auto"></div> CSS placeholder -->
+  </div>
+  <footer class="flex flex-col mt-10 ">
+    <ul class="flex flex-wrap">
+        <li
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          <a href="https://dev-mkc19.github.io/blog/tag/docker.html">docker</a>
+        </li>
+    </ul>
+    <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
+      <div class="w-1/2 rounded-l-lg"></div>
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-r-lg ">
+        <a class="flex flex-col" href="https://dev-mkc19.github.io/blog/tableau-files-types-ru.html">
+          <div class="text-right mx-4 py-2">
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">NEXT PAGE »</p>
+            <p class="text-right py-1 hover:underline">Tableau files' types</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+            href="https://www.linkedin.com/sharing/share-offsite/?url=https://dev-mkc19.github.io/blog/docker-for-newbies.html">
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+            href="https://api.whatsapp.com/send?text=Features - https://dev-mkc19.github.io/blog/docker-for-newbies.html">
+            <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+            href="https://telegram.me/share/url?text=Features&amp;url=https://dev-mkc19.github.io/blog/docker-for-newbies.html">
+            <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+  <div>
+  </div>
+</main>
+
+    </div>
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
+        <div class="px-4">
+            <span>©2023&nbsp;&#8226;&nbsp;</span>Powered by
+            <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
+        </div>
+    </footer>
+
+
+    <script>
+        let themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        let themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+        let themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', function () {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

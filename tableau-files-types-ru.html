@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Pelican" />
+    <meta name="description" content="dev.tinito Blog Posts">
+    <title>Tableau files' types</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/pygment.css" />
+    <link rel="shortcut icon" href="https://dev-mkc19.github.io/blog/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://dev-mkc19.github.io/blog/theme/css/stork.css">
+    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
+        href="https://dev-mkc19.github.io/blog/theme/css/stork-dark.css">
+    <link
+        href="https://dev-mkc19.github.io/blog/feeds/all.atom.xml"
+        type="application/atom+xml" rel="alternate" title="dev.tinito Atom Feed" />
+<meta name="description" content="Встретившись первый раз с тем, какие файлы ассоциированы с Tableau, можно запутаться и задаться вопросом, а для чего они нужны. Не переживайте..." />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
+        <div class="flex pt-4">
+            <h1 class="font-semibold text-2xl"><a href="https://dev-mkc19.github.io/blog/">dev.tinito</a></h1>
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
+                class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <ul class="flex flex-wrap lg:mr-24 md:pt-0">
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/archives.html">Archive</a></li>
+            <li class="mr-4 pt-6"><a                     href="https://dev-mkc19.github.io/blog/categories.html">Categories</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/tags.html">Tags</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/search.html">Search</a></li>
+        </ul>
+    </nav>
+    <div class="flex-grow md:max-w-screen-md md:mx-auto md:w-3/4 px-4">
+        <nav class="text-zinc-800 dark:text-zinc-300 mt-12 pb-2 md:mt-16" aria-label="Breadcrumb">
+            <ul class="p-0 inline-flex items-center">
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/" class="text-zinc-800 dark:text-zinc-300 inline-flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        Home
+                    </a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/categories.html">Categories</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/category/tableau.html">Tableau</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+            </ul>
+        </nav>
+
+<main>
+  <header>
+    <h1 class="font-semibold text-3xl my-2">Tableau files' types</h1>
+    <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
+      <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+        <time>April 13, 2023</time>
+        <div>
+          <span>&nbsp;·&nbsp;4 min read</span>
+        </div>
+        <div>
+          <span>&nbsp;·&nbsp;Mikhail K</span>
+        </div>
+      </div>
+    </footer>
+  </header>
+  <details class="flex flex-col my-6 p-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg">
+    <summary class="text-lg font-bold">Table of contents</summary>
+    <div class="mx-4 px-4 underline">
+      <div id="toc"><ul><li><a class="toc-href" href="#tipy-failov" title="&Tcy;&icy;&pcy;&ycy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy;">&Tcy;&icy;&pcy;&ycy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy;</a><ul><li><a class="toc-href" href="#twb" title="TWB">TWB</a></li><li><a class="toc-href" href="#tds" title="TDS">TDS</a></li><li><a class="toc-href" href="#hyper" title="HYPER">HYPER</a></li><li><a class="toc-href" href="#twbx" title="TWBX">TWBX</a></li><li><a class="toc-href" href="#tdsx" title="TDSX">TDSX</a></li><li><a class="toc-href" href="#dopolnitelno" title="&Dcy;&ocy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;">&Dcy;&ocy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;</a></li><li><a class="toc-href" href="#tbm" title="TBM">TBM</a></li><li><a class="toc-href" href="#tdc" title="TDC">TDC</a></li><li><a class="toc-href" href="#tms" title="TMS">TMS</a></li><li><a class="toc-href" href="#tps" title="TPS">TPS</a></li></ul></li></ul></div>
+    </div>
+  </details>
+  <div class="max-w-7xl container mx-auto my-8 text-zinc-800 dark:text-zinc-300  
+              prose lg:max-w-none prose-headings:text-zinc-800 prose-headings:dark:text-zinc-300 
+              prose-h1:text-3xl lg:prose-h1:text-3xl prose-headings:font-semibold 
+              prose-pre:bg-zinc-200 prose-pre:text-zinc-800
+              dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
+              prose-blockquote:text-zinc-800
+              dark:prose-blockquote:text-zinc-200
+              prose-a:text-slate-600 prose-a:font-normal
+              dark:prose-a:text-slate-400
+              dark:prose-strong:text-zinc-200 
+              dark:prose-code:text-zinc-200
+              dark:prose-code:bg-zinc-800
+              prose-code:bg-zinc-200
+              prose-code:font-light
+              prose-img:rounded-md
+              sm:text-left md:text-justify
+              ">
+
+
+    <h1 id="tipy-failov">&Tcy;&icy;&pcy;&ycy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy;</h1>
+<p>&Rcy;&acy;&zcy;&bcy;&iecy;&rcy;&iecy;&mcy; &ncy;&acy;&icy;&bcy;&ocy;&lcy;&iecy;&iecy; &rcy;&acy;&scy;&pcy;&rcy;&ocy;&scy;&tcy;&rcy;&acy;&ncy;&iecy;&ncy;&ncy;&ycy;&iecy; &rcy;&acy;&scy;&shcy;&icy;&rcy;&iecy;&ncy;&icy;&yacy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&softcy; Tableau Desktop &bcy;&ucy;&dcy;&iecy;&tcy; &vcy;&scy;&tcy;&rcy;&iecy;&chcy;&acy;&tcy;&softcy; &vcy; &rcy;&acy;&bcy;&ocy;&tcy;&iecy;.</p>
+<h2 id="twb">TWB</h2>
+<p><img alt="IMAGE_0.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_0.png" style="height: 150px"/>
+<strong>Tableau Workbook</strong>
+&Rcy;&acy;&bcy;&ocy;&chcy;&acy;&yacy; &kcy;&ncy;&icy;&gcy;&acy; Tableau - &ecy;&tcy;&ocy; &bcy;&acy;&zcy;&ocy;&vcy;&ycy;&jcy; &tcy;&icy;&pcy; &fcy;&acy;&jcy;&lcy;&acy;, &scy;&ocy;&zcy;&dcy;&acy;&ncy;&ncy;&ycy;&jcy; Tableau Desktop. &Ocy;&ncy;&acy; &vcy;&kcy;&lcy;&yucy;&chcy;&acy;&iecy;&tcy; &vcy; &scy;&iecy;&bcy;&yacy; &vcy;&scy;&iecy; &rcy;&acy;&bcy;&ocy;&chcy;&icy;&iecy; &lcy;&icy;&scy;&tcy;&ycy;, &dcy;&acy;&shcy;&bcy;&ocy;&rcy;&dcy;&ycy; &icy; &tcy;.&dcy;. &Vcy;&scy;&iecy;, &chcy;&tcy;&ocy; &vcy;&ycy; &scy;&dcy;&iecy;&lcy;&acy;&lcy;&icy; &scy; &vcy;&kcy;&lcy;&acy;&dcy;&kcy;&acy;&mcy;&icy; &vcy; &rcy;&acy;&bcy;&ocy;&chcy;&iecy;&jcy; &kcy;&ncy;&icy;&gcy;&iecy;, &tcy;&acy;&kcy;&icy;&mcy;&icy; &kcy;&acy;&kcy; &tscy;&vcy;&iecy;&tcy;&acy; &mcy;&iecy;&tcy;&ocy;&kcy;, &tcy;&icy;&pcy;&ycy; &gcy;&rcy;&acy;&fcy;&icy;&kcy;&ocy;&vcy;, &ecy;&tcy;&icy;&kcy;&iecy;&tcy;&kcy;&icy;, &scy;&tcy;&icy;&lcy;&icy; &gcy;&rcy;&acy;&ncy;&icy;&tscy; &icy; &tcy;.&dcy;. &zcy;&acy;&pcy;&icy;&scy;&ycy;&vcy;&acy;&yucy;&tcy;&scy;&yacy; &zcy;&dcy;&iecy;&scy;&softcy;. &IEcy;&scy;&lcy;&icy; &ucy; &vcy;&acy;&scy; &iecy;&scy;&tcy;&softcy; live-connection &kcy; &vcy;&acy;&shcy;&iecy;&mcy;&ucy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&ucy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &ecy;&tcy;&ocy; &tcy;&icy;&pcy; &fcy;&acy;&jcy;&lcy;&acy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&jcy; &vcy;&ycy; &scy;&ocy;&zcy;&dcy;&acy;&dcy;&icy;&tcy;&iecy;.
+&Acy;&vcy;&tcy;&ocy;&mcy;&acy;&tcy;&icy;&chcy;&iecy;&scy;&kcy;&icy; &vcy; TWB-&fcy;&acy;&jcy;&lcy; &vcy;&kcy;&lcy;&yucy;&chcy;&acy;&iecy;&tcy;&scy;&yacy; TDS-&fcy;&acy;&jcy;&lcy;, &pcy;&ocy;&dcy;&rcy;&ocy;&bcy;&ncy;&ocy; &ocy;&pcy;&icy;&scy;&acy;&ncy;&ncy;&ycy;&jcy; &ncy;&icy;&zhcy;&iecy;. &Pcy;&ocy;&mcy;&ncy;&icy;&tcy;&iecy;, &chcy;&tcy;&ocy; &vcy;&acy;&shcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &ncy;&iecy; &khcy;&rcy;&acy;&ncy;&yacy;&tcy;&scy;&yacy; &vcy;&ncy;&ucy;&tcy;&rcy;&icy; TWB (&scy;&lcy;&iecy;&dcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy; &icy; &vcy; TDS &tcy;&ocy;&zhcy;&iecy;). &Vcy;&mcy;&iecy;&scy;&tcy;&ocy; &ecy;&tcy;&ocy;&gcy;&ocy;, &rcy;&acy;&bcy;&ocy;&chcy;&acy;&yacy; &kcy;&ncy;&icy;&gcy;&acy; Tableau &yacy;&vcy;&lcy;&yacy;&iecy;&tcy;&scy;&yacy; XML &kcy;&ocy;&dcy;&ocy;&mcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&jcy; Tableau Desktop &gcy;&iecy;&ncy;&iecy;&rcy;&icy;&rcy;&ucy;&iecy;&tcy; &dcy;&lcy;&yacy; &pcy;&iecy;&rcy;&iecy;&vcy;&ocy;&dcy;&acy; &tcy;&ocy;&gcy;&ocy;, &chcy;&tcy;&ocy; &vcy;&ycy; &scy;&dcy;&iecy;&lcy;&acy;&lcy;&icy; &ncy;&acy; &scy;&vcy;&ocy;&icy;&khcy; &rcy;&acy;&bcy;&ocy;&chcy;&icy;&khcy; &lcy;&icy;&scy;&tcy;&acy;&khcy; &icy; &pcy;&rcy;&icy;&bcy;&ocy;&rcy;&ncy;&ycy;&khcy; &pcy;&acy;&ncy;&iecy;&lcy;&yacy;&khcy;.
+&Vcy;&ncy;&ucy;&tcy;&rcy;&icy; My Tableau Repository &vcy; &pcy;&acy;&pcy;&kcy;&iecy; &dcy;&ocy;&kcy;&ucy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy;, &ncy;&ocy;&vcy;&ycy;&iecy; TWB &fcy;&acy;&jcy;&lcy;&ycy; &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&mcy;&iecy;&shchcy;&iecy;&ncy;&ycy; &vcy; &pcy;&acy;&pcy;&kcy;&ucy; Workbooks.</p>
+<h2 id="tds">TDS</h2>
+<p><img alt="IMAGE_1.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_1.png" style="height: 150px"/>
+<strong>Tableau Data Source</strong>
+&Fcy;&acy;&jcy;&lcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &vcy;&kcy;&lcy;&yucy;&chcy;&acy;&iecy;&tcy; &vcy; &scy;&iecy;&bcy;&yacy; &vcy;&scy;&yucy; &icy;&ncy;&fcy;&ocy;&rcy;&mcy;&acy;&tscy;&icy;&yucy; &ocy; &scy;&ocy;&iecy;&dcy;&icy;&ncy;&iecy;&ncy;&icy;&icy; &icy; &mcy;&iecy;&tcy;&acy;&dcy;&acy;&ncy;&ncy;&ycy;&iecy; &ocy; &vcy;&acy;&shcy;&iecy;&mcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Ncy;&acy;&pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &iecy;&scy;&lcy;&icy; &vcy;&ycy; &ucy;&kcy;&acy;&zcy;&acy;&lcy;&icy; &pcy;&scy;&iecy;&vcy;&dcy;&ocy;&ncy;&icy;&mcy;&ycy; &dcy;&lcy;&yacy; &icy;&zcy;&mcy;&iecy;&rcy;&iecy;&ncy;&icy;&jcy;, &icy;&zcy;&mcy;&iecy;&ncy;&icy;&lcy;&icy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &icy;&zcy;&mcy;&iecy;&ncy;&icy;&lcy;&icy; &gcy;&rcy;&ucy;&pcy;&pcy;&icy;&rcy;&ocy;&vcy;&kcy;&icy; &pcy;&ocy; &ucy;&mcy;&ocy;&lcy;&chcy;&acy;&ncy;&icy;&yucy; &icy; &tcy;.&dcy;., &tcy;&ocy;&gcy;&dcy;&acy; &vcy;&scy;&iecy; &ecy;&tcy;&ocy; &bcy;&ucy;&dcy;&iecy;&tcy; &scy;&ocy;&khcy;&rcy;&acy;&ncy;&iecy;&ncy;&ocy; &zcy;&dcy;&iecy;&scy;&softcy;. &Ocy;&ncy; &tcy;&acy;&kcy;&zhcy;&iecy; &vcy;&kcy;&lcy;&yucy;&chcy;&acy;&iecy;&tcy; &vcy; &scy;&iecy;&bcy;&yacy; &vcy;&ycy;&chcy;&icy;&scy;&lcy;&yacy;&iecy;&mcy;&ycy;&iecy; &pcy;&ocy;&lcy;&yacy;, &pcy;&acy;&rcy;&acy;&mcy;&iecy;&tcy;&rcy;&ycy;, &bcy;&icy;&ncy;&ycy;, &icy;&iecy;&rcy;&acy;&rcy;&khcy;&icy;&icy;, &gcy;&rcy;&ucy;&pcy;&pcy;&ycy; &icy; &scy;&iecy;&tcy;&ycy;.
+TDS-&fcy;&acy;&jcy;&lcy; &acy;&vcy;&tcy;&ocy;&mcy;&acy;&tcy;&icy;&chcy;&iecy;&scy;&kcy;&icy; &vcy;&kcy;&lcy;&yucy;&chcy;&acy;&iecy;&tcy;&scy;&yacy; &vcy; TWB-&fcy;&acy;&jcy;&lcy;, &ncy;&ocy; &ocy;&ncy; &tcy;&acy;&kcy;&zhcy;&iecy; &mcy;&ocy;&zhcy;&iecy;&tcy; &bcy;&ycy;&tcy;&softcy; &scy;&ocy;&khcy;&rcy;&acy;&ncy;&iecy;&ncy;&ncy;&ycy;&mcy; &vcy; &vcy;&icy;&dcy;&iecy; &ocy;&tcy;&dcy;&iecy;&lcy;&softcy;&ncy;&ocy;&gcy;&ocy; &fcy;&acy;&jcy;&lcy;&acy;, &iecy;&scy;&lcy;&icy; &vcy;&ycy; &khcy;&ocy;&tcy;&icy;&tcy;&iecy; &pcy;&ocy;&dcy;&iecy;&lcy;&icy;&tcy;&softcy;&scy;&yacy; &icy;&ncy;&fcy;&ocy;&rcy;&mcy;&acy;&tscy;&icy;&iecy;&jcy; &ocy; &scy;&ocy;&iecy;&dcy;&icy;&ncy;&iecy;&ncy;&icy;&icy;, &acy; &tcy;&acy;&kcy;&zhcy;&iecy; &mcy;&iecy;&tcy;&acy;&dcy;&acy;&ncy;&ncy;&ycy;&iecy; &dcy;&lcy;&yacy; &ecy;&tcy;&ocy;&gcy;&ocy; &kcy;&ocy;&ncy;&kcy;&rcy;&iecy;&tcy;&ncy;&ocy;&gcy;&ocy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &CHcy;&tcy;&ocy;&bcy;&ycy; &scy;&dcy;&iecy;&lcy;&acy;&tcy;&softcy; &ecy;&tcy;&ocy; &pcy;&rcy;&acy;&vcy;&icy;&lcy;&softcy;&ncy;&ocy;, &ncy;&acy;&zhcy;&mcy;&icy;&tcy;&iecy; &ncy;&acy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &vcy; &vcy;&iecy;&rcy;&khcy;&ncy;&iecy;&jcy; &chcy;&acy;&scy;&tcy;&icy; &pcy;&acy;&ncy;&iecy;&lcy;&icy; Data &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; &pcy;&ucy;&ncy;&kcy;&tcy; Add to Saved Data Sources.
+&Vcy;&ncy;&ucy;&tcy;&rcy;&icy; My Tableau Repository &vcy; &pcy;&acy;&pcy;&kcy;&iecy; &dcy;&ocy;&kcy;&ucy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy;, &ncy;&ocy;&vcy;&ycy;&iecy; TDS &fcy;&acy;&jcy;&lcy;&ycy; &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&mcy;&iecy;&shchcy;&iecy;&ncy;&ycy; &vcy; &pcy;&acy;&pcy;&kcy;&ucy; Datasources.</p>
+<h2 id="hyper">HYPER</h2>
+<p><img alt="IMAGE_2.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_2.png" style="height: 150px"/>
+<strong>Tableau Data Extract</strong>
+&Ecy;&kcy;&scy;&tcy;&rcy;&acy;&kcy;&tcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; - &ecy;&tcy;&ocy; &lcy;&ocy;&kcy;&acy;&lcy;&softcy;&ncy;&acy;&yacy; &kcy;&ocy;&pcy;&icy;&yacy; &lcy;&icy;&bcy;&ocy; &tscy;&iecy;&lcy;&ocy;&gcy;&ocy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &lcy;&icy;&bcy;&ocy; &pcy;&ocy;&dcy;&mcy;&ncy;&ocy;&zhcy;&iecy;&scy;&tcy;&vcy;&ocy; &ecy;&tcy;&icy;&khcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ucy;&iecy;&tcy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&ocy; &pcy;&rcy;&icy;&chcy;&icy;&ncy; &dcy;&lcy;&yacy; &scy;&ocy;&zcy;&dcy;&acy;&ncy;&icy;&yacy; &ecy;&kcy;&scy;&tcy;&rcy;&acy;&kcy;&tcy;&acy;, &tcy;&acy;&kcy;&icy;&khcy; &kcy;&acy;&kcy; &pcy;&ocy;&rcy;&tcy;&acy;&tcy;&icy;&vcy;&ncy;&ocy;&scy;&tcy;&softcy;, &pcy;&rcy;&ocy;&icy;&zcy;&vcy;&ocy;&dcy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;&scy;&tcy;&softcy; &icy; &kcy;&ocy;&ncy;&tcy;&rcy;&ocy;&lcy;&softcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Ecy;&kcy;&scy;&tcy;&rcy;&acy;&kcy;&tcy;&ycy;, &scy;&ocy;&zcy;&dcy;&acy;&ncy;&ncy;&ycy;&iecy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; Tableau &ocy;&pcy;&tcy;&icy;&mcy;&icy;&zcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&ycy; &dcy;&lcy;&yacy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy; &vcy; &vcy;&acy;&shcy;&iecy;&jcy; &vcy;&icy;&zcy;&ucy;&acy;&lcy;&icy;&zcy;&acy;&tscy;&icy;&icy;. Tableau &scy;&tcy;&rcy;&ocy;&icy;&tcy; &icy;&zcy;&vcy;&lcy;&iecy;&chcy;&iecy;&ncy;&icy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; Extract Data &scy;&ocy; &scy;&tcy;&rcy;&acy;&ncy;&icy;&tscy;&ycy; Data Connection.
+&Lcy;&yucy;&bcy;&ycy;&iecy; &ncy;&ocy;&vcy;&ycy;&iecy; &kcy;&ocy;&lcy;&ocy;&ncy;&kcy;&icy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &pcy;&ocy;&yacy;&vcy;&lcy;&yacy;&yucy;&tcy;&scy;&yacy; &vcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &vcy; &rcy;&iecy;&zcy;&ucy;&lcy;&softcy;&tcy;&acy;&tcy;&iecy; &rcy;&acy;&bcy;&ocy;&tcy;&ycy; Tableau Desktop &tcy;&acy;&kcy;&zhcy;&iecy; &bcy;&ucy;&dcy;&ucy;&tcy; &vcy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&ycy; &vcy; &ecy;&kcy;&scy;&tcy;&rcy;&acy;&kcy;&tcy;. &Scy;&yucy;&dcy;&acy; &vcy;&khcy;&ocy;&dcy;&yacy;&tcy; &vcy;&ycy;&chcy;&icy;&scy;&lcy;&yacy;&iecy;&mcy;&ycy;&iecy; &pcy;&ocy;&lcy;&yacy;, &gcy;&rcy;&ucy;&pcy;&pcy;&ycy;, &icy;&iecy;&rcy;&acy;&rcy;&khcy;&icy;&icy;, &scy;&iecy;&tcy;&ycy;, &bcy;&icy;&ncy;&ycy; &icy; &dcy;&acy;&zhcy;&iecy; &ncy;&iecy;&kcy;&ocy;&tcy;&ocy;&rcy;&ocy;&iecy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&iecy; &pcy;&ocy; &ucy;&mcy;&ocy;&lcy;&chcy;&acy;&ncy;&icy;&yucy; (&ncy;&acy;&pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&iecy; &chcy;&icy;&scy;&lcy;&acy;).
+&Vcy;&ncy;&ucy;&tcy;&rcy;&icy; &rcy;&iecy;&pcy;&ocy;&zcy;&icy;&tcy;&ocy;&rcy;&icy;&yacy; My Tableau &vcy; &pcy;&acy;&pcy;&kcy;&iecy; &dcy;&ocy;&kcy;&ucy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy;, &ncy;&ocy;&vcy;&ycy;&iecy; HYPER &fcy;&acy;&jcy;&lcy;&ycy; &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&mcy;&iecy;&shchcy;&iecy;&ncy;&ycy; &vcy; &pcy;&acy;&pcy;&kcy;&ucy; Datasources. &Ocy; &tcy;&ocy;&mcy; &kcy;&acy;&kcy; &scy;&ocy;&zcy;&dcy;&acy;&vcy;&acy;&tcy;&softcy; &ecy;&kcy;&scy;&tcy;&rcy;&acy;&kcy;&tcy;&ycy; &pcy;&ocy;&dcy;&rcy;&ocy;&bcy;&ncy;&iecy;&iecy; &ocy;&pcy;&icy;&scy;&acy;&ncy;&ocy; &vcy; &ecy;&tcy;&ocy;&jcy; &scy;&tcy;&acy;&tcy;&softcy;&iecy;.</p>
+<h2 id="twbx">TWBX</h2>
+<p><img alt="IMAGE_3.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_3.png" style="height: 150px"/>
+<strong>Tableau Packaged Workbook</strong>
+&Ucy;&pcy;&acy;&kcy;&ocy;&vcy;&acy;&ncy;&ncy;&acy;&yacy; &rcy;&acy;&bcy;&ocy;&chcy;&acy;&yacy; &tcy;&iecy;&tcy;&rcy;&acy;&dcy;&softcy; Tableau &scy;&ocy;&chcy;&iecy;&tcy;&acy;&iecy;&tcy; &vcy; &scy;&iecy;&bcy;&iecy; &rcy;&acy;&bcy;&ocy;&chcy;&ucy;&yucy; &tcy;&iecy;&tcy;&rcy;&acy;&dcy;&softcy;, &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &ocy; &pcy;&ocy;&dcy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&icy;&icy; &icy; &mcy;&iecy;&tcy;&acy;&dcy;&acy;&ncy;&ncy;&ycy;&iecy; &icy; &scy;&acy;&mcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy; &vcy; &vcy;&icy;&dcy;&iecy; HYPER. &IEcy;&scy;&lcy;&icy; &iecy;&scy;&tcy;&softcy; &kcy;&acy;&kcy;&icy;&iecy;-&ncy;&icy;&bcy;&ucy;&dcy;&softcy; &icy;&zcy;&ocy;&bcy;&rcy;&acy;&zhcy;&iecy;&ncy;&icy;&yacy;, &ncy;&acy;&pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &fcy;&ocy;&ncy;&ocy;&vcy;&ycy;&iecy; &icy;&zcy;&ocy;&bcy;&rcy;&acy;&zhcy;&iecy;&ncy;&icy;&yacy;, &vcy; &ucy;&pcy;&acy;&kcy;&ocy;&vcy;&acy;&ncy;&ncy;&ucy;&yucy; &rcy;&acy;&bcy;&ocy;&chcy;&ucy;&yucy; &kcy;&ncy;&icy;&gcy;&ucy; &tcy;&acy;&kcy;&zhcy;&iecy; &bcy;&ucy;&dcy;&ucy;&tcy; &vcy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&ycy; &ecy;&tcy;&icy; &icy;&zcy;&ocy;&bcy;&rcy;&acy;&zhcy;&iecy;&ncy;&icy;&yacy;. &Ecy;&tcy;&ocy; &pcy;&ocy;&lcy;&ncy;&ocy;&scy;&tcy;&softcy;&yucy; &pcy;&ocy;&rcy;&tcy;&acy;&tcy;&icy;&vcy;&ncy;&acy;&yacy; &rcy;&acy;&bcy;&ocy;&chcy;&acy;&yacy; &kcy;&ncy;&icy;&gcy;&acy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ocy;&jcy; &mcy;&ocy;&zhcy;&ncy;&ocy; &dcy;&iecy;&lcy;&icy;&tcy;&softcy;&scy;&yacy; &icy;&lcy;&icy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; &vcy; &acy;&vcy;&tcy;&ocy;&ncy;&ocy;&mcy;&ncy;&ocy;&mcy; &rcy;&iecy;&zhcy;&icy;&mcy;&iecy;. A &fcy;&acy;&jcy;&lcy; TWBX &ncy;&iecy;&ocy;&bcy;&khcy;&ocy;&dcy;&icy;&mcy; &dcy;&lcy;&yacy; &dcy;&rcy;&ucy;&gcy;&ocy;&gcy;&ocy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy;, &chcy;&tcy;&ocy;&bcy;&ycy; &ocy;&tcy;&kcy;&rcy;&ycy;&tcy;&softcy; &rcy;&acy;&bcy;&ocy;&chcy;&ucy;&yucy; &kcy;&ncy;&icy;&gcy;&ucy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; Tableau Reader. &Pcy;&ocy;&dcy;&ucy;&mcy;&acy;&jcy;&tcy;&iecy; &ocy; &rcy;&acy;&bcy;&ocy;&chcy;&iecy;&jcy; &kcy;&ncy;&icy;&gcy;&iecy; &vcy; &kcy;&ocy;&mcy;&pcy;&lcy;&iecy;&kcy;&tcy;&iecy; Tableau, &kcy;&acy;&kcy; &ocy; &scy;&pcy;&iecy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ocy;&mcy; &ncy;&acy;&bcy;&ocy;&rcy;&iecy; zip-&fcy;&acy;&jcy;&lcy;&ocy;&vcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &scy;&zhcy;&acy;&tcy;&ycy; &vcy;&mcy;&iecy;&scy;&tcy;&iecy;.
+&CHcy;&tcy;&ocy;&bcy;&ycy; &scy;&ocy;&khcy;&rcy;&acy;&ncy;&icy;&tcy;&softcy; &vcy;&acy;&shcy;&ucy; &rcy;&acy;&bcy;&ocy;&chcy;&ucy;&yucy; &kcy;&ncy;&icy;&gcy;&ucy; &vcy; &vcy;&icy;&dcy;&iecy; &Ucy;&pcy;&acy;&kcy;&ocy;&vcy;&acy;&ncy;&ncy;&ocy;&jcy; &rcy;&acy;&bcy;&ocy;&chcy;&iecy;&jcy; &kcy;&ncy;&icy;&gcy;&icy; Tableau, &kcy;&ocy;&gcy;&dcy;&acy; &vcy;&ycy; &scy;&ocy;&khcy;&rcy;&acy;&ncy;&yacy;&iecy;&tcy;&iecy; &vcy;&acy;&shcy;&icy; &rcy;&acy;&bcy;&ocy;&chcy;&acy;&yacy; &kcy;&ncy;&icy;&gcy;&acy; &icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy; &vcy;&ycy;&pcy;&acy;&dcy;&acy;&yucy;&shchcy;&iecy;&iecy; &mcy;&iecy;&ncy;&yucy; Save As Type &vcy; Tableau Packaged Workbook (*.twbx). &Vcy;&ncy;&ucy;&tcy;&rcy;&icy; &pcy;&acy;&pcy;&kcy;&icy; My Tableau Repository &ncy;&ocy;&vcy;&ycy;&iecy; &fcy;&acy;&jcy;&lcy;&ycy; TWBX &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&mcy;&iecy;&shchcy;&iecy;&ncy;&ycy; &vcy; &pcy;&acy;&pcy;&kcy;&ucy; Workbooks.</p>
+<h2 id="tdsx">TDSX</h2>
+<p><img alt="IMAGE_4.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_4.png" style="height: 150px"/>
+<strong>Tableau Packaged Data Source</strong>
+&Pcy;&ocy;&dcy;&ocy;&bcy;&ncy;&ocy; TWBX, Tableau Packaged Data Source &pcy;&rcy;&iecy;&dcy;&scy;&tcy;&acy;&vcy;&lcy;&yacy;&iecy;&tcy; &scy;&ocy;&bcy;&ocy;&jcy; &kcy;&ocy;&mcy;&bcy;&icy;&ncy;&acy;&tscy;&icy;&yucy; &icy;&zcy; &pcy;&acy;&rcy;&ycy; &rcy;&acy;&zcy;&ncy;&ycy;&khcy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy;. TDSX &ocy;&bcy;&hardcy;&iecy;&dcy;&icy;&ncy;&yacy;&iecy;&tcy; &mcy;&iecy;&tcy;&acy;&dcy;&acy;&ncy;&ncy;&ycy;&iecy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &icy;&ncy;&fcy;&ocy;&rcy;&mcy;&acy;&tscy;&icy;&yacy; &ocy; &pcy;&ocy;&dcy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&icy;&icy; &icy; &ecy;&kcy;&scy;&tcy;&rcy;&acy;&kcy;&tcy;&acy;&khcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Ecy;&tcy;&ocy; &ncy;&acy;&icy;&bcy;&ocy;&lcy;&iecy;&iecy; &pcy;&ocy;&lcy;&ncy;&ycy;&jcy; &scy;&pcy;&ocy;&scy;&ocy;&bcy; &pcy;&ocy;&dcy;&iecy;&lcy;&icy;&tcy;&softcy;&scy;&yacy; &dcy;&acy;&ncy;&ncy;&ycy;&mcy;&icy;, &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &ocy;&ncy;&icy; &tcy;&acy;&kcy;&zhcy;&iecy; &vcy;&kcy;&lcy;&yucy;&chcy;&acy;&yucy;&tcy; &vcy;&scy;&iecy; &icy;&zcy;&mcy;&iecy;&ncy;&iecy;&ncy;&icy;&yacy; &icy; &pcy;&rcy;&iecy;&dcy;&ocy;&bcy;&rcy;&acy;&bcy;&ocy;&tcy;&kcy;&ucy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &bcy;&ycy;&lcy;&icy; &scy;&dcy;&iecy;&lcy;&acy;&ncy;&ycy;: &pcy;&acy;&rcy;&acy;&mcy;&iecy;&tcy;&rcy;&ycy;, &scy;&iecy;&tcy;&ycy;, &icy;&iecy;&rcy;&acy;&rcy;&khcy;&icy;&icy;, &gcy;&rcy;&ucy;&pcy;&pcy;&ycy;, &rcy;&acy;&scy;&scy;&chcy;&icy;&tcy;&acy;&ncy;&ncy;&ycy;&iecy; &pcy;&ocy;&lcy;&yacy;, &bcy;&icy;&ncy;&ycy; &icy; &vcy;&scy;&iecy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&ycy; &pcy;&ocy;&lcy;&iecy;&jcy; &pcy;&ocy; &ucy;&mcy;&ocy;&lcy;&chcy;&acy;&ncy;&icy;&yucy;.
+&CHcy;&tcy;&ocy;&bcy;&ycy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; TDSX-&fcy;&acy;&jcy;&lcy;, &shchcy;&iecy;&lcy;&kcy;&ncy;&icy;&tcy;&iecy; &pcy;&rcy;&acy;&vcy;&ocy;&jcy; &kcy;&ncy;&ocy;&pcy;&kcy;&ocy;&jcy; &mcy;&ycy;&shcy;&icy; &ncy;&acy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; Add to Saved Data Sources. &Vcy; &pcy;&ocy;&yacy;&vcy;&icy;&vcy;&shcy;&iecy;&mcy;&scy;&yacy; &dcy;&icy;&acy;&lcy;&ocy;&gcy;&ocy;&vcy;&ocy;&mcy; &ocy;&kcy;&ncy;&iecy; &icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&iecy; Save As Type &vcy;&ycy;&pcy;&acy;&dcy;&acy;&yucy;&shchcy;&iecy;&gcy;&ocy; &mcy;&iecy;&ncy;&yucy; &vcy; Tableau Packaged Data Source (*.tdsx). &Vcy;&ncy;&ucy;&tcy;&rcy;&icy; &pcy;&acy;&pcy;&kcy;&icy; My Tableau Repository &ncy;&ocy;&vcy;&ycy;&iecy; &fcy;&acy;&jcy;&lcy;&ycy; TDSX &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&mcy;&iecy;&shchcy;&iecy;&ncy;&ycy; &vcy; &pcy;&acy;&pcy;&kcy;&ucy; Datasources.
+&Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &vcy;&ycy;&yacy;&scy;&ncy;&icy;&mcy;, &kcy;&acy;&kcy; &vcy;&scy;&iecy; &ecy;&tcy;&icy; &rcy;&acy;&zcy;&lcy;&icy;&chcy;&ncy;&ycy;&iecy; &tcy;&icy;&pcy;&ycy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy; &vcy;&zcy;&acy;&icy;&mcy;&ocy;&dcy;&iecy;&jcy;&scy;&tcy;&vcy;&ucy;&yucy;&tcy; &vcy;&mcy;&iecy;&scy;&tcy;&iecy;:
+&Pcy;&ocy;&mcy;&ncy;&icy;&tcy;&iecy;, &chcy;&tcy;&ocy; &fcy;&acy;&jcy;&lcy;&ycy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&ocy;&vcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; Tableau &icy; &ecy;&kcy;&scy;&tcy;&rcy;&acy;&kcy;&tcy;&ycy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; Tableau &mcy;&ocy;&gcy;&ucy;&tcy; &scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ocy;&vcy;&acy;&tcy;&softcy; &vcy;&ncy;&ucy;&tcy;&rcy;&icy; &dcy;&rcy;&ucy;&gcy;&icy;&khcy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy; &icy;&lcy;&icy; &mcy;&ocy;&gcy;&ucy;&tcy; &bcy;&ycy;&tcy;&softcy; &scy;&ocy;&khcy;&rcy;&acy;&ncy;&iecy;&ncy;&ycy; &ocy;&tcy;&dcy;&iecy;&lcy;&softcy;&ncy;&ocy;. &Ncy;&acy;&pcy;&rcy;&icy;&mcy;&iecy;&rcy;, TDS &fcy;&acy;&jcy;&lcy; &bcy;&ucy;&dcy;&iecy;&tcy; &scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ocy;&vcy;&acy;&tcy;&softcy; &vcy;&ncy;&ucy;&tcy;&rcy;&icy; TWB, TWBX &icy; TDSX.
+<img alt="IMAGE_5.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_5.png" style="height: 150px"/></p>
+<h2 id="dopolnitelno">&Dcy;&ocy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;</h2>
+<p>&Ocy;&scy;&tcy;&acy;&lcy;&softcy;&ncy;&ycy;&iecy; &tcy;&icy;&pcy;&ycy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy; &rcy;&iecy;&zhcy;&iecy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&yucy;&tcy;&scy;&yacy; &bcy;&ocy;&lcy;&softcy;&shcy;&icy;&ncy;&scy;&tcy;&vcy;&ocy;&mcy; &pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&iecy;&jcy; Tableau.</p>
+<h2 id="tbm">TBM</h2>
+<p><strong>Tableau Bookmark</strong>
+&Zcy;&acy;&kcy;&lcy;&acy;&dcy;&kcy;&acy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&iecy;&tcy;&scy;&yacy; &dcy;&lcy;&yacy; &vcy;&ycy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&yacy; &kcy;&ocy;&ncy;&kcy;&rcy;&iecy;&tcy;&ncy;&ocy;&gcy;&ocy; &rcy;&acy;&bcy;&ocy;&chcy;&iecy;&gcy;&ocy; &lcy;&icy;&scy;&tcy;&acy;. &IEcy;&scy;&lcy;&icy; &vcy;&ycy; &khcy;&ocy;&tcy;&icy;&tcy;&iecy; &pcy;&ocy;&dcy;&iecy;&lcy;&icy;&tcy;&softcy;&scy;&yacy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &rcy;&acy;&bcy;&ocy;&chcy;&icy;&mcy; &lcy;&icy;&scy;&tcy;&ocy;&mcy;, &acy; &ncy;&iecy; &vcy;&scy;&iecy;&jcy; &rcy;&acy;&bcy;&ocy;&chcy;&iecy;&jcy; &tcy;&iecy;&tcy;&rcy;&acy;&dcy;&softcy;&yucy;, &icy;&lcy;&icy; &iecy;&scy;&lcy;&icy; &vcy;&ycy; &chcy;&acy;&scy;&tcy;&ocy; &kcy; &ncy;&iecy;&mcy;&ucy; &ocy;&bcy;&rcy;&acy;&shchcy;&acy;&iecy;&tcy;&iecy;&scy;&softcy;, &tcy;&ocy; &iecy;&scy;&tcy;&softcy; &scy;&mcy;&ycy;&scy;&lcy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; &zcy;&acy;&kcy;&lcy;&acy;&dcy;&kcy;&ucy;. &CHcy;&tcy;&ocy;&bcy;&ycy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &zcy;&acy;&kcy;&lcy;&acy;&dcy;&kcy;&ucy;, &pcy;&iecy;&rcy;&iecy;&jcy;&dcy;&icy;&tcy;&iecy; &vcy; &mcy;&iecy;&ncy;&yucy; Window &icy; &vcy;&ycy;&bcy;&iecy;&rcy;&icy;&tcy;&iecy; &pcy;&ucy;&ncy;&kcy;&tcy; Bookmark &gt; Create Bookmark. &Vcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&tcy;&iecy; &ocy;&tcy;&kcy;&rcy;&ycy;&tcy;&softcy; &zcy;&acy;&kcy;&lcy;&acy;&dcy;&kcy;&ucy; &dcy;&vcy;&ocy;&jcy;&ncy;&ycy;&mcy; &shchcy;&iecy;&lcy;&chcy;&kcy;&ocy;&mcy; &pcy;&ocy; &icy;&kcy;&ocy;&ncy;&kcy;&iecy; &fcy;&acy;&jcy;&lcy;&acy;.
+&Vcy;&ncy;&ucy;&tcy;&rcy;&icy; My Tableau Repository &vcy; &pcy;&acy;&pcy;&kcy;&iecy; &dcy;&ocy;&kcy;&ucy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy;, &ncy;&ocy;&vcy;&ycy;&iecy; TBM &fcy;&acy;&jcy;&lcy;&ycy; &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&mcy;&iecy;&shchcy;&iecy;&ncy;&ycy; &vcy; &pcy;&acy;&pcy;&kcy;&ucy; Bookmarks. &IEcy;&scy;&lcy;&icy; &vcy;&ycy; &rcy;&iecy;&shcy;&icy;&lcy;&icy; &scy;&ocy;&khcy;&rcy;&acy;&ncy;&icy;&tcy;&softcy; &fcy;&acy;&jcy;&lcy; TBM &vcy; &dcy;&rcy;&ucy;&gcy;&ocy;&mcy; &mcy;&iecy;&scy;&tcy;&iecy;, &chcy;&iecy;&mcy; &pcy;&acy;&pcy;&kcy;&acy; "My Tableau Repository", &tcy;&ocy; &ocy;&ncy; &ncy;&iecy; &pcy;&ocy;&yacy;&vcy;&icy;&tcy;&scy;&yacy; &vcy; &mcy;&iecy;&ncy;&yucy; Bookmarks.</p>
+<h2 id="tdc">TDC</h2>
+<p><img alt="IMAGE_6.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_6.png" style="height: 150px"/>
+<strong>Tableau Datasource Connection</strong>
+&Fcy;&acy;&jcy;&lcy;&ycy; &pcy;&ocy;&dcy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&icy;&yacy; &kcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy;&mcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy; Tableau (TDC) &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&yucy;&tcy;&scy;&yacy; &dcy;&lcy;&yacy; &khcy;&rcy;&acy;&ncy;&iecy;&ncy;&icy;&yacy; &ncy;&acy;&scy;&tcy;&rcy;&ocy;&iecy;&kcy; &icy; &pcy;&rcy;&iecy;&dcy;&pcy;&ocy;&chcy;&tcy;&iecy;&ncy;&icy;&yacy; &dcy;&lcy;&yacy; &pcy;&iecy;&rcy;&iecy;&dcy;&acy;&chcy;&icy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;. &Ecy;&tcy;&icy; &tcy;&icy;&pcy;&ycy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy; &mcy;&ocy;&gcy;&ucy;&tcy; &bcy;&ycy;&tcy;&softcy; &scy;&ocy;&zcy;&dcy;&acy;&ncy;&ycy; &vcy; &lcy;&yucy;&bcy;&ocy;&mcy; &tcy;&iecy;&kcy;&scy;&tcy;&ocy;&vcy;&ocy;&mcy; &rcy;&iecy;&dcy;&acy;&kcy;&tcy;&ocy;&rcy;&iecy;. &Ocy;&bcy;&ycy;&chcy;&ncy;&ocy; &ocy;&ncy;&icy; &scy;&ocy;&khcy;&rcy;&acy;&ncy;&yacy;&yucy;&tcy;&scy;&yacy; &vcy; &pcy;&acy;&pcy;&kcy;&iecy; "Datasources" &vcy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&iecy; "My Tableau Repository".</p>
+<h2 id="tms">TMS</h2>
+<p><img alt="IMAGE_7.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_7.png" style="height: 150px"/>
+<strong>Tableau Map Source</strong>
+Tableau &pcy;&rcy;&iecy;&dcy;&ocy;&scy;&tcy;&acy;&vcy;&lcy;&yacy;&iecy;&tcy; &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ocy;&scy;&tcy;&softcy; &pcy;&ocy;&dcy;&kcy;&lcy;&yucy;&chcy;&iecy;&ncy;&icy;&yacy; &kcy; &kcy;&acy;&rcy;&tcy;&ocy;&gcy;&rcy;&acy;&fcy;&icy;&chcy;&iecy;&scy;&kcy;&ocy;&mcy;&ucy; &scy;&iecy;&rcy;&vcy;&iecy;&rcy;&ucy; Tableau. &IEcy;&scy;&lcy;&icy; &vcy;&ycy; &pcy;&ocy;&dcy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&iecy;&scy;&softcy; &kcy; &kcy;&acy;&rcy;&tcy;&ocy;&gcy;&rcy;&acy;&fcy;&icy;&chcy;&iecy;&scy;&kcy;&ocy;&mcy;&ucy; &scy;&iecy;&rcy;&vcy;&iecy;&rcy;&ucy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&jcy; &ncy;&iecy; &pcy;&ocy;&dcy;&dcy;&iecy;&rcy;&zhcy;&icy;&vcy;&acy;&iecy;&tcy; &scy;&tcy;&acy;&ncy;&dcy;&acy;&rcy;&tcy; WMS, &vcy;&acy;&mcy; &ncy;&ucy;&zhcy;&ncy;&ocy; &bcy;&ucy;&dcy;&iecy;&tcy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &fcy;&acy;&jcy;&lcy; TMS.</p>
+<h2 id="tps">TPS</h2>
+<p><img alt="IMAGE_8.png" src="https://dev-mkc19.github.io/blog/images/file_types/IMAGE_8.png" style="height: 150px"/>
+<strong>Tableau Preferences</strong>
+&IEcy;&scy;&lcy;&icy; &vcy;&ycy; &khcy;&ocy;&tcy;&icy;&tcy;&iecy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&softcy;&scy;&kcy;&ucy;&yucy; &tscy;&vcy;&iecy;&tcy;&ocy;&vcy;&ucy;&yucy; &pcy;&acy;&lcy;&icy;&tcy;&rcy;&ucy;, &vcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&tcy;&iecy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &icy;&khcy; &vcy;&ncy;&ucy;&tcy;&rcy;&icy; &fcy;&acy;&jcy;&lcy;&acy; Preferences.tps. &Ocy;&ncy; &rcy;&acy;&scy;&pcy;&ocy;&lcy;&ocy;&zhcy;&iecy;&ncy; &vcy; &pcy;&acy;&pcy;&kcy;&iecy; &vcy;&iecy;&rcy;&khcy;&ncy;&iecy;&gcy;&ocy; &ucy;&rcy;&ocy;&vcy;&ncy;&yacy; My Tableau Repository. &CHcy;&tcy;&ocy;&bcy;&ycy; &iecy;&gcy;&ocy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; &scy;&lcy;&iecy;&dcy;&ucy;&jcy;&tcy;&iecy; &icy;&ncy;&scy;&tcy;&rcy;&ucy;&kcy;&tscy;&icy;&yacy;&mcy;.
+&Pcy;&rcy;&icy;&yacy;&tcy;&ncy;&ocy;&gcy;&ocy; &ocy;&bcy;&ucy;&chcy;&iecy;&ncy;&icy;&yacy; 😃</p>
+    
+    <!-- <div class="aspect-w-16 aspect-h-9 mx-auto"></div> CSS placeholder -->
+  </div>
+  <footer class="flex flex-col mt-10 ">
+    <ul class="flex flex-wrap">
+        <li
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          <a href="https://dev-mkc19.github.io/blog/tag/tableau.html">tableau</a>
+        </li>
+    </ul>
+    <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-l-lg">
+        <a class="flex flex-col pr-2" href="https://dev-mkc19.github.io/blog/docker-for-newbies.html">
+          <div class="mx-4 py-2 text-left">
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">« PREV PAGE</p>
+            <p class="text-left py-1 hover:underline">Docker for newbies</p>
+          </div>
+        </a>
+      </div>
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-r-lg ">
+        <a class="flex flex-col" href="https://dev-mkc19.github.io/blog/funnel-vizualisation-kak-postroit-ru.html">
+          <div class="text-right mx-4 py-2">
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">NEXT PAGE »</p>
+            <p class="text-right py-1 hover:underline">Funnel vizualisation - как построить?</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+            href="https://www.linkedin.com/sharing/share-offsite/?url=https://dev-mkc19.github.io/blog/tableau-files-types-ru.html">
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+            href="https://api.whatsapp.com/send?text=Features - https://dev-mkc19.github.io/blog/tableau-files-types-ru.html">
+            <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+            href="https://telegram.me/share/url?text=Features&amp;url=https://dev-mkc19.github.io/blog/tableau-files-types-ru.html">
+            <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+  <div>
+  </div>
+</main>
+
+    </div>
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
+        <div class="px-4">
+            <span>©2023&nbsp;&#8226;&nbsp;</span>Powered by
+            <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
+        </div>
+    </footer>
+
+
+    <script>
+        let themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        let themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+        let themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', function () {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

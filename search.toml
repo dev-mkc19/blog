@@ -1,0 +1,43 @@
+[input]
+base_directory = "/github/workspace/docs"
+html_selector = "main"
+
+[[input.files]]
+path = "docker-for-newbies.html"
+url = "/docker-for-newbies.html"
+title = "Docker for newbies"
+
+[[input.files]]
+path = "tableau-files-types-ru.html"
+url = "/tableau-files-types-ru.html"
+title = "Tableau files' types"
+
+[[input.files]]
+path = "funnel-vizualisation-kak-postroit-ru.html"
+url = "/funnel-vizualisation-kak-postroit-ru.html"
+title = "Funnel vizualisation - как построить?"
+
+[[input.files]]
+path = "datasource-replacement-ru.html"
+url = "/datasource-replacement-ru.html"
+title = "DataSource replacement"
+
+[[input.files]]
+path = "data-densification-what-is-it-ru.html"
+url = "/data-densification-what-is-it-ru.html"
+title = "Data Densification - what is it?"
+
+[[input.files]]
+path = "donut-chart.html"
+url = "/donut-chart.html"
+title = "Donut Chart"
+
+[[input.files]]
+path = "docker-for-newbies-ru.html"
+url = "/docker-for-newbies-ru.html"
+title = "Docker for newbies"
+
+[[input.files]]
+path = "donut-chart-ru.html"
+url = "/donut-chart-ru.html"
+title = "Donut Chart - пончиковая диаграмма"

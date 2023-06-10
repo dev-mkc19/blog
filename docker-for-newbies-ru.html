@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Pelican" />
+    <meta name="description" content="dev.tinito Blog Posts">
+    <title>Docker for newbies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/pygment.css" />
+    <link rel="shortcut icon" href="https://dev-mkc19.github.io/blog/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://dev-mkc19.github.io/blog/theme/css/stork.css">
+    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
+        href="https://dev-mkc19.github.io/blog/theme/css/stork-dark.css">
+    <link
+        href="https://dev-mkc19.github.io/blog/feeds/all.atom.xml"
+        type="application/atom+xml" rel="alternate" title="dev.tinito Atom Feed" />
+<meta name="description" content="Found great course about working with containerization via docker. Perhaps my feedback will motivate you to learn it too." />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
+        <div class="flex pt-4">
+            <h1 class="font-semibold text-2xl"><a href="https://dev-mkc19.github.io/blog/">dev.tinito</a></h1>
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
+                class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <ul class="flex flex-wrap lg:mr-24 md:pt-0">
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/archives.html">Archive</a></li>
+            <li class="mr-4 pt-6"><a                     href="https://dev-mkc19.github.io/blog/categories.html">Categories</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/tags.html">Tags</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/search.html">Search</a></li>
+        </ul>
+    </nav>
+    <div class="flex-grow md:max-w-screen-md md:mx-auto md:w-3/4 px-4">
+        <nav class="text-zinc-800 dark:text-zinc-300 mt-12 pb-2 md:mt-16" aria-label="Breadcrumb">
+            <ul class="p-0 inline-flex items-center">
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/" class="text-zinc-800 dark:text-zinc-300 inline-flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        Home
+                    </a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/categories.html">Categories</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/category/docker.html">Docker</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+            </ul>
+        </nav>
+
+<main>
+  <header>
+    <h1 class="font-semibold text-3xl my-2">Docker for newbies</h1>
+    <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
+      <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+        <time>May 15, 2023</time>
+        <div>
+        </div>
+        <div>
+          <span>&nbsp;·&nbsp;Mikhail K</span>
+        </div>
+      </div>
+    </footer>
+  </header>
+  <details class="flex flex-col my-6 p-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg">
+    <summary class="text-lg font-bold">Table of contents</summary>
+    <div class="mx-4 px-4 underline">
+      <div id="toc"><ul><li><a class="toc-href" href="#znaniia-darom" title="&Zcy;&ncy;&acy;&ncy;&icy;&yacy; &dcy;&acy;&rcy;&ocy;&mcy;">&Zcy;&ncy;&acy;&ncy;&icy;&yacy; &dcy;&acy;&rcy;&ocy;&mcy;</a></li><li><a class="toc-href" href="#osnovnye-momenty-kursa" title="&Ocy;&scy;&ncy;&ocy;&vcy;&ncy;&ycy;&iecy; &mcy;&ocy;&mcy;&iecy;&ncy;&tcy;&ycy; &kcy;&ucy;&rcy;&scy;&acy;">&Ocy;&scy;&ncy;&ocy;&vcy;&ncy;&ycy;&iecy; &mcy;&ocy;&mcy;&iecy;&ncy;&tcy;&ycy; &kcy;&ucy;&rcy;&scy;&acy;</a><ul><li><a class="toc-href" href="#osnovnoe" title="&Ocy;&scy;&ncy;&ocy;&vcy;&ncy;&ocy;&iecy;">&Ocy;&scy;&ncy;&ocy;&vcy;&ncy;&ocy;&iecy;</a></li><li><a class="toc-href" href="#seti" title="&Scy;&iecy;&tcy;&icy;">&Scy;&iecy;&tcy;&icy;</a></li><li><a class="toc-href" href="#yaml-notatsiia" title="YAML &ncy;&ocy;&tcy;&acy;&tscy;&icy;&yacy;">YAML &ncy;&ocy;&tcy;&acy;&tscy;&icy;&yacy;</a></li></ul></li><li><a class="toc-href" href="#itog_1" title="&Icy;&tcy;&ocy;&gcy;">&Icy;&tcy;&ocy;&gcy;</a></li></ul></div>
+    </div>
+  </details>
+  <div class="max-w-7xl container mx-auto my-8 text-zinc-800 dark:text-zinc-300  
+              prose lg:max-w-none prose-headings:text-zinc-800 prose-headings:dark:text-zinc-300 
+              prose-h1:text-3xl lg:prose-h1:text-3xl prose-headings:font-semibold 
+              prose-pre:bg-zinc-200 prose-pre:text-zinc-800
+              dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
+              prose-blockquote:text-zinc-800
+              dark:prose-blockquote:text-zinc-200
+              prose-a:text-slate-600 prose-a:font-normal
+              dark:prose-a:text-slate-400
+              dark:prose-strong:text-zinc-200 
+              dark:prose-code:text-zinc-200
+              dark:prose-code:bg-zinc-800
+              prose-code:bg-zinc-200
+              prose-code:font-light
+              prose-img:rounded-md
+              sm:text-left md:text-justify
+              ">
+
+        <p class="hover:underline decoration-4 decoration-solid"><a href="docker-for-newbies.html">
+ 
+            Читать на Английском 🇬🇧
+ 
+        </a></p>
+    <hr>
+
+    <p><img alt="karpov_logo" src="https://dev-mkc19.github.io/blog/images/karpov_logo.png"/>
+&Ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&ocy; &lcy;&iecy;&tcy; &ncy;&acy;&zcy;&acy;&dcy;, &kcy;&ocy;&gcy;&dcy;&acy; &yacy; &vcy;&pcy;&iecy;&rcy;&vcy;&ycy;&iecy; &pcy;&ocy;&zcy;&ncy;&acy;&kcy;&ocy;&mcy;&icy;&lcy;&scy;&yacy; &scy; NAS, &yacy; &ocy;&tcy;&kcy;&rcy;&ycy;&lcy; &dcy;&lcy;&yacy; &scy;&iecy;&bcy;&yacy; &kcy;&lcy;&acy;&scy;&scy;&ncy;&ucy;&yucy; &tcy;&iecy;&khcy;&ncy;&ocy;&lcy;&ocy;&gcy;&icy;&yucy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ucy;&yucy; &rcy;&acy;&ncy;&softcy;&shcy;&iecy; &ncy;&iecy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&lcy;. &Mcy;&iecy;&ncy;&yacy; &icy;&ncy;&tcy;&iecy;&rcy;&iecy;&scy;&ocy;&vcy;&acy;&lcy;&icy; &ncy;&ocy;&vcy;&ycy;&iecy; &scy;&iecy;&rcy;&vcy;&icy;&scy;&ycy;, &ucy;&mcy;&ncy;&ycy;&jcy; &dcy;&ocy;&mcy;, &rcy;&acy;&scy;&shcy;&icy;&rcy;&iecy;&ncy;&icy;&iecy; &fcy;&ucy;&ncy;&kcy;&tscy;&icy;&ocy;&ncy;&acy;&lcy;&softcy;&ncy;&ocy;&scy;&tcy;&icy; NAS &dcy;&ocy; 200%, &icy; &ecy;&tcy;&ocy; &bcy;&ycy;&lcy;&ocy; &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ocy; &tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; docker, &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &vcy; &vcy;&scy;&tcy;&rcy;&ocy;&iecy;&ncy;&ncy;&ocy;&mcy; &tscy;&iecy;&ncy;&tcy;&rcy;&iecy; &pcy;&rcy;&icy;&lcy;&ocy;&zhcy;&iecy;&ncy;&icy;&jcy; &ncy;&iecy; &tcy;&acy;&kcy; &mcy;&ncy;&ocy;&gcy;&ocy; &ncy;&acy;&tcy;&icy;&vcy;&ncy;&ycy;&khcy;. &Tcy;&acy;&kcy;&zhcy;&iecy; docker &pcy;&ocy;&zcy;&vcy;&ocy;&lcy;&icy;&lcy; &ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&icy;&tcy;&softcy; &vcy;&scy;&iecy;, &chcy;&tcy;&ocy; &yacy; &khcy;&ocy;&chcy;&ucy;, &bcy;&iecy;&zcy; &ucy;&shchcy;&iecy;&rcy;&bcy;&acy; &dcy;&lcy;&yacy; &khcy;&ocy;&scy;&tcy;-&scy;&icy;&scy;&tcy;&iecy;&mcy;&ycy;. &Ecy;&tcy;&ocy;&tcy; &fcy;&acy;&kcy;&tcy; &pcy;&ocy;&zcy;&vcy;&ocy;&lcy;&yacy;&iecy;&tcy; &pcy;&rcy;&ocy;&vcy;&ocy;&dcy;&icy;&tcy;&softcy; &lcy;&yucy;&bcy;&ycy;&iecy; &ecy;&kcy;&scy;&pcy;&iecy;&rcy;&icy;&mcy;&iecy;&ncy;&tcy;&ycy;, &ncy;&iecy; &bcy;&ocy;&yacy;&scy;&softcy; &chcy;&tcy;&ocy;-&tcy;&ocy; &scy;&lcy;&ocy;&mcy;&acy;&tcy;&softcy;. &Ncy;&ocy; &vcy; &chcy;&iecy;&mcy; &bcy;&ycy;&lcy;&acy; &pcy;&rcy;&ocy;&bcy;&lcy;&iecy;&mcy;&acy;? ... &YAcy; &scy;&ocy;&vcy;&iecy;&rcy;&shcy;&iecy;&ncy;&ncy;&ocy; &ncy;&iecy; &zcy;&ncy;&acy;&lcy; docker :)</p>
+<h2 id="znaniia-darom">&Zcy;&ncy;&acy;&ncy;&icy;&yacy; &dcy;&acy;&rcy;&ocy;&mcy;</h2>
+<p>&Rcy;&iecy;&bcy;&yacy;&tcy;&acy; &scy; karpov.courses &scy;&dcy;&iecy;&lcy;&acy;&lcy;&icy; &ocy;&tcy;&lcy;&icy;&chcy;&ncy;&ycy;&jcy; <a href="https://karpov.courses/docker">&kcy;&ucy;&rcy;&scy;</a> &dcy;&lcy;&yacy; &vcy;&scy;&iecy;&khcy;. &Vcy;&acy;&mcy; &ncy;&iecy; &ncy;&ucy;&zhcy;&ncy;&ycy; &ncy;&acy;&vcy;&ycy;&kcy;&icy; &pcy;&rcy;&ocy;&gcy;&rcy;&acy;&mcy;&mcy;&icy;&rcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy;, &zcy;&ncy;&acy;&ncy;&icy;&iecy; bash &icy;&lcy;&icy; &chcy;&iecy;&gcy;&ocy;-&tcy;&ocy; &iecy;&shchcy;&iecy;, &ocy;&ncy; &pcy;&ocy;&dcy;&khcy;&ocy;&dcy;&icy;&tcy; &acy;&bcy;&scy;&ocy;&lcy;&yucy;&tcy;&ncy;&ocy; &vcy;&scy;&iecy;&mcy;. &Tcy;&iecy;&mcy; &ncy;&iecy; &mcy;&iecy;&ncy;&iecy;&iecy;, &ocy;&ncy; &pcy;&ocy;&dcy;&rcy;&ocy;&bcy;&ncy;&ocy; &ocy;&pcy;&icy;&scy;&ycy;&vcy;&acy;&iecy;&tcy; docker &scy; &rcy;&acy;&zcy;&ncy;&ycy;&khcy; &scy;&tcy;&ocy;&rcy;&ocy;&ncy;. &Ncy;&iecy;&scy;&mcy;&ocy;&tcy;&rcy;&yacy; &ncy;&acy; &tcy;&ocy;, &chcy;&tcy;&ocy; &yacy; &ucy;&zhcy;&iecy; &zcy;&ncy;&acy;&lcy; docker, &yacy; &ocy;&tcy;&kcy;&rcy;&ycy;&lcy; &dcy;&lcy;&yacy; &scy;&iecy;&bcy;&yacy; &ncy;&iecy;&kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &mcy;&ocy;&mcy;&iecy;&ncy;&tcy;&ycy;, &ncy;&acy;&pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &kcy;&acy;&kcy; &ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&icy;&tcy;&softcy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy; &scy; &ocy;&tcy;&dcy;&iecy;&lcy;&softcy;&ncy;&ycy;&mcy; IP-&acy;&dcy;&rcy;&iecy;&scy;&ocy;&mcy;. &YAcy; &bcy;&ycy;&lcy; &bcy;&ycy; &rcy;&acy;&dcy; &ncy;&acy;&jcy;&tcy;&icy; &ecy;&tcy;&ocy;&tcy; &tscy;&iecy;&ncy;&ncy;&ycy;&jcy; &kcy;&ucy;&rcy;&scy; &vcy; &ncy;&acy;&chcy;&acy;&lcy;&iecy; &mcy;&ocy;&iecy;&gcy;&ocy; &pcy;&ucy;&tcy;&icy; &ocy;&bcy;&ucy;&chcy;&iecy;&ncy;&icy;&yacy;, &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &ocy;&ncy; &rcy;&acy;&scy;&scy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&iecy;&tcy; &tcy;&iecy;&mcy;&ucy; &zcy;&acy; &tcy;&iecy;&mcy;&ocy;&jcy; &vcy; &pcy;&rcy;&ocy;&scy;&tcy;&ocy;&jcy; &fcy;&ocy;&rcy;&mcy;&iecy;. &Ocy;&tcy;&dcy;&iecy;&lcy;&softcy;&ncy;&ocy;&iecy; &scy;&pcy;&acy;&scy;&icy;&bcy;&ocy; &acy;&vcy;&tcy;&ocy;&rcy;&ucy; &Acy;&ncy;&tcy;&ocy;&ncy;&ucy; &Scy;&icy;&dcy;&ocy;&rcy;&icy;&ncy;&ucy;.</p>
+<h2 id="osnovnye-momenty-kursa">&Ocy;&scy;&ncy;&ocy;&vcy;&ncy;&ycy;&iecy; &mcy;&ocy;&mcy;&iecy;&ncy;&tcy;&ycy; &kcy;&ucy;&rcy;&scy;&acy;</h2>
+<p>&Pcy;&rcy;&iecy;&zhcy;&dcy;&iecy; &chcy;&iecy;&mcy; &pcy;&rcy;&icy;&scy;&tcy;&ucy;&pcy;&icy;&tcy;&softcy; &kcy; &rcy;&acy;&scy;&scy;&mcy;&ocy;&tcy;&rcy;&iecy;&ncy;&icy;&yucy; &tcy;&ocy;&gcy;&ocy;, &chcy;&tcy;&ocy; &ncy;&ocy;&vcy;&ocy;&gcy;&ocy; &yacy; &ocy;&tcy;&kcy;&rcy;&ycy;&lcy; &dcy;&lcy;&yacy; &scy;&iecy;&bcy;&yacy;, &dcy;&ocy;&lcy;&zhcy;&iecy;&ncy; &scy;&ocy;&ocy;&bcy;&shchcy;&icy;&tcy;&softcy;: &Ecy;&tcy;&icy; &vcy;&iecy;&shchcy;&icy; &pcy;&rcy;&icy;&vcy;&lcy;&iecy;&kcy;&lcy;&icy; &mcy;&iecy;&ncy;&yacy;, &acy; &ncy;&iecy; &vcy;&acy;&scy;, &tcy;&acy;&kcy; &chcy;&tcy;&ocy;, &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ocy;, &vcy;&ycy; &ncy;&acy;&jcy;&dcy;&iecy;&tcy;&iecy; &pcy;&ocy;&lcy;&iecy;&zcy;&ncy;&ycy;&mcy; &chcy;&tcy;&ocy;-&tcy;&ocy; &dcy;&rcy;&ucy;&gcy;&ocy;&iecy;.</p>
+<h3 id="osnovnoe">&Ocy;&scy;&ncy;&ocy;&vcy;&ncy;&ocy;&iecy;</h3>
+<h4>1. &Scy;&ocy;&vcy;&iecy;&tcy;&ycy; &pcy;&ocy; Bash</h4>
+<p>&Ecy;&tcy;&ocy; &ncy;&iecy; &ocy;&tcy;&ncy;&ocy;&scy;&icy;&tcy;&scy;&yacy; &ncy;&acy;&pcy;&rcy;&yacy;&mcy;&ucy;&yucy; &kcy; &fcy;&ucy;&ncy;&kcy;&tscy;&icy;&ocy;&ncy;&acy;&lcy;&ucy; docker, &ncy;&ocy; &pcy;&ocy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&iecy;&tcy;, &kcy;&acy;&kcy; &bcy;&ycy;&scy;&tcy;&rcy;&ocy; &mcy;&ocy;&zhcy;&ncy;&ocy; &ocy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&icy;&tcy;&softcy; &vcy;&scy;&iecy; &zcy;&acy;&pcy;&ucy;&shchcy;&iecy;&ncy;&ncy;&ycy;&iecy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&ycy; &zcy;&acy; 1 &shcy;&acy;&gcy;.</p>
+<div class="highlight"><pre><span></span><code>docker stop <span class="k">$(</span>docker ps -q<span class="k">)</span>
+</code></pre></div>
+<p>&Acy;&ncy;&acy;&lcy;&ocy;&gcy;&icy;&chcy;&ncy;&ocy; &vcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&tcy;&iecy; &ucy;&dcy;&acy;&lcy;&icy;&tcy;&softcy; &vcy;&scy;&iecy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&ycy;</p>
+<div class="highlight"><pre><span></span><code>docker rm <span class="k">$(</span>docker ps -qa<span class="k">)</span>
+</code></pre></div>
+<p>&Pcy;&iecy;&rcy;&iecy;&ncy;&acy;&pcy;&rcy;&acy;&vcy;&lcy;&iecy;&ncy;&icy;&iecy; &lcy;&ocy;&gcy;&ocy;&vcy; &vcy; &fcy;&acy;&jcy;&lcy; &tcy;&acy;&kcy;&zhcy;&iecy; &acy;&kcy;&tcy;&ucy;&acy;&lcy;&softcy;&ncy;&ocy; &dcy;&lcy;&yacy; bash &chcy;&iecy;&rcy;&iecy;&zcy; &ocy;&pcy;&iecy;&rcy;&acy;&tcy;&ocy;&rcy; <code>&gt; / &gt;&gt;</code>, &ncy;&ocy; &yacy; &ncy;&iecy; &dcy;&ucy;&mcy;&acy;&lcy; &ocy;&bcy; &ecy;&tcy;&ocy;&mcy; &vcy; &tcy;&acy;&kcy;&ocy;&mcy; &kcy;&ocy;&ncy;&tcy;&iecy;&kcy;&scy;&tcy;&iecy;.</p>
+<h4>2. &Kcy;&ocy;&mcy;&acy;&ncy;&dcy;&acy; ENTRYPOINT &pcy;&rcy;&ocy;&tcy;&icy;&vcy; CMD</h4>
+<p>&Ncy;&iecy; &zcy;&ncy;&acy;&yucy;, &pcy;&ocy;&chcy;&iecy;&mcy;&ucy; &yacy; &zcy;&acy;&scy;&tcy;&rcy;&yacy;&lcy; &vcy; &pcy;&ocy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&icy; &ncy;&acy; &ecy;&tcy;&ocy;&jcy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy;&iecy; &icy; &ncy;&iecy; &ocy;&bcy;&rcy;&acy;&tcy;&icy;&lcy;&scy;&yacy; &kcy; &dcy;&ocy;&kcy;&ucy;&mcy;&iecy;&ncy;&tcy;&acy;&tscy;&icy;&icy;, &gcy;&dcy;&iecy; &ocy;&ncy;&acy; &dcy;&ocy;&vcy;&ocy;&lcy;&softcy;&ncy;&ocy; &chcy;&iecy;&tcy;&kcy;&ocy; &ocy;&pcy;&icy;&scy;&acy;&ncy;&acy;. &Pcy;&ocy;&ecy;&tcy;&ocy;&mcy;&ucy; &scy;&scy;&ycy;&lcy;&acy;&yucy;&scy;&softcy; &ncy;&acy; &ncy;&iecy;&iecy; &tcy;&iecy;&pcy;&iecy;&rcy;&softcy;.</p>
+<p>&Ocy;&bcy;&iecy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy;&ycy; CMD &icy; ENTRYPOINT &ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&yacy;&yucy;&tcy;, &kcy;&acy;&kcy;&acy;&yacy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy;&acy; &bcy;&ucy;&dcy;&iecy;&tcy; &vcy;&ycy;&pcy;&ocy;&lcy;&ncy;&iecy;&ncy;&acy; &pcy;&rcy;&icy; &zcy;&acy;&pcy;&ucy;&scy;&kcy;&iecy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy;. &IEcy;&scy;&tcy;&softcy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&ocy; &pcy;&rcy;&acy;&vcy;&icy;&lcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &ocy;&pcy;&icy;&scy;&ycy;&vcy;&acy;&yucy;&tcy; &icy;&khcy; &vcy;&zcy;&acy;&icy;&mcy;&ocy;&dcy;&iecy;&jcy;&scy;&tcy;&vcy;&icy;&iecy;.</p>
+<ul>
+<li>&Vcy; Dockerfile &dcy;&ocy;&lcy;&zhcy;&ncy;&acy; &bcy;&ycy;&tcy;&softcy; &ucy;&kcy;&acy;&zcy;&acy;&ncy;&acy; &khcy;&ocy;&tcy;&yacy; &bcy;&ycy; &ocy;&dcy;&ncy;&acy; &icy;&zcy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy; CMD &icy;&lcy;&icy; ENTRYPOINT.</li>
+<li>ENTRYPOINT &dcy;&ocy;&lcy;&zhcy;&ncy;&acy; &bcy;&ycy;&tcy;&softcy; &ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&acy; &pcy;&rcy;&icy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&ncy;&icy;&icy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy; &vcy; &kcy;&acy;&chcy;&iecy;&scy;&tcy;&vcy;&iecy; &icy;&scy;&pcy;&ocy;&lcy;&ncy;&yacy;&iecy;&mcy;&ocy;&gcy;&ocy; &fcy;&acy;&jcy;&lcy;&acy;.</li>
+<li>CMD &scy;&lcy;&iecy;&dcy;&ucy;&iecy;&tcy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; &kcy;&acy;&kcy; &scy;&pcy;&ocy;&scy;&ocy;&bcy; &ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&yacy; &acy;&rcy;&gcy;&ucy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy; &pcy;&ocy; &ucy;&mcy;&ocy;&lcy;&chcy;&acy;&ncy;&icy;&yucy; &dcy;&lcy;&yacy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy;&ycy; ENTRYPOINT &icy;&lcy;&icy; &dcy;&lcy;&yacy; &vcy;&ycy;&pcy;&ocy;&lcy;&ncy;&iecy;&ncy;&icy;&yacy; &scy;&pcy;&iecy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ocy;&jcy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy;&ycy; &vcy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&iecy;.</li>
+<li>CMD &bcy;&ucy;&dcy;&iecy;&tcy; &pcy;&iecy;&rcy;&iecy;&ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy; &pcy;&rcy;&icy; &zcy;&acy;&pcy;&ucy;&scy;&kcy;&iecy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy; &scy; &acy;&lcy;&softcy;&tcy;&iecy;&rcy;&ncy;&acy;&tcy;&icy;&vcy;&ncy;&ycy;&mcy;&icy; &acy;&rcy;&gcy;&ucy;&mcy;&iecy;&ncy;&tcy;&acy;&mcy;&icy;.</li>
+</ul>
+<h4>3. &Mcy;&ucy;&lcy;&softcy;&tcy;&icy;&scy;&bcy;&ocy;&rcy;&kcy;&acy;</h4>
+<p>&KHcy;&ocy;&rcy;&ocy;&shcy;&acy;&yacy; &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ocy;&scy;&tcy;&softcy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&icy;&tcy;&softcy; &scy;&bcy;&ocy;&rcy;&kcy;&ucy; &ncy;&acy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&ocy; &shcy;&acy;&gcy;&ocy;&vcy; &dcy;&lcy;&yacy; &ucy;&mcy;&iecy;&ncy;&softcy;&shcy;&iecy;&ncy;&icy;&yacy; &rcy;&acy;&zcy;&mcy;&iecy;&rcy;&acy; &kcy;&ocy;&ncy;&iecy;&chcy;&ncy;&ocy;&gcy;&ocy; &ocy;&bcy;&rcy;&acy;&zcy;&acy; &icy;&lcy;&icy; &dcy;&lcy;&yacy; &pcy;&ocy;&vcy;&tcy;&ocy;&rcy;&ncy;&ocy;&gcy;&ocy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&ncy;&icy;&yacy; &ecy;&tcy;&ocy;&gcy;&ocy; &shcy;&acy;&gcy;&acy; &ncy;&acy; &scy;&lcy;&iecy;&dcy;&ucy;&yucy;&shchcy;&icy;&khcy; &ecy;&tcy;&acy;&pcy;&acy;&khcy;.</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">&lt;image&gt;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span>
+. . .
+
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">&lt;image&gt;</span><span class="w"> </span>
+. . .
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder &lt;path_from_builder&gt; &lt;path_to_current_build&gt;
+</code></pre></div>
+<h4>5. Volumes difference</h4>
+<p>&Scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ucy;&iecy;&tcy; 2 &tcy;&icy;&pcy;&acy; &tcy;&ocy;&mcy;&ocy;&vcy;:</p>
+<ul>
+<li>Bind mount</li>
+<li>Volumes</li>
+</ul>
+<p>&Dcy;&ocy; &ecy;&tcy;&ocy;&gcy;&ocy; &kcy;&ucy;&rcy;&scy;&acy; &mcy;&ncy;&iecy; &bcy;&ycy;&lcy;&ocy; &ncy;&iecy;&pcy;&ocy;&ncy;&yacy;&tcy;&ncy;&ocy;, &dcy;&lcy;&yacy; &chcy;&iecy;&gcy;&ocy; &mcy;&ocy;&gcy;&ucy;&tcy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy;&scy;&yacy; Volumes. &Ncy;&ocy; &dcy;&acy;&vcy;&acy;&jcy;&tcy;&iecy; &scy;&ncy;&ocy;&vcy;&acy; &ocy;&bcy;&rcy;&acy;&tcy;&icy;&mcy;&scy;&yacy; &kcy; &dcy;&ocy;&kcy;&ucy;&mcy;&iecy;&ncy;&tcy;&acy;&tscy;&icy;&icy;. &Ucy; Volumes &iecy;&scy;&tcy;&softcy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&ocy; &pcy;&rcy;&iecy;&icy;&mcy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy; &pcy;&iecy;&rcy;&iecy;&dcy; bind mounts:</p>
+<ul>
+<li>&Dcy;&lcy;&yacy; Volumes &lcy;&iecy;&gcy;&chcy;&iecy; &scy;&ocy;&zcy;&dcy;&acy;&vcy;&acy;&tcy;&softcy; &rcy;&iecy;&zcy;&iecy;&rcy;&vcy;&ncy;&ycy;&iecy; &kcy;&ocy;&pcy;&icy;&icy; &icy;&lcy;&icy; &mcy;&icy;&gcy;&rcy;&icy;&rcy;&ocy;&vcy;&acy;&tcy;&softcy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy;, &chcy;&iecy;&mcy; bind mounts.</li>
+<li>&Vcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&tcy;&iecy; &ucy;&pcy;&rcy;&acy;&vcy;&lcy;&yacy;&tcy;&softcy; Volumes &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy; Docker CLI &icy;&lcy;&icy; Docker API.</li>
+<li>Volumes &rcy;&acy;&bcy;&ocy;&tcy;&acy;&yucy;&tcy; &vcy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy;&khcy; Linux &icy; Windows.</li>
+<li>Volumes &mcy;&ocy;&zhcy;&ncy;&ocy; &bcy;&iecy;&zcy;&ocy;&pcy;&acy;&scy;&ncy;&iecy;&iecy; &rcy;&acy;&scy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&yacy;&tcy;&softcy; &mcy;&iecy;&zhcy;&dcy;&ucy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&icy;&mcy;&icy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy;&mcy;&icy;.</li>
+<li>&Dcy;&rcy;&acy;&jcy;&vcy;&iecy;&rcy;&ycy; Volumes &pcy;&ocy;&zcy;&vcy;&ocy;&lcy;&yacy;&yucy;&tcy; &khcy;&rcy;&acy;&ncy;&icy;&tcy;&softcy; &icy;&khcy; &ncy;&acy; &ucy;&dcy;&acy;&lcy;&iecy;&ncy;&ncy;&ycy;&khcy; &ucy;&zcy;&lcy;&acy;&khcy; &icy;&lcy;&icy; &ucy; &ocy;&bcy;&lcy;&acy;&chcy;&ncy;&ycy;&khcy; &pcy;&rcy;&ocy;&vcy;&acy;&jcy;&dcy;&iecy;&rcy;&ocy;&vcy;, &shcy;&icy;&fcy;&rcy;&ocy;&vcy;&acy;&tcy;&softcy; &scy;&ocy;&dcy;&iecy;&rcy;&zhcy;&icy;&mcy;&ocy;&iecy; Volumes &icy;&lcy;&icy; &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&yacy;&tcy;&softcy; &dcy;&rcy;&ucy;&gcy;&icy;&iecy; &fcy;&ucy;&ncy;&kcy;&tscy;&icy;&icy;.</li>
+<li>&Scy;&ocy;&dcy;&iecy;&rcy;&zhcy;&icy;&mcy;&ocy;&iecy; &ncy;&ocy;&vcy;&ycy;&khcy; Volumes &mcy;&ocy;&zhcy;&iecy;&tcy; &bcy;&ycy;&tcy;&softcy; &pcy;&rcy;&iecy;&dcy;&vcy;&acy;&rcy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy; &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&iecy;&ncy;&ocy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&ocy;&mcy;.</li>
+<li>Volumes &ncy;&acy; Docker Desktop &icy;&mcy;&iecy;&yucy;&tcy; &gcy;&ocy;&rcy;&acy;&zcy;&dcy;&ocy; &bcy;&ocy;&lcy;&iecy;&iecy; &vcy;&ycy;&scy;&ocy;&kcy;&ucy;&yucy; &pcy;&rcy;&ocy;&icy;&zcy;&vcy;&ocy;&dcy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy;&scy;&tcy;&softcy;, &chcy;&iecy;&mcy; bind mounts &scy; &khcy;&ocy;&scy;&tcy;&ocy;&vcy; Mac &icy; Windows.</li>
+</ul>
+<p>&Tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &mcy;&ncy;&iecy; &lcy;&iecy;&gcy;&kcy;&ocy; &scy;&dcy;&iecy;&lcy;&acy;&tcy;&softcy; &vcy;&ycy;&bcy;&ocy;&rcy;, &chcy;&tcy;&ocy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy;. &IEcy;&scy;&lcy;&icy; &ecy;&tcy;&ocy; &kcy;&acy;&kcy;&icy;&iecy;-&tcy;&ocy; &pcy;&ocy;&scy;&tcy;&ocy;&yacy;&ncy;&ncy;&ycy;&iecy; &dcy;&acy;&ncy;&ncy;&ycy;&iecy;, &gcy;&iecy;&ncy;&iecy;&rcy;&icy;&rcy;&ucy;&iecy;&mcy;&ycy;&iecy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&ocy;&mcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&mcy;&icy; &vcy;&ycy; &ncy;&iecy; &pcy;&lcy;&acy;&ncy;&icy;&rcy;&ucy;&iecy;&tcy;&iecy; &ucy;&pcy;&rcy;&acy;&vcy;&lcy;&yacy;&tcy;&softcy; &scy;&acy;&mcy;&ocy;&scy;&tcy;&ocy;&yacy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy; - &vcy;&ycy;&bcy;&icy;&rcy;&acy;&jcy;&tcy;&iecy; &tcy;&ocy;&mcy;&acy;, &vcy; &pcy;&rcy;&ocy;&tcy;&icy;&vcy;&ncy;&ocy;&mcy; &scy;&lcy;&ucy;&chcy;&acy;&iecy; bind mount &lcy;&ucy;&chcy;&shcy;&iecy; &vcy;&scy;&iecy;&gcy;&ocy; &pcy;&ocy;&dcy;&khcy;&ocy;&dcy;&icy;&tcy; &dcy;&lcy;&yacy; &vcy;&ncy;&iecy;&shcy;&ncy;&icy;&khcy; &fcy;&acy;&jcy;&lcy;&ocy;&vcy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &dcy;&ocy;&lcy;&zhcy;&ncy;&ycy; &bcy;&ycy;&tcy;&softcy; &vcy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&iecy;.</p>
+<p>&Fcy;&lcy;&acy;&gcy; "&tcy;&ocy;&lcy;&softcy;&kcy;&ocy; &chcy;&tcy;&iecy;&ncy;&icy;&iecy;" - &iecy;&shchcy;&iecy; &ocy;&dcy;&ncy;&acy; &kcy;&lcy;&acy;&scy;&scy;&ncy;&acy;&yacy; &ocy;&scy;&ocy;&bcy;&iecy;&ncy;&ncy;&ocy;&scy;&tcy;&softcy; Volumes.</p>
+<div class="highlight"><pre><span></span><code>docker run -d <span class="se">\</span>
+  --name<span class="o">=</span>nginxtest <span class="se">\</span>
+  -v nginx-vol:/usr/share/nginx/html:ro <span class="se">\</span>
+  nginx:latest
+</code></pre></div>
+<h4>4. &Scy;&ocy;&zcy;&dcy;&acy;&ncy;&icy;&iecy; &ocy;&bcy;&rcy;&acy;&zcy;&ocy;&vcy; &icy;&zcy; &zcy;&acy;&pcy;&ucy;&shchcy;&iecy;&ncy;&ncy;&ocy;&gcy;&ocy; &scy;&ocy;&scy;&tcy;&ocy;&yacy;&ncy;&icy;&yacy; &dcy;&rcy;&ucy;&gcy;&ocy;&gcy;&ocy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy;</h4>
+<p>&YAcy; &ncy;&iecy; &vcy;&scy;&tcy;&rcy;&iecy;&chcy;&acy;&lcy; &rcy;&iecy;&acy;&lcy;&softcy;&ncy;&ycy;&khcy; &scy;&lcy;&ucy;&chcy;&acy;&iecy;&vcy;, &kcy;&ocy;&gcy;&dcy;&acy; &ecy;&tcy;&ocy; &mcy;&ocy;&zhcy;&ncy;&ocy; &bcy;&ycy;&lcy;&ocy; &bcy;&ycy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy;. &Ncy;&ocy;, &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ocy;, &kcy;&acy;&kcy; &acy;&lcy;&softcy;&tcy;&iecy;&rcy;&ncy;&acy;&tcy;&icy;&vcy;&acy; &pcy;&iecy;&rcy;&iecy;&scy;&ocy;&zcy;&dcy;&acy;&ncy;&icy;&yucy; &ocy;&bcy;&rcy;&acy;&zcy;&ocy;&vcy; &kcy;&acy;&zhcy;&dcy;&ycy;&jcy; &rcy;&acy;&zcy;, &vcy;&ycy; &mcy;&ocy;&zhcy;&iecy;&tcy;&iecy; &zcy;&acy;&pcy;&ucy;&scy;&tcy;&icy;&tcy;&softcy; &iecy;&gcy;&ocy; &icy; &ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&icy;&tcy;&softcy; &ncy;&iecy;&kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&iecy; &dcy;&ocy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ycy;&iecy; &pcy;&acy;&kcy;&iecy;&tcy;&ycy;, &icy;&zcy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy; &fcy;&acy;&jcy;&lcy;&ycy;, &icy;&scy;&pcy;&rcy;&acy;&vcy;&icy;&tcy;&softcy; &ocy;&shcy;&icy;&bcy;&kcy;&icy;, &acy; &zcy;&acy;&tcy;&iecy;&mcy; &scy;&ocy;&zcy;&dcy;&acy;&tcy;&softcy; &ocy;&dcy;&icy;&ncy; "&scy;&ncy;&icy;&mcy;&ocy;&kcy;" &ecy;&tcy;&ocy;&gcy;&ocy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy; &vcy; &vcy;&icy;&dcy;&iecy; &ncy;&ocy;&vcy;&ocy;&gcy;&ocy; &ocy;&bcy;&rcy;&acy;&zcy;&acy;.</p>
+<div class="highlight"><pre><span></span><code>docker commit <span class="o">[</span>OPTIONS<span class="o">]</span> CONTAINER <span class="o">[</span>REPOSITORY<span class="o">[</span>:TAG<span class="o">]]</span>
+</code></pre></div>
+<h3 id="seti">&Scy;&iecy;&tcy;&icy;</h3>
+<p>&Scy;&acy;&mcy;&ocy;&jcy; &icy;&ncy;&tcy;&iecy;&rcy;&iecy;&scy;&ncy;&ocy;&jcy; &chcy;&acy;&scy;&tcy;&softcy;&yucy; &dcy;&lcy;&yacy; &mcy;&iecy;&ncy;&yacy; &bcy;&ycy;&lcy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy; &scy;&iecy;&tcy;&iecy;&jcy;. &Pcy;&ocy; &scy;&rcy;&acy;&vcy;&ncy;&iecy;&ncy;&icy;&yucy; &scy; &dcy;&rcy;&ucy;&gcy;&icy;&mcy;&icy; &rcy;&acy;&zcy;&dcy;&iecy;&lcy;&acy;&mcy;&icy;, &scy;&iecy;&tcy;&icy; &yacy; &zcy;&ncy;&acy;&lcy; &mcy;&iecy;&ncy;&softcy;&shcy;&iecy; &vcy;&scy;&iecy;&gcy;&ocy;, &icy; &icy;&mcy;&iecy;&ncy;&ncy;&ocy; &ecy;&tcy;&ocy;&tcy; &fcy;&acy;&kcy;&tcy; &mcy;&ocy;&tcy;&icy;&vcy;&icy;&rcy;&ocy;&vcy;&acy;&lcy; &mcy;&iecy;&ncy;&yacy; &pcy;&rcy;&ocy;&jcy;&tcy;&icy; &vcy;&iecy;&scy;&softcy; &kcy;&ucy;&rcy;&scy;.</p>
+<h4>1. &Ocy;&bcy;&rcy;&acy;&shchcy;&iecy;&ncy;&icy;&iecy; &kcy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&ucy; &pcy;&ocy; &icy;&mcy;&iecy;&ncy;&icy; &pcy;&rcy;&icy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&ncy;&icy;&icy; &pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&iecy;&lcy;&softcy;&scy;&kcy;&ocy;&jcy; &scy;&iecy;&tcy;&icy;</h4>
+<p>&KHcy;&ocy;&chcy;&iecy;&shcy;&softcy; &icy;&scy;&kcy;&acy;&tcy;&softcy; IP-&acy;&dcy;&rcy;&iecy;&scy; &kcy;&acy;&zhcy;&dcy;&ocy;&gcy;&ocy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy; &kcy;&acy;&zhcy;&dcy;&ycy;&jcy; &rcy;&acy;&zcy;, &chcy;&tcy;&ocy;&bcy;&ycy; &ucy;&scy;&tcy;&acy;&ncy;&ocy;&vcy;&icy;&tcy;&softcy; &iecy;&gcy;&ocy; &ncy;&acy; &dcy;&rcy;&ucy;&gcy;&ocy;&jcy;? &YAcy; &ncy;&iecy;&tcy;, &icy; docker &pcy;&rcy;&iecy;&dcy;&ocy;&scy;&tcy;&acy;&vcy;&lcy;&yacy;&iecy;&tcy; &vcy;&scy;&tcy;&rcy;&ocy;&iecy;&ncy;&ncy;&ycy;&jcy; DNS-&rcy;&iecy;&zcy;&ocy;&lcy;&vcy;&iecy;&rcy;. &Pcy;&rcy;&ocy;&scy;&tcy;&ocy; &zcy;&acy;&dcy;&acy;&jcy;&tcy;&iecy; &icy;&mcy;&yacy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy; &chcy;&iecy;&rcy;&iecy;&zcy; &acy;&tcy;&rcy;&icy;&bcy;&ucy;&tcy; <code>--name &lt;container_name&gt;</code> &icy; &ocy;&bcy;&rcy;&acy;&shchcy;&acy;&jcy;&tcy;&iecy;&scy;&softcy; &kcy; &ncy;&iecy;&mcy;&ucy; &pcy;&ocy; &icy;&mcy;&iecy;&ncy;&icy;. &Ocy;&chcy;&iecy;&ncy;&softcy; &kcy;&rcy;&ucy;&tcy;&ocy;, &ncy;&iecy; &pcy;&rcy;&acy;&vcy;&dcy;&acy; &lcy;&icy;?</p>
+<h4>2. &Icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&ncy;&icy;&iecy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&icy;&khcy; &scy;&iecy;&tcy;&iecy;&jcy; &ocy;&dcy;&ncy;&icy;&mcy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&ocy;&mcy;</h4>
+<p>&Ncy;&iecy;&ocy;&chcy;&iecy;&vcy;&icy;&dcy;&ncy;&acy;&yacy; &vcy;&iecy;&shchcy;&softcy;, &ncy;&ocy; &ocy;&ncy;&acy; &iecy;&scy;&tcy;&softcy;. &Bcy;&ocy;&lcy;&softcy;&shcy;&iecy; &rcy;&acy;&scy;&scy;&kcy;&acy;&zcy;&ycy;&vcy;&acy;&tcy;&softcy; &ncy;&iecy; &ocy; &chcy;&iecy;&mcy;.</p>
+<h4>3. &Pcy;&rcy;&iecy;&dcy;&ocy;&scy;&tcy;&acy;&vcy;&lcy;&iecy;&ncy;&icy;&iecy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&ucy; &vcy;&ncy;&iecy;&shcy;&ncy;&iecy;&gcy;&ocy; IP-&acy;&dcy;&rcy;&iecy;&scy;&acy;</h4>
+<p>&Ecy;&tcy;&ocy; &tcy;&ocy;, &chcy;&tcy;&ocy; &mcy;&ncy;&iecy; &ncy;&ucy;&zhcy;&ncy;&ocy; &bcy;&ycy;&lcy;&ocy; &ncy;&iecy;&scy;&kcy;&ocy;&lcy;&softcy;&kcy;&ocy; &rcy;&acy;&zcy;. &Ncy;&acy;&dcy;&iecy;&yucy;&scy;&softcy;, &yacy; &rcy;&acy;&scy;&scy;&kcy;&acy;&zhcy;&ucy; &ocy;&bcy; &ecy;&tcy;&ocy;&mcy; &pcy;&ocy;&dcy;&rcy;&ocy;&bcy;&ncy;&ocy; &vcy; &ocy;&tcy;&dcy;&iecy;&lcy;&softcy;&ncy;&ocy;&jcy; &scy;&tcy;&acy;&tcy;&softcy;&iecy;, &acy; &scy;&iecy;&jcy;&chcy;&acy;&scy; &pcy;&rcy;&ocy;&scy;&tcy;&ocy; &ucy;&pcy;&ocy;&mcy;&yacy;&ncy;&ucy; &scy;&lcy;&ucy;&chcy;&acy;&icy;:</p>
+<ul>
+<li>&Icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&ncy;&icy;&iecy; &icy;&ncy;&scy;&tcy;&rcy;&ucy;&mcy;&iecy;&ncy;&tcy;&ocy;&vcy; &bcy;&lcy;&ocy;&kcy;&icy;&rcy;&ocy;&vcy;&kcy;&icy; &rcy;&iecy;&kcy;&lcy;&acy;&mcy;&ycy; (AdGuard, PiHole &icy; &tcy;.&dcy;.) &icy; &vcy;&ncy;&iecy;&shcy;&ncy;&icy;&jcy; DNS-&scy;&iecy;&rcy;&vcy;&iecy;&rcy; &ncy;&iecy; &mcy;&ocy;&gcy;&ucy;&tcy; &scy;&ocy;&scy;&ucy;&shchcy;&iecy;&scy;&tcy;&vcy;&ocy;&vcy;&acy;&tcy;&softcy; &ncy;&acy; &ocy;&dcy;&ncy;&ocy;&mcy; &khcy;&ocy;&scy;&tcy;&iecy; &icy;&zcy;-&zcy;&acy; &kcy;&ocy;&ncy;&fcy;&lcy;&icy;&kcy;&tcy;&acy; &pcy;&ocy;&rcy;&tcy;&ocy;&vcy;. &Ncy;&ocy; &chcy;&tcy;&ocy; &zhcy;&iecy; &tcy;&ocy;&gcy;&dcy;&acy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy;? &Vcy;&icy;&rcy;&tcy;&ucy;&acy;&lcy;&softcy;&ncy;&acy;&yacy; &mcy;&acy;&shcy;&icy;&ncy;&acy; &pcy;&ocy;&mcy;&ocy;&gcy;&lcy;&acy; &rcy;&iecy;&shcy;&icy;&tcy;&softcy; &pcy;&rcy;&ocy;&bcy;&lcy;&iecy;&mcy;&ucy; &rcy;&acy;&ncy;&softcy;&shcy;&iecy;, &ncy;&ocy; &tcy;&iecy;&pcy;&iecy;&rcy;&softcy; &yacy; &mcy;&ocy;&gcy;&ucy; &ncy;&acy;&zcy;&ncy;&acy;&chcy;&icy;&tcy;&softcy; &vcy;&ncy;&iecy;&shcy;&ncy;&icy;&jcy; IP &dcy;&lcy;&yacy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy;.</li>
+<li>&CHcy;&tcy;&ocy; &iecy;&scy;&lcy;&icy; &vcy;&ycy; &khcy;&ocy;&tcy;&icy;&tcy;&iecy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; VPN &icy;&lcy;&icy; &icy;&ncy;&tcy;&iecy;&rcy;&ncy;&iecy;&tcy;-&pcy;&rcy;&ocy;&vcy;&acy;&jcy;&dcy;&iecy;&rcy; &dcy;&lcy;&yacy; &ocy;&tcy;&dcy;&iecy;&lcy;&softcy;&ncy;&ocy;&gcy;&ocy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy;, &ncy;&ocy; &ncy;&iecy; &dcy;&lcy;&yacy; &vcy;&scy;&iecy;&gcy;&ocy; &khcy;&ocy;&scy;&tcy;&acy;? &Dcy;&acy;, &vcy;&ncy;&iecy;&shcy;&ncy;&icy;&jcy; IP &dcy;&lcy;&yacy; &kcy;&ocy;&ncy;&tcy;&iecy;&jcy;&ncy;&iecy;&rcy;&acy; &scy;&ncy;&ocy;&vcy;&acy; &pcy;&ocy;&mcy;&ocy;&zhcy;&iecy;&tcy;.</li>
+</ul>
+<p>&YAcy; &ncy;&iecy;&mcy;&ncy;&ocy;&gcy;&ocy; &zcy;&acy;&pcy;&ucy;&tcy;&acy;&lcy;&scy;&yacy; &vcy; &tcy;&ocy;&mcy;, &kcy;&acy;&kcy;&icy;&iecy; &acy;&tcy;&rcy;&icy;&bcy;&ucy;&tcy;&ycy;, &scy;&ocy;&gcy;&lcy;&acy;&scy;&ncy;&ocy; &ocy;&fcy;&icy;&tscy;&icy;&acy;&lcy;&softcy;&ncy;&ocy;&mcy;&ucy; <a href="https://docs.docker.com/network/macvlan/">&ucy;&chcy;&iecy;&bcy;&ncy;&icy;&kcy;&ucy;</a>, &yacy; &dcy;&ocy;&lcy;&zhcy;&iecy;&ncy; &zcy;&acy;&pcy;&ocy;&lcy;&ncy;&icy;&tcy;&softcy; &dcy;&lcy;&yacy; &dcy;&ocy;&scy;&tcy;&icy;&zhcy;&iecy;&ncy;&icy;&yacy; &mcy;&ocy;&iecy;&jcy; &tscy;&iecy;&lcy;&icy;.</p>
+<div class="highlight"><pre><span></span><code>docker network create -d macvlan <span class="se">\</span>
+  -&pcy;&ocy;&dcy;&scy;&iecy;&tcy;&softcy;<span class="o">=</span><span class="m">192</span>.168.1.0/24 <span class="se">\</span>
+  --gateway<span class="o">=</span><span class="m">192</span>.168.1.1 <span class="se">\</span>
+  -o <span class="nv">parent</span><span class="o">=</span>ovs_eth0 <span class="se">\</span>
+  my-macvlan-net
+</code></pre></div>
+<p>&Ocy;&bcy;&rcy;&acy;&tcy;&icy;&tcy;&iecy; &vcy;&ncy;&icy;&mcy;&acy;&ncy;&icy;&iecy;, &chcy;&tcy;&ocy; &vcy;&ycy; &bcy;&ucy;&dcy;&iecy;&tcy;&iecy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy; IP &dcy;&icy;&acy;&pcy;&acy;&zcy;&ocy;&ncy;&ycy; &vcy;&acy;&shcy;&iecy;&jcy; &tcy;&iecy;&kcy;&ucy;&shchcy;&iecy;&jcy; &scy;&iecy;&tcy;&icy;, &pcy;&ocy;&ecy;&tcy;&ocy;&mcy;&ucy; &tcy;&acy;&mcy; &mcy;&ocy;&gcy;&ucy;&tcy; &bcy;&ycy;&tcy;&softcy; &kcy;&ocy;&ncy;&fcy;&lcy;&icy;&kcy;&tcy;&ycy;. &Vcy;&acy;&mcy; &tcy;&acy;&kcy;&zhcy;&iecy; &ncy;&ucy;&zhcy;&ncy;&ocy; &ucy;&kcy;&acy;&zcy;&acy;&tcy;&softcy; &rcy;&ocy;&dcy;&icy;&tcy;&iecy;&lcy;&yacy;, &tcy;&ocy; &iecy;&scy;&tcy;&softcy; &icy;&ncy;&tcy;&iecy;&rcy;&fcy;&iecy;&jcy;&scy;, &chcy;&iecy;&rcy;&iecy;&zcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&jcy; &tcy;&rcy;&acy;&fcy;&icy;&kcy; &bcy;&ucy;&dcy;&iecy;&tcy; &fcy;&icy;&zcy;&icy;&chcy;&iecy;&scy;&kcy;&icy; &pcy;&rcy;&ocy;&khcy;&ocy;&dcy;&icy;&tcy;&softcy; &ncy;&acy; &khcy;&ocy;&scy;&tcy;&iecy; Docker (&kcy; &scy;&ocy;&zhcy;&acy;&lcy;&iecy;&ncy;&icy;&yucy;, &iecy;&scy;&tcy;&softcy; <a href="https://github.com/docker/for-mac/issues/3926">&ocy;&shcy;&icy;&bcy;&kcy;&acy; &scy; MacOS</a>). &Ncy;&acy;&jcy;&tcy;&icy; &pcy;&ocy;&dcy;&khcy;&ocy;&dcy;&yacy;&shchcy;&icy;&jcy; &mcy;&ocy;&zhcy;&ncy;&ocy; &scy; &pcy;&ocy;&mcy;&ocy;&shchcy;&softcy;&yucy; &kcy;&ocy;&mcy;&acy;&ncy;&dcy;&ycy; <code>ifconfig</code> (&scy;&mcy;&ocy;&tcy;&rcy;&icy;&tcy;&iecy; &tcy;&iecy;, &gcy;&dcy;&iecy; &ncy;&acy;&zcy;&ncy;&acy;&chcy;&acy;&iecy;&tcy;&scy;&yacy; &rcy;&iecy;&acy;&lcy;&softcy;&ncy;&ycy;&jcy; IP).</p>
+<h3 id="yaml-notatsiia">YAML &ncy;&ocy;&tcy;&acy;&tscy;&icy;&yacy;</h3>
+<p>&Rcy;&acy;&ncy;&iecy;&iecy; &yacy; &ncy;&iecy; &dcy;&ucy;&mcy;&acy;&lcy; &ocy; YAML &kcy;&acy;&kcy; &ocy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&iecy;. &Tcy;&ocy; &iecy;&scy;&tcy;&softcy;, &yacy; &ncy;&iecy; &pcy;&ocy;&ncy;&icy;&mcy;&acy;&lcy; &iecy;&gcy;&ocy; &kcy;&acy;&kcy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy; &scy; &pcy;&rcy;&acy;&vcy;&icy;&lcy;&acy;&mcy;&icy;. &Ecy;&tcy;&ocy; &pcy;&ocy;&khcy;&ocy;&zhcy;&iecy; &ncy;&acy; &pcy;&rcy;&icy;&vcy;&ycy;&chcy;&ncy;&ycy;&jcy; &tcy;&iecy;&kcy;&scy;&tcy;&ocy;&vcy;&ycy;&jcy; &fcy;&acy;&jcy;&lcy;, &vcy; &kcy;&ocy;&tcy;&ocy;&rcy;&ocy;&mcy; &mcy;&ocy;&zhcy;&ncy;&ocy; &pcy;&icy;&scy;&acy;&tcy;&softcy; &vcy;&scy;&iecy;, &chcy;&tcy;&ocy; &khcy;&ocy;&chcy;&iecy;&shcy;&softcy;, &pcy;&ocy;&chcy;&tcy;&icy;. &Ncy;&acy;&pcy;&rcy;&icy;&mcy;&iecy;&rcy;, &dcy;&rcy;&ucy;&gcy;&icy;&iecy; &fcy;&ocy;&rcy;&mcy;&acy;&tcy;&ycy; &bcy;&ucy;&dcy;&ucy;&tcy; &pcy;&ocy;&vcy;&rcy;&iecy;&zhcy;&dcy;&iecy;&ncy;&ycy;, &iecy;&scy;&lcy;&icy; &vcy;&ycy; &gcy;&dcy;&iecy;-&tcy;&ocy; &ocy;&shcy;&icy;&bcy;&iecy;&tcy;&iecy;&scy;&softcy;, &ncy;&ocy; YAML &ncy;&iecy; &pcy;&ocy;&khcy;&ocy;&zhcy; &ncy;&acy; &dcy;&rcy;&ucy;&gcy;&icy;&iecy;, &kcy;&acy;&kcy; &yacy; &dcy;&ucy;&mcy;&acy;&lcy;, &ncy;&ocy; &yacy; &ocy;&shcy;&icy;&bcy;&acy;&lcy;&scy;&yacy;. &Vcy; &kcy;&ucy;&rcy;&scy;&iecy; &bcy;&ycy;&lcy;&icy; &pcy;&ocy;&kcy;&acy;&zcy;&acy;&ncy;&ycy; &ocy;&scy;&ncy;&ocy;&vcy;&ycy;, &pcy;&rcy;&acy;&vcy;&icy;&lcy;&acy;, &scy;&tcy;&rcy;&ucy;&kcy;&tcy;&ucy;&rcy;&acy; &icy; &tcy;.&dcy;. &Bcy;&ycy;&lcy;&ocy; &lcy;&yucy;&bcy;&ocy;&pcy;&ycy;&tcy;&ncy;&ocy; &ucy;&vcy;&icy;&dcy;&iecy;&tcy;&softcy;, &kcy;&acy;&kcy; &scy;&tcy;&rcy;&ucy;&kcy;&tcy;&ucy;&rcy;&ycy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &tcy;&acy;&kcy;&icy;&iecy; &kcy;&acy;&kcy; &scy;&pcy;&icy;&scy;&ocy;&kcy;, &bcy;&ycy;&lcy;&icy; &rcy;&iecy;&acy;&lcy;&icy;&zcy;&ocy;&vcy;&acy;&ncy;&ycy; &vcy; &ncy;&acy;&tcy;&icy;&vcy;&ncy;&ocy;&mcy; &vcy;&icy;&dcy;&iecy;.</p>
+<p>&IEcy;&shchcy;&iecy; &ocy;&dcy;&ncy;&acy; &ocy;&scy;&ocy;&bcy;&iecy;&ncy;&ncy;&ocy;&scy;&tcy;&softcy; &scy; &yacy;&kcy;&ocy;&rcy;&yacy;&mcy;&icy; YAML &bcy;&ycy;&lcy;&acy; &ocy;&bcy;&hardcy;&yacy;&scy;&ncy;&iecy;&ncy;&acy; &ncy;&acy; &fcy;&acy;&jcy;&lcy;&iecy; Airflow docker compose, &ecy;&tcy;&ocy; &icy;&dcy;&iecy;&acy;&lcy;&softcy;&ncy;&ocy;&iecy; &pcy;&ocy;&pcy;&acy;&dcy;&acy;&ncy;&icy;&iecy; &vcy; &yacy;&bcy;&lcy;&ocy;&chcy;&kcy;&ocy;. &Rcy;&iecy;&acy;&lcy;&softcy;&ncy;&ycy;&jcy; &icy; &pcy;&rcy;&acy;&kcy;&tcy;&icy;&chcy;&iecy;&scy;&kcy;&icy;&jcy; &pcy;&rcy;&icy;&mcy;&iecy;&rcy; &dcy;&lcy;&yacy; &mcy;&iecy;&ncy;&yacy;, &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &kcy;&ocy;&gcy;&dcy;&acy; &yacy; &ocy;&tcy;&kcy;&rcy;&ycy;&lcy; &iecy;&gcy;&ocy; &vcy; &pcy;&iecy;&rcy;&vcy;&ycy;&jcy; &rcy;&acy;&zcy;, &yacy; &bcy;&ycy;&lcy; &vcy; &zcy;&acy;&mcy;&iecy;&shcy;&acy;&tcy;&iecy;&lcy;&softcy;&scy;&tcy;&vcy;&iecy;, &chcy;&tcy;&ocy; &ecy;&tcy;&ocy; &tcy;&acy;&kcy;&ocy;&iecy;, &icy; &yacy; &pcy;&ocy;&pcy;&ycy;&tcy;&acy;&lcy;&scy;&yacy; &ncy;&acy;&jcy;&tcy;&icy; &icy;&ncy;&fcy;&ocy;&rcy;&mcy;&acy;&tscy;&icy;&yucy; &vcy; ... &dcy;&ocy;&kcy;&ucy;&mcy;&iecy;&ncy;&tcy;&acy;&tscy;&icy;&icy; docker. &Kcy;&ocy;&ncy;&iecy;&chcy;&ncy;&ocy; &tcy;&acy;&mcy; &ncy;&icy;&chcy;&iecy;&gcy;&ocy; &ncy;&iecy;&tcy;.</p>
+<p>&Pcy;&rcy;&icy;&ncy;&tscy;&icy;&pcy; DRY &vcy; &dcy;&iecy;&jcy;&scy;&tcy;&vcy;&icy;&icy;:
+&YAcy;&kcy;&ocy;&rcy;&softcy; - <code>&amp;</code>.
+&Pcy;&scy;&iecy;&vcy;&dcy;&ocy;&ncy;&icy;&mcy; - <code>&lt;&lt;: *</code></p>
+<div class="highlight"><pre><span></span><code><span class="nt">&ocy;&pcy;&rcy;&iecy;&dcy;&iecy;&lcy;&iecy;&ncy;&icy;&yacy;</span><span class="p">:</span><span class="w"> </span>
+<span class="w">  </span><span class="nt">&shcy;&acy;&gcy;&icy;</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">&shcy;&acy;&gcy;</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;build-and-test</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&icy;&mcy;&yacy;</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and test</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&scy;&tscy;&iecy;&ncy;&acy;&rcy;&icy;&jcy;</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mvn package</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&acy;&rcy;&tcy;&iecy;&fcy;&acy;&kcy;&tcy;&ycy;</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">target/**</span><span class="w"></span>
+
+<span class="nt">&kcy;&ocy;&ncy;&vcy;&iecy;&jcy;&iecy;&rcy;&ycy;</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&vcy;&iecy;&tcy;&vcy;&icy;</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">develop</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">step</span><span class="p">:</span><span class="w"> </span><span class="nv">*build-and-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">master</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">step</span><span class="p">:</span><span class="w"> </span><span class="nv">*build-and-test</span><span class="w"></span>
+</code></pre></div>
+<h2 id="itog_1">&Icy;&tcy;&ocy;&gcy;</h2>
+<p>&Vcy; &kcy;&ocy;&ncy;&tscy;&iecy; &kcy;&ocy;&ncy;&tscy;&ocy;&vcy;, &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ocy;, &yacy; &ncy;&iecy; &tcy;&acy;&kcy; &khcy;&ocy;&rcy;&ocy;&shcy;&ocy; &zcy;&ncy;&acy;&yucy; docker, &kcy;&acy;&kcy; &dcy;&ucy;&mcy;&acy;&lcy;, &pcy;&ocy;&tcy;&ocy;&mcy;&ucy; &chcy;&tcy;&ocy; &vcy; &ncy;&iecy;&mcy; &ocy;&kcy;&acy;&zcy;&acy;&lcy;&ocy;&scy;&softcy; &scy;&lcy;&icy;&shcy;&kcy;&ocy;&mcy; &mcy;&ncy;&ocy;&gcy;&ocy; &pcy;&ocy;&lcy;&iecy;&zcy;&ncy;&ocy;&jcy; &icy;&ncy;&fcy;&ocy;&rcy;&mcy;&acy;&tscy;&icy;&icy; &dcy;&lcy;&yacy; &mcy;&iecy;&ncy;&yacy;. &Icy; &iecy;&scy;&tcy;&softcy; &mcy;&acy;&scy;&scy;&acy; &dcy;&rcy;&ucy;&gcy;&icy;&khcy; &vcy;&ocy;&zcy;&mcy;&ocy;&zhcy;&ncy;&ocy;&scy;&tcy;&iecy;&jcy;, &ocy; &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&khcy; &yacy; &iecy;&shchcy;&iecy; &ncy;&iecy; &zcy;&ncy;&acy;&yucy;. &Ncy;&ocy; &yacy; &pcy;&ocy;&lcy;&acy;&gcy;&acy;&yucy;, &chcy;&tcy;&ocy; &ecy;&tcy;&ocy; &vcy;&scy;&iecy; &pcy;&ocy;&tcy;&ocy;&mcy;&ucy;, &chcy;&tcy;&ocy; &kcy;&ucy;&rcy;&scy; &bcy;&ycy;&lcy; &dcy;&iecy;&jcy;&scy;&tcy;&vcy;&icy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy; &zcy;&acy;&mcy;&iecy;&chcy;&acy;&tcy;&iecy;&lcy;&softcy;&ncy;&ycy;&mcy;. &Pcy;&rcy;&ocy;&vcy;&iecy;&rcy;&softcy;&tcy;&iecy; &iecy;&gcy;&ocy; &scy;&acy;&mcy;&icy;!</p>
+    
+    <!-- <div class="aspect-w-16 aspect-h-9 mx-auto"></div> CSS placeholder -->
+  </div>
+  <footer class="flex flex-col mt-10 ">
+    <ul class="flex flex-wrap">
+        <li
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          <a href="https://dev-mkc19.github.io/blog/tag/docker.html">docker</a>
+        </li>
+    </ul>
+    <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
+      <div class="w-1/2 rounded-l-lg"></div>
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-r-lg ">
+        <a class="flex flex-col" href="https://dev-mkc19.github.io/blog/tableau-files-types-ru.html">
+          <div class="text-right mx-4 py-2">
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">NEXT PAGE »</p>
+            <p class="text-right py-1 hover:underline">Tableau files' types</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+            href="https://www.linkedin.com/sharing/share-offsite/?url=https://dev-mkc19.github.io/blog/docker-for-newbies-ru.html">
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+            href="https://api.whatsapp.com/send?text=Features - https://dev-mkc19.github.io/blog/docker-for-newbies-ru.html">
+            <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+            href="https://telegram.me/share/url?text=Features&amp;url=https://dev-mkc19.github.io/blog/docker-for-newbies-ru.html">
+            <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+  <div>
+  </div>
+</main>
+
+    </div>
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
+        <div class="px-4">
+            <span>©2023&nbsp;&#8226;&nbsp;</span>Powered by
+            <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
+        </div>
+    </footer>
+
+
+    <script>
+        let themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        let themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+        let themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', function () {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

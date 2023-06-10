@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Pelican" />
+    <meta name="description" content="dev.tinito Blog Posts">
+    <title>DataSource replacement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://dev-mkc19.github.io/blog/theme/css/pygment.css" />
+    <link rel="shortcut icon" href="https://dev-mkc19.github.io/blog/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://dev-mkc19.github.io/blog/theme/css/stork.css">
+    <link rel="stylesheet" media="screen and (prefers-color-scheme: dark)"
+        href="https://dev-mkc19.github.io/blog/theme/css/stork-dark.css">
+    <link
+        href="https://dev-mkc19.github.io/blog/feeds/all.atom.xml"
+        type="application/atom+xml" rel="alternate" title="dev.tinito Atom Feed" />
+<meta name="description" content="Каким образом можно заменить источник данных в Tableau встроенными средствами рассмотрим в данной статье. Будет полезно чтобы ускорить процесс..." />
+</head>
+
+<body class="min-h-screen flex flex-col max-w-7xl lg:max-w-none text-zinc-800 bg-neutral-100 
+    dark:bg-neutral-900 dark:text-zinc-300 container mx-auto justify-center md:px-3 ">
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <nav class="sm:flex sm:justify-between xl:ml-32 pl-4 items-center">
+        <div class="flex pt-4">
+            <h1 class="font-semibold text-2xl"><a href="https://dev-mkc19.github.io/blog/">dev.tinito</a></h1>
+            <button id="theme-toggle" type="button" aria-label="Light|Dark"
+                class="text-zinc-700 dark:text-zinc-400 rounded-full focus:outline-none text-sm ml-2 p-1">
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                        fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <ul class="flex flex-wrap lg:mr-24 md:pt-0">
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/archives.html">Archive</a></li>
+            <li class="mr-4 pt-6"><a                     href="https://dev-mkc19.github.io/blog/categories.html">Categories</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/tags.html">Tags</a></li>
+            <li class="mr-4 pt-6"><a  href="https://dev-mkc19.github.io/blog/search.html">Search</a></li>
+        </ul>
+    </nav>
+    <div class="flex-grow md:max-w-screen-md md:mx-auto md:w-3/4 px-4">
+        <nav class="text-zinc-800 dark:text-zinc-300 mt-12 pb-2 md:mt-16" aria-label="Breadcrumb">
+            <ul class="p-0 inline-flex items-center">
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/" class="text-zinc-800 dark:text-zinc-300 inline-flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        Home
+                    </a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/categories.html">Categories</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <a href="https://dev-mkc19.github.io/blog/category/tableau.html">Tableau</a>
+                    <svg class="fill-current w-3 h-3 mr-2 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path
+                            d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
+                    </svg>
+                </li>
+            </ul>
+        </nav>
+
+<main>
+  <header>
+    <h1 class="font-semibold text-3xl my-2">DataSource replacement</h1>
+    <footer class="flex text-sm text-zinc-800 dark:text-zinc-400">
+      <div class="flex text-xs text-zinc-800 dark:text-zinc-400">
+        <time>March 05, 2023</time>
+        <div>
+        </div>
+        <div>
+          <span>&nbsp;·&nbsp;Mikhail K</span>
+        </div>
+      </div>
+    </footer>
+  </header>
+  <details class="flex flex-col my-6 p-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg">
+    <summary class="text-lg font-bold">Table of contents</summary>
+    <div class="mx-4 px-4 underline">
+      <div id="toc"><ul><li><a class="toc-href" href="#zamena-istochnika" title="&Zcy;&acy;&mcy;&iecy;&ncy;&acy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy;">&Zcy;&acy;&mcy;&iecy;&ncy;&acy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy;</a></li></ul></div>
+    </div>
+  </details>
+  <div class="max-w-7xl container mx-auto my-8 text-zinc-800 dark:text-zinc-300  
+              prose lg:max-w-none prose-headings:text-zinc-800 prose-headings:dark:text-zinc-300 
+              prose-h1:text-3xl lg:prose-h1:text-3xl prose-headings:font-semibold 
+              prose-pre:bg-zinc-200 prose-pre:text-zinc-800
+              dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-200
+              prose-blockquote:text-zinc-800
+              dark:prose-blockquote:text-zinc-200
+              prose-a:text-slate-600 prose-a:font-normal
+              dark:prose-a:text-slate-400
+              dark:prose-strong:text-zinc-200 
+              dark:prose-code:text-zinc-200
+              dark:prose-code:bg-zinc-800
+              prose-code:bg-zinc-200
+              prose-code:font-light
+              prose-img:rounded-md
+              sm:text-left md:text-justify
+              ">
+
+
+    <h1 id="zamena-istochnika">&Zcy;&acy;&mcy;&iecy;&ncy;&acy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy;</h1>
+<p>&Pcy;&ocy;&rcy;&ocy;&jcy; &vcy;&ocy;&zcy;&ncy;&icy;&kcy;&acy;&iecy;&tcy; &pcy;&ocy;&tcy;&rcy;&iecy;&bcy;&ncy;&ocy;&scy;&tcy;&softcy; &zcy;&acy;&mcy;&iecy;&ncy;&icy;&tcy;&softcy; &ocy;&dcy;&icy;&ncy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy; &ncy;&acy; &dcy;&rcy;&ucy;&gcy;&ocy;&jcy; &pcy;&ocy; &rcy;&acy;&zcy;&ncy;&ycy;&mcy; &pcy;&rcy;&icy;&chcy;&icy;&ncy;&acy;&mcy;:</p>
+<ul>
+<li>&Icy;&zcy;&mcy;&iecy;&ncy;&icy;&lcy;&ocy;&scy;&softcy; &rcy;&acy;&scy;&shcy;&icy;&rcy;&iecy;&ncy;&icy;&iecy; &fcy;&acy;&jcy;&lcy;&acy; (&bcy;&ycy;&lcy;&ocy; &vcy; csv, &scy;&tcy;&acy;&lcy;&ocy; &vcy; Excel)</li>
+<li>&Dcy;&acy;&shcy;&bcy;&ocy;&rcy;&dcy; &bcy;&ycy;&lcy; &rcy;&acy;&zcy;&rcy;&acy;&bcy;&ocy;&tcy;&acy;&ncy; &ncy;&acy; &tcy;&iecy;&scy;&tcy;&ocy;&vcy;&ycy;&khcy; &dcy;&acy;&ncy;&ncy;&ycy;&khcy;, &ncy;&iecy;&ocy;&bcy;&khcy;&ocy;&dcy;&icy;&mcy;&ocy; &pcy;&iecy;&rcy;&iecy;&kcy;&lcy;&yucy;&chcy;&icy;&tcy;&softcy; &ncy;&acy; &pcy;&rcy;&ocy;&dcy;&ucy;&kcy;&tcy;&icy;&vcy;&ncy;&ycy;&iecy;</li>
+<li>&Dcy;&acy;&ncy;&ncy;&ycy;&iecy; &pcy;&iecy;&rcy;&iecy;&ncy;&iecy;&scy;&lcy;&icy; &ncy;&acy; &dcy;&rcy;&ucy;&gcy;&ocy;&jcy; &scy;&iecy;&rcy;&vcy;&iecy;&rcy; &icy;&lcy;&icy; &scy;&icy;&scy;&tcy;&iecy;&mcy;&ucy;</li>
+</ul>
+<p>&ZHcy;&iecy;&lcy;&acy;&tcy;&iecy;&lcy;&softcy;&ncy;&ocy; &icy;&mcy;&iecy;&tcy;&softcy; &ocy;&dcy;&icy;&ncy;&acy;&kcy;&ocy;&vcy;&ycy;&iecy; &ncy;&acy;&icy;&mcy;&iecy;&ncy;&ocy;&vcy;&acy;&ncy;&icy;&yacy; &pcy;&ocy;&lcy;&iecy;&jcy; &vcy; &ocy;&bcy;&ocy;&icy;&khcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy;&khcy; &dcy;&lcy;&yacy; &scy;&ocy;&kcy;&rcy;&acy;&shchcy;&iecy;&ncy;&icy;&yacy; &tcy;&rcy;&ucy;&dcy;&ocy;&zcy;&acy;&tcy;&rcy;&acy;&tcy; &icy; &pcy;&rcy;&iecy;&dcy;&ocy;&tcy;&vcy;&rcy;&acy;&shchcy;&iecy;&ncy;&icy;&icy; &ncy;&iecy;&ocy;&bcy;&khcy;&ocy;&dcy;&icy;&mcy;&ocy;&scy;&tcy;&icy; &icy;&scy;&pcy;&rcy;&acy;&vcy;&lcy;&yacy;&tcy;&softcy; &scy;&scy;&ycy;&lcy;&kcy;&icy; &vcy; &kcy;&acy;&zhcy;&dcy;&ocy;&mcy; &ldquo;&bcy;&icy;&tcy;&ocy;&mcy;&rdquo; &pcy;&ocy;&lcy;&iecy;.</p>
+<ol>
+<li>&Dcy;&ocy;&bcy;&acy;&vcy;&icy;&tcy;&softcy; &ncy;&ocy;&vcy;&ycy;&jcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy; &scy;&tcy;&acy;&ncy;&dcy;&acy;&rcy;&tcy;&ncy;&ycy;&mcy; &scy;&pcy;&ocy;&scy;&ocy;&bcy;&ocy;&mcy;</li>
+<li>&Ncy;&acy; &rcy;&acy;&bcy;&ocy;&chcy;&iecy;&jcy; &ocy;&bcy;&lcy;&acy;&scy;&tcy;&icy; &vcy; &scy;&pcy;&icy;&scy;&kcy;&iecy; &ldquo;Datasources&rdquo; &ocy;&tcy;&ocy;&bcy;&rcy;&acy;&zcy;&icy;&tcy;&scy;&yacy; &dcy;&ocy;&bcy;&acy;&vcy;&lcy;&iecy;&ncy;&ncy;&ycy;&iecy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;
+<img alt="IMAGE_0" src="https://dev-mkc19.github.io/blog/images/ds_replace/IMG_0.png"/></li>
+<li>&Vcy;&ycy;&zcy;&vcy;&acy;&vcy; &kcy;&ocy;&ncy;&tcy;&iecy;&kcy;&scy;&tcy;&ncy;&ocy;&iecy; &mcy;&iecy;&ncy;&yucy; &ncy;&iecy;&ocy;&bcy;&khcy;&ocy;&dcy;&icy;&mcy;&ocy; &vcy;&ycy;&bcy;&rcy;&acy;&tcy;&softcy; &pcy;&ucy;&ncy;&kcy;&tcy; &ldquo;Replace data source&rdquo;
+<img alt="IMAGE_1" src="https://dev-mkc19.github.io/blog/images/ds_replace/IMG_1.png"/></li>
+<li>&Pcy;&rcy;&ocy;&vcy;&iecy;&rcy;&icy;&tcy;&softcy; &kcy;&ocy;&rcy;&rcy;&iecy;&kcy;&tcy;&ncy;&ocy;&scy;&tcy;&softcy; &icy; &scy;&ocy;&ocy;&tcy;&vcy;&iecy;&tcy;&scy;&tcy;&vcy;&icy;&iecy; &tcy;&iecy;&kcy;&ucy;&shchcy;&iecy;&gcy;&ocy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;&acy; &icy; &ncy;&ocy;&vcy;&ocy;&gcy;&ocy;, &kcy;&ocy;&tcy;&ocy;&rcy;&ycy;&jcy; &tcy;&rcy;&iecy;&bcy;&ucy;&iecy;&tcy;&scy;&yacy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ocy;&vcy;&acy;&tcy;&softcy;.
+<img alt="IMAGE_2" src="https://dev-mkc19.github.io/blog/images/ds_replace/IMG_2.png"/></li>
+<li>&Ncy;&acy;&zhcy;&acy;&tcy;&softcy; &ldquo;&Ocy;&kcy;&rdquo; &icy; &pcy;&rcy;&ocy;&vcy;&iecy;&rcy;&icy;&tcy;&softcy; &chcy;&tcy;&ocy; &zcy;&acy;&mcy;&iecy;&ncy;&acy; &pcy;&rcy;&ocy;&shcy;&lcy;&acy; &kcy;&ocy;&rcy;&rcy;&iecy;&kcy;&tcy;&ncy;&ocy;, &ucy;&bcy;&iecy;&dcy;&icy;&tcy;&softcy;&scy;&yacy;, &chcy;&tcy;&ocy; &ncy;&ocy;&vcy;&ycy;&jcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy; &icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&iecy;&tcy;&scy;&yacy; &kcy;&acy;&kcy; &ocy;&scy;&ncy;&ocy;&vcy;&ncy;&ocy;&jcy; (&ocy; &chcy;&iecy;&mcy; &scy;&vcy;&icy;&dcy;&iecy;&tcy;&iecy;&lcy;&softcy;&scy;&tcy;&vcy;&ucy;&iecy;&tcy; &pcy;&icy;&kcy;&tcy;&ocy;&gcy;&rcy;&acy;&mcy;&mcy;&acy; &gcy;&acy;&lcy;&ocy;&chcy;&kcy;&icy; &scy;&icy;&ncy;&iecy;&gcy;&ocy; &tscy;&vcy;&iecy;&tcy;&acy;) &icy; &pcy;&ocy;&scy;&lcy;&iecy; &ecy;&tcy;&ocy;&gcy;&ocy; &zcy;&acy;&kcy;&rcy;&ycy;&tcy;&softcy; (&ucy;&dcy;&acy;&lcy;&icy;&tcy;&softcy;) &ncy;&iecy;&icy;&scy;&pcy;&ocy;&lcy;&softcy;&zcy;&ucy;&iecy;&mcy;&ycy;&jcy; &scy;&tcy;&acy;&rcy;&ycy;&jcy; &icy;&scy;&tcy;&ocy;&chcy;&ncy;&icy;&kcy;.</li>
+</ol>
+    
+    <!-- <div class="aspect-w-16 aspect-h-9 mx-auto"></div> CSS placeholder -->
+  </div>
+  <footer class="flex flex-col mt-10 ">
+    <ul class="flex flex-wrap">
+        <li
+          class="bg-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-800 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 mb-2 mr-2 px-3 py-1.5 rounded-md transition ease-in active:-translate-y-1 active:scale-110 duration-75">
+          <a href="https://dev-mkc19.github.io/blog/tag/how-to.html">how-to</a>
+        </li>
+    </ul>
+    <div class="flex w-full my-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg">
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-l-lg">
+        <a class="flex flex-col pr-2" href="https://dev-mkc19.github.io/blog/funnel-vizualisation-kak-postroit-ru.html">
+          <div class="mx-4 py-2 text-left">
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">« PREV PAGE</p>
+            <p class="text-left py-1 hover:underline">Funnel vizualisation - как построить?</p>
+          </div>
+        </a>
+      </div>
+      <div class="w-1/2 hover:bg-zinc-300 dark:hover:bg-zinc-800 rounded-r-lg ">
+        <a class="flex flex-col" href="https://dev-mkc19.github.io/blog/data-densification-what-is-it-ru.html">
+          <div class="text-right mx-4 py-2">
+            <p class="text-zinc-600 dark:text-zinc-300 text-sm">NEXT PAGE »</p>
+            <p class="text-right py-1 hover:underline">Data Densification - what is it?</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="flex bg-zinc-200 dark:bg-zinc-700 py-2 rounded-lg justify-center space-x-2 text-xs">
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="linkedin" aria-label="share Features on linkedin"
+            href="https://www.linkedin.com/sharing/share-offsite/?url=https://dev-mkc19.github.io/blog/datasource-replacement-ru.html">
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="whatsapp" aria-label="share Features on whatsapp"
+            href="https://api.whatsapp.com/send?text=Features - https://dev-mkc19.github.io/blog/datasource-replacement-ru.html">
+            <i class="fab fa-whatsapp fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li class="bg-gray-900 p-1 text-white rounded-md">
+          <a target="_blank" rel="noopener noreferrer" title="telegram" aria-label="share Features on telegram"
+            href="https://telegram.me/share/url?text=Features&amp;url=https://dev-mkc19.github.io/blog/datasource-replacement-ru.html">
+            <i class="fab fa-telegram fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+  <div>
+  </div>
+</main>
+
+    </div>
+    <footer class="flex w-full text-xs justify-center mt-10 mb-6 text-zinc-600 dark:text-zinc-400">
+        <div class="px-4">
+            <span>©2023&nbsp;&#8226;&nbsp;</span>Powered by
+            <a class="underline" href="https://getpelican.com/">Pelican</a>&nbsp;&
+            <a class="underline" href="https://github.com/aleylara/Papyrus">Papyrus</a>
+        </div>
+    </footer>
+
+
+    <script>
+        let themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        let themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+        let themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', function () {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

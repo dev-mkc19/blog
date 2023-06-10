@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>dev.tinito - Docker</title><link href="https://dev-mkc19.github.io/blog/" rel="alternate"></link><link href="https://dev-mkc19.github.io/blog/feeds/docker.atom.xml" rel="self"></link><id>https://dev-mkc19.github.io/blog/</id><updated>2023-05-15T00:00:00+10:00</updated><entry><title>Docker for newbies</title><link href="https://dev-mkc19.github.io/blog/docker-for-newbies.html" rel="alternate"></link><published>2023-05-15T00:00:00+10:00</published><updated>2023-05-15T00:00:00+10:00</updated><author><name>Mikhail K</name></author><id>tag:dev-mkc19.github.io,2023-05-15:/blog/docker-for-newbies.html</id><summary type="html">&lt;p&gt;Found great course about working with containerization via docker. Perhaps my feedback will motivate you to learn it too.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;img alt="karpov_logo" src="https://dev-mkc19.github.io/blog/images/karpov_logo.png"/&gt;
+Few years ago when I first time met with the NAS I discovered cool technology which I didn't use before. I was interested in new services, smart home, extend functionality of NAS up to 200% and it was possible only with the docker, because there aren't many native apps in a build-in app center. Also docker allowed to install all what I want without impact to host system. That fact makes possible any experiments without fear broke something. But what was the problem? .. I totally didn't know docker :)&lt;/p&gt;
+&lt;h2 id="knowledge-for-free"&gt;Knowledge for free&lt;/h2&gt;
+&lt;p&gt;Guys from karpov.courses made a great &lt;a href="https://karpov.courses/docker"&gt;course&lt;/a&gt; for everyone. You no need programming skills, knowing bash or something else, it suits for absolutely everyone. Nevertheless it comprehensively describes docker from different sides. Despite of I learnt docker by this years I discovered some insights for instance how to set up container with separate IP address. I would be happy to find this valuable course at the beginning of my learning path because it tells topic by topic in a simple form. Special thanks to Anton Sidorin as an author.&lt;/p&gt;
+&lt;h2 id="course-highlights"&gt;Course highlight's&lt;/h2&gt;
+&lt;p&gt;Before starting observe what new things I dig from course I have to announce: That things attracted me, not you, so perhaps you will find useful something else.&lt;/p&gt;
+&lt;h3 id="basic"&gt;Basic&lt;/h3&gt;
+&lt;h4&gt;1. Bash tips&lt;/h4&gt;
+&lt;p&gt;It doesn't directly refer docker functionality, but it shows how quickly you can stop all running containers for 1 step.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker stop &lt;span class="k"&gt;$(&lt;/span&gt;docker ps -q&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Similar you can delete all containers&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker rm &lt;span class="k"&gt;$(&lt;/span&gt;docker ps -qa&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Redirecting logs to file it's also typical for bash through the &lt;code&gt;&amp;gt; / &amp;gt;&amp;gt;&lt;/code&gt; operator, but I didn't think about it in that context.&lt;/p&gt;
+&lt;h4&gt;2. ENTRYPOINT command vs. CMD&lt;/h4&gt;
+&lt;p&gt;I don't know why I was stuck with this command and didn't see to the documentation where is pretty clear description. So I refer to it.&lt;/p&gt;
+&lt;p&gt;Both CMD and ENTRYPOINT instructions define what command gets executed when running a container. There are few rules that describe their co-operation.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dockerfile should specify at least one of CMD or ENTRYPOINT commands.&lt;/li&gt;
+&lt;li&gt;ENTRYPOINT should be defined when using the container as an executable.&lt;/li&gt;
+&lt;li&gt;CMD should be used as a way of defining default arguments for an ENTRYPOINT command or for executing an ad-hoc command in a container.&lt;/li&gt;
+&lt;li&gt;CMD will be overridden when running the container with alternative arguments.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;3. Multi build&lt;/h4&gt;
+&lt;p&gt;Good feature to split your build into several steps for reducing size of your final image or for reusing this step in a next stages.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;lt;image&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;builder&lt;/span&gt;
+. . .
+
+
+&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;lt;image&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;
+. . .
+&lt;span class="k"&gt;COPY&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;--from&lt;span class="o"&gt;=&lt;/span&gt;builder &amp;lt;path_from_builder&amp;gt; &amp;lt;path_to_current_build&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;5. Volumes difference&lt;/h4&gt;
+&lt;p&gt;There are 2 types of volumes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Bind mount&lt;/li&gt;
+&lt;li&gt;Volumes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Before this course it was strange for me for what volumes might be use. But let's look to the docs again. Volumes have several advantages over bind mounts:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Volumes are easier to back up or migrate than bind mounts.&lt;/li&gt;
+&lt;li&gt;You can manage volumes using Docker CLI commands or the Docker API.&lt;/li&gt;
+&lt;li&gt;Volumes work on both Linux and Windows containers.&lt;/li&gt;
+&lt;li&gt;Volumes can be more safely shared among multiple containers.&lt;/li&gt;
+&lt;li&gt;Volume drivers let you store volumes on remote hosts or cloud providers, to encrypt the contents of volumes, or to add other functionality.&lt;/li&gt;
+&lt;li&gt;New volumes can have their content pre-populated by a container.&lt;/li&gt;
+&lt;li&gt;Volumes on Docker Desktop have much higher performance than bind mounts from Mac and Windows hosts.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So now I'll easily make a decision what to use. If it some persistent data generated by container which you don't plan to manage by yourself - select volumes, otherwise bind mount best chose for external files which should be in container.&lt;/p&gt;
+&lt;p&gt;Read only flag is another cool feature of volumes.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker run -d &lt;span class="se"&gt;\&lt;/span&gt;
+  --name&lt;span class="o"&gt;=&lt;/span&gt;nginxtest &lt;span class="se"&gt;\&lt;/span&gt;
+  -v nginx-vol:/usr/share/nginx/html:ro &lt;span class="se"&gt;\&lt;/span&gt;
+  nginx:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;4. Making images from running state of other container&lt;/h4&gt;
+&lt;p&gt;I have never met real case where to use it. But perhaps as an alternative to rebuilding each time images you can run it and install some additional packages, modify files, fix bugs and then create once "snapshot" of this container as an new image.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker commit &lt;span class="o"&gt;[&lt;/span&gt;OPTIONS&lt;span class="o"&gt;]&lt;/span&gt; CONTAINER &lt;span class="o"&gt;[&lt;/span&gt;REPOSITORY&lt;span class="o"&gt;[&lt;/span&gt;:TAG&lt;span class="o"&gt;]]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="networks"&gt;Networks&lt;/h3&gt;
+&lt;p&gt;The most interesting part for me was a network section. Compare with other parts I knew less and exactly this fact motivated me to pass entire course.&lt;/p&gt;
+&lt;h4&gt;1. Addressing to container by name if using custom network&lt;/h4&gt;
+&lt;p&gt;Do you want to discover IP address of each container for setting it to another? Not me and docker provides build-in DNS resolver. Just set container name via attribute &lt;code&gt;--name &amp;lt;container_name&amp;gt;&lt;/code&gt; and access to it by name. Really cool, is't it?&lt;/p&gt;
+&lt;h4&gt;2. Using multiple networks by one container&lt;/h4&gt;
+&lt;p&gt;Not obvious thing, but it is. Nothing to tell more.&lt;/p&gt;
+&lt;h4&gt;3. Giving container external IP address&lt;/h4&gt;
+&lt;p&gt;That what I need for several times. Hope I will explain it in details in separate article, but wor now just mention cases:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Using Ad Blocking instruments (AdGuard, PiHole etc.) and external DNS Server can't co-exists on the same host because of ports conflicts. But what should I use then? Virtual Machine helped to resolve the problem before, but now I can assign external IP for container.&lt;/li&gt;
+&lt;li&gt;What if  you want to use VPN or IPS provider for special container, but not to entire host? Yeah, external IP for container helps me again.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I was confused a little bit about what attributes according official &lt;a href="https://docs.docker.com/network/macvlan/"&gt;tutorial&lt;/a&gt; should I fill to achieve my goal.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker network create -d macvlan &lt;span class="se"&gt;\&lt;/span&gt;
+  --subnet&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;192&lt;/span&gt;.168.1.0/24 &lt;span class="se"&gt;\&lt;/span&gt;
+  --gateway&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;192&lt;/span&gt;.168.1.1 &lt;span class="se"&gt;\&lt;/span&gt;
+  -o &lt;span class="nv"&gt;parent&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;ovs_eth0 &lt;span class="se"&gt;\&lt;/span&gt;
+  my-macvlan-net
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Pay attention that you will use IP ranges of your current network, so it might be conflicts there. You also need to specify the parent, which is the interface the traffic will physically go through on the Docker host (unfortunately there is a &lt;a href="https://github.com/docker/for-mac/issues/3926"&gt;bug with MacOS&lt;/a&gt;). You can find appropriate via &lt;code&gt;ifconfig&lt;/code&gt; command (see those where assign real IP.)&lt;/p&gt;
+&lt;h3 id="yaml-notation"&gt;YAML notation&lt;/h3&gt;
+&lt;p&gt;Previously I didn't think about YAML as a format. I mean that I didn't understand it as a format with the rules. It seems like habitual text file, where you are able to write whatever you want, almost. For instance others formats will be broken if you will make a mistake somewhere but YAML doesn't seem to other as I thought, but I was mistaken. And course shown the basics, rules, structure etc. It was surprisingly to see how data structures like list was implemented in a native form.&lt;/p&gt;
+&lt;p&gt;One more feature with anchors of YAML was explained on Airflow docker compose file, it is a perfect bullseye. Real and practical example for me, because of when I opened this first time, I was confused what was that and I tried to find out in ... docker documentation. For sure there is nothing there.&lt;/p&gt;
+&lt;p&gt;DRY principle in action:
+Anchor - &lt;code&gt;&amp;amp;&lt;/code&gt;
+Alias - &lt;code&gt;&amp;lt;&amp;lt;: *&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;definitions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;step&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nl"&gt;&amp;amp;build-and-test&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Build and test&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;mvn package&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;artifacts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;target/**&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="nt"&gt;pipelines&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;develop&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;step&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;*build-and-test&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;master&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;step&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;*build-and-test&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id="summary_1"&gt;Summary&lt;/h2&gt;
+&lt;p&gt;After all maybe I didn't know docker as well as I thought, because of it's too much useful insights was appears for me. And there are tons of other feature which I don't know yet. But I suppose it's all because course was really great. Check it out yourself!&lt;/p&gt;</content><category term="Docker"></category><category term="docker"></category></entry></feed>
